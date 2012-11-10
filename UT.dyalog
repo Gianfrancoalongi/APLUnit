@@ -12,7 +12,7 @@
         Name ← ⎕FX Function
         Res ← ⍎ Name,' ⍬'
         :If 1 = ⍴⍴ Res
-                ⎕ ← 'FAILED:',(,⎕CR Name)
+                ⎕ ← 'FAILED:',function_header Name 
                 ⎕ ← 'Expected'
                 ⎕ ← show_term ⊃Res[1]
                 ⎕ ← 'Got'
@@ -20,6 +20,16 @@
                 Z ← 0
         :Else
                 Z ← Res
+        :EndIf
+∇
+
+∇ Z ← function_header Name;Matrix
+        Matrix ← ⎕CR Name
+        (R C) ← ⍴ Matrix
+        :If R > 1
+                Z ← ,Matrix[1;],' ... ',Matrix[R;]
+        :Else
+                Z ← ,Matrix
         :EndIf
 ∇
 
