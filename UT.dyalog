@@ -14,13 +14,22 @@
         :If 1 = ⍴⍴ Res
                 ⎕ ← 'FAILED:',(,⎕CR Name)
                 ⎕ ← 'Expected'
-                ⎕ ← '  ',Res[1]               
+                ⎕ ← show_term ⊃Res[1]
                 ⎕ ← 'Got'
-                ⎕ ← '  ',Res[2]
+                ⎕ ← show_term ⊃Res[2]
                 Z ← 0
         :Else
                 Z ← Res
         :EndIf
 ∇
+
+∇ Z ← show_term Term
+        :If 0=≡Term
+                Z ← Term
+        :Else
+                Z ← #.DISPLAY Term
+        :EndIf
+∇
+
 
 :EndNameSpace
