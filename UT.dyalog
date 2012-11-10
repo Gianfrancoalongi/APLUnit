@@ -23,7 +23,7 @@
         :EndIf
 ∇
 
-∇ Z ← function_header Name;Matrix
+∇ Z ← function_header Name;Matrix;R;C
         Matrix ← ⎕CR Name
         (R C) ← ⍴ Matrix
         :If R > 1
