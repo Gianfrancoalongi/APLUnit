@@ -70,12 +70,12 @@ the function definition.
 Failure and Success behavior identical to the single line Unit Test behavior.
 
 ** Automatic execution of all Unit Tests from file
-
+   
 Having multiple Single line tests in a file, it must be possible to execute
 them all in one go. 
 
 #+BEGIN_EXAMPLE
- (Failing Passing) ← ⎕UT.run File.dyalog
+ (Passing Failing) ← ⎕UT.run File.dyalog
 #+END_EXAMPLE
 
 During the execution of the test cases, every failed test is displayed as 
@@ -104,9 +104,8 @@ a vector. This shall also be printed for quick readability.
  File.dyalog unit tests
  ⍋ 152 PASSED  
  ⍒ 2   FAILED 
- (Failing Passing) ← ⎕UT File.dyalog
+ (Passing Failing) ← ⎕UT File.dyalog
 #+END_EXAMPLE
-
 
 * SHOULD 
 
@@ -177,7 +176,7 @@ this result shall also be shown in the returned array.
  ⋄ 3   SKIPPED
  ⍒ 2   FAILED 
  
- (Failing Skipped Passing) ← ⎕UT.run File.dyalog 
+ (Passing Skipped Failing) ← ⎕UT.run File.dyalog 
 #+END_EXAMPLE
 
 ** Test Groups
@@ -211,7 +210,7 @@ Output result shall for both cases show that this was a group
  ⍋ 10 PASSED  
  ⋄ 0  SKIPPED
  ⍒ 0  FAILED 
- (Failing Skipped Passing) ← ⎕UT Test_GROUP File.dyalog
+ (Passing Skipped Failing) ← ⎕UT Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 ** Test Suites
@@ -254,7 +253,7 @@ being executed that contains groups.
   ⍋ 23 PASSED
   ⋄ 0  SKIPPED
   ⍒ 1  FAILED
- (Failing Skipped Passing) ← ⎕UT.run Test_SUITE File.dyalog
+ (Passing Skipped Failing) ← ⎕UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 ** Init and End per Test / Group / Suite
@@ -292,9 +291,55 @@ and End functions shall be as follows.
 If defined, the Init and End functions must be able to execute, invariably of 
 test success / fail or skip.
 
-
 * COULD
+** Collect and show execution time
+ 
+It shall be possible to configure if the execution time of each
+TEST/GROUP/SUITE is to be collected and reported.
 
+#+BEGIN_EXAMPLE
+ ⎕UT.runtime 1
+#+END_EXAMPLE
+
+Example of wanted output for single TEST execution
+
+#+BEGIN_EXAMPLE
+ RunTime ← ⎕UT.run first_TEST
+ PASSED - 0.01 Seconds
+#+END_EXAMPLE
+
+Example of wanted output for single GROUP execution
+
+#+BEGIN_EXAMPLE
+ Group Test_GROUP unit tests
+ ⍋ 10 PASSED  
+ ⋄ 0  SKIPPED
+ ⍒ 0  FAILED 
+ ○ 0.02 Seconds
+ (Passing Skipped Failing RunTime) ← ⎕UT Test_GROUP File.dyalog
+#+END_EXAMPLE
+
+Example of wanted output for single SUITE execution
+
+#+BEGIN_EXAMPLE
+ Suite Test_SUITE unit tests
+   Group first_GROUP
+    ⍋ 10 PASSED  
+    ⋄ 0  SKIPPED
+    ⍒ 0  FAILED 
+    ○ 0.01 Seconds
+   Group second_GROUP
+    ⍋ 13 PASSED  
+    ⋄ 0  SKIPPED
+    ⍒ 1  FAILED 
+    ○ 0.02 Seconds
+ --------------------------
+  ⍋ 23 PASSED
+  ⋄ 0  SKIPPED
+  ⍒ 1  FAILED
+  ○ 0.03 Seconds
+ (Passing Skipped Failing RunTime) ← ⎕UT.run Test_SUITE File.dyalog
+#+END_EXAMPLE
 
 * WOULD BE NICE
 
