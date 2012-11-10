@@ -1,7 +1,6 @@
 #+OPTIONS: ^:{}
 
 * MUST
-
 ** Automatic execution of single line Unit Test
    
 A test - written on one line, with the expected value on the 
@@ -67,7 +66,24 @@ the function definition.
 ∇
 #+END_EXAMPLE
 
-Failure and Success behavior identical to the single line Unit Test behavior.
+Failure and Success behavior identical to the single line Unit Test behavior,
+except that for the failure case, the whole function is not shown.
+It will truncate the displayed function, showing the first and last lines.
+
+#+BEGIN_EXAMPLE
+ FAILED: ∇ my_TEST ... LHS ⎕ RHS ∇
+ Expected 
+   ┌→────────┐
+   │   ┌→──┐ │
+   │ 1 │2 3│ │
+   │   └~──┘ │
+   └∊────────┘
+ Got
+   ┌→────┐                                                               
+   │1 2 3│
+   └~────┘
+#+END_EXAMPLE
+
 
 ** Automatic execution of all Unit Tests from file
    
