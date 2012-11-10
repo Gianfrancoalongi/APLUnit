@@ -60,9 +60,9 @@ A test written across several lines. The match operator is used within
 the function definition. 
 
 #+BEGIN_EXAMPLE
-∇ my_TEST
+∇ Z ← my_TEST
   ...
-  LHS ⎕ RHS
+  Z ← LHS ⎕ RHS
 ∇
 #+END_EXAMPLE
 
@@ -71,7 +71,7 @@ except that for the failure case, the whole function is not shown.
 It will truncate the displayed function, showing the first and last lines.
 
 #+BEGIN_EXAMPLE
- FAILED: ∇ my_TEST ... LHS ⎕ RHS ∇
+ FAILED: ∇ Z ← my_TEST ... Z ← LHS ⎕ RHS ∇
  Expected 
    ┌→────────┐
    │   ┌→──┐ │
