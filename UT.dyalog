@@ -23,11 +23,12 @@
         :EndIf
 ∇
 
-∇ Z ← show_term Term
+∇ Z ← show_term Term;Tmp
         :If 0=≡Term
-                Z ← Term
+                Z ← ' ',⍕Term
         :Else
-                Z ← #.DISPLAY Term
+                Tmp ← #.DISPLAY Term                
+                Z ← ((⍴Tmp)[1] ⍴ ' '),Tmp
         :EndIf
 ∇
 
