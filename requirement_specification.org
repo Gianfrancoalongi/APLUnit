@@ -1,0 +1,301 @@
+#+OPTIONS: ^:{}
+
+* MUST
+
+** Automatic execution of single line Unit Test
+   
+A test - written on one line, with the expected value on the 
+left hand side (LHS) of a special unit test equality operator 
+and the function to be called on the right hand side (RHS).
+
+#+BEGIN_EXAMPLE
+ first_TEST ← { LHS ⎕ RHS }
+#+END_EXAMPLE
+
+This single line Unit Test can then be executed
+
+#+BEGIN_EXAMPLE
+ ⎕UT.run first_TEST
+#+END_EXAMPLE
+
+Upon execution and evaluation of RHS, if the LHS does not match the 
+returned value from the RHS: the test is to be considered as failed, 
+appropriate text is to be displayed - clearly outlining the Expected 
+value and the Actual value - along with the textual representation 
+of the test.
+
+#+BEGIN_EXAMPLE
+ FAILED: first_TEST ← { LHS ⎕ RHS }
+ Expected 
+   ┌→────────┐
+   │   ┌→──┐ │
+   │ 1 │2 3│ │
+   │   └~──┘ │
+   └∊────────┘
+ Got
+   ┌→────┐                                                               
+   │1 2 3│
+   └~────┘
+#+END_EXAMPLE
+
+If the LHS matches the RHS, the test is to be considered as successfull 
+and no output is generated. The execution of the test must return 1 on 
+success and 0 on failure.
+
+| Execution Result | Side effect                      | Return value |
+|------------------+----------------------------------+--------------|
+| LHS ≡ RHS        | none                             |            1 |
+| LHS ≢ RHS        | Print expected and actual values |            0 |
+
+It can be wise to set and follow a fixed naming convention. 
+For example, all variables with the suffix '_TEST' are
+a test.
+
+#+BEGIN_EXAMPLE
+ My_TEST
+#+END_EXAMPLE
+
+** Automatic execution of multi-line Unit Test
+
+A test written across several lines. The match operator is used within 
+the function definition. 
+
+#+BEGIN_EXAMPLE
+∇ my_TEST
+  ...
+  LHS ⎕ RHS
+∇
+#+END_EXAMPLE
+
+Failure and Success behavior identical to the single line Unit Test behavior.
+
+** Automatic execution of all Unit Tests from file
+
+Having multiple Single line tests in a file, it must be possible to execute
+them all in one go. 
+
+#+BEGIN_EXAMPLE
+ (Failing Passing) ← ⎕UT.run File.dyalog
+#+END_EXAMPLE
+
+During the execution of the test cases, every failed test is displayed as 
+in the single line Unit Test execution - additionally a line number is 
+expected to show the failing test and which line it is on.
+
+#+BEGIN_EXAMPLE
+ FAILED 12: my_TEST ← { LHS ⎕ RHS }
+ Expected 
+   ┌→────────┐
+   │   ┌→──┐ │
+   │ 1 │2 3│ │
+   │   └~──┘ │
+   └∊────────┘
+ Got
+   ┌→────┐                                                               
+   │1 2 3│
+   └~────┘
+#+END_EXAMPLE
+
+At the end of the execution, an aggregated result is returned, 
+showing the amount of Failed and the amount of Passed testcases in 
+a vector. This shall also be printed for quick readability.
+
+#+BEGIN_EXAMPLE
+ File.dyalog unit tests
+ ⍋ 152 PASSED  
+ ⍒ 2   FAILED 
+ (Failing Passing) ← ⎕UT File.dyalog
+#+END_EXAMPLE
+
+
+* SHOULD 
+
+** Coverage report from Unit Test execution
+
+There shall be a setting indicating that a coverage report is to be generated
+as a result of the Unit Test execution. Recommended is that the output directory
+can be specified.
+
+#+BEGIN_EXAMPLE
+ ⎕UT.coverage 1
+ ⎕UT.out 'coverage'
+#+END_EXAMPLE
+
+but that the coverage report is as follows: An index.html file, showing the agregated
+total coverage, and the specific coverage for each dyalog module, with links to the specific
+dyalog module cover reports.
+
+#+BEGIN_EXAMPLE
+ coverage/
+  |- index.html
+  |- a.html
+  +- b.html
+#+END_EXAMPLE
+
+a.html and b.html are dyalog module specific coverage reports.
+The information displayed on the pages shall be at least as follows
+
+*** index.html
+
+1. Total project (dyalog files) coverage in percentage
+2. Total project covered lines
+3. Total project uncovered lines
+4. Link to each dyalog specific coverage page
+5. For each link
+ -  name of the file
+ -  coverage in percentage
+ -  covered lines
+ -  uncovered lines
+
+*** dyalog specific coverage page
+
+The X.dyalog file specific coverage page will show the source
+code in a page, and the covered lines are marked as black, while
+the uncovered lines are red.
+
+Additionally, there will be a rightmost column with numbering
+showing the amount of times every line is executed.
+
+The page itself shall have at the top
+
+1. The total coverage %
+2. The amount of covered lines
+3. The amount of uncovered lines
+
+** Test exception robustness
+   
+Exceptions in one test shall not disrupt the execution 
+of other tests. As such, the tests shall be isolated
+entities.
+
+Tests that fail with exception shall be marked as 'skipped'
+this result shall also be shown in the returned array.
+
+#+BEGIN_EXAMPLE
+ File.dyalog unit tests
+ ⍋ 152 PASSED  
+ ⋄ 3   SKIPPED
+ ⍒ 2   FAILED 
+ 
+ (Failing Skipped Passing) ← ⎕UT.run File.dyalog 
+#+END_EXAMPLE
+
+** Test Groups
+
+A test group is an array of test functions. It shall be possible 
+to create test groups and execute only a certain group.
+It can be wise to set and follow a fixed naming convention. 
+For example, all variables with the suffix '_GROUP' are
+a group.
+
+#+BEGIN_EXAMPLE
+ My_GROUP
+#+END_EXAMPLE
+
+
+#+BEGIN_EXAMPLE
+Test_GROUP ← (first_TEST ... last_TEST)
+⎕UT.run Test_GROUP
+#+END_EXAMPLE
+
+It shall also be possible to target a specific group within a File
+
+#+BEGIN_EXAMPLE
+⎕UT.run Test_GROUP File.dyalog
+#+END_EXAMPLE
+
+Output result shall for both cases show that this was a group
+
+#+BEGIN_EXAMPLE
+ Group Test_GROUP unit tests
+ ⍋ 10 PASSED  
+ ⋄ 0  SKIPPED
+ ⍒ 0  FAILED 
+ (Failing Skipped Passing) ← ⎕UT Test_GROUP File.dyalog
+#+END_EXAMPLE
+
+** Test Suites
+
+A test suite is an array of test groups. It shall be possible to 
+organize tests into Test Suites and execute only a certain suite.
+It can be wise to set and follow a fixed naming convention.
+For example, all variables with the suffix '_SUITE' are 
+a suite.
+
+#+BEGIN_EXAMPLE
+ My_SUITE
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+Test_SUITE ← (first_GROUP .. last_GROUP)
+⎕UT.run Test_SUITE
+#+END_EXAMPLE
+
+It shall also be possible to target a specific suite within a File
+
+#+BEGIN_EXAMPLE
+⎕UT.run Test_SUITE File.dyalog
+#+END_EXAMPLE
+
+Output result shall for both cases show thart this was a suite 
+being executed that contains groups.
+
+#+BEGIN_EXAMPLE
+ Suite Test_SUITE unit tests
+   Group first_GROUP
+    ⍋ 10 PASSED  
+    ⋄ 0  SKIPPED
+    ⍒ 0  FAILED 
+   Group second_GROUP
+    ⍋ 13 PASSED  
+    ⋄ 0  SKIPPED
+    ⍒ 1  FAILED 
+ --------------------------
+  ⍋ 23 PASSED
+  ⋄ 0  SKIPPED
+  ⍒ 1  FAILED
+ (Failing Skipped Passing) ← ⎕UT.run Test_SUITE File.dyalog
+#+END_EXAMPLE
+
+** Init and End per Test / Group / Suite
+
+For Tests, Groups and Suites, it shall be possible to specify
+an Initialization function, and an End function that is executed
+before, and after the Test / Group / Suite.
+
+The Init and End functions are niladic and dyadic, such that the
+result of the Init evaluation is passed onto the left argument of
+the End function and the test result of the Single test / Group / Suite
+is passed as the right argument of the End function. 
+
+#+BEGIN_EXAMPLE
+    ⎕_init 
+      |
+      ├-→ Test/Group/Suite execution
+      │       │
+      │     result
+      │       │
+      ∇ ⎕_end ∇
+#+END_EXAMPLE
+
+The relation between Test object and Initialization 
+and End functions shall be as follows.
+
+
+| Unit Test Object | Name    | Init function name | End function name |
+|------------------+---------+--------------------+-------------------|
+| Single Line      | ⎕_TEST  | ⎕_TEST_init        | ⎕_TEST_end        |
+| Multi line       | ⎕_TEST  | ⎕_TEST_init        | ⎕_TEST_end        |
+| Group            | ⎕_GROUP | ⎕_GROUP_init       | ⎕_GROUP_end       |
+| Suite            | ⎕_SUITE | ⎕_SUITE_init       | ⎕_SUITE_end       |
+
+If defined, the Init and End functions must be able to execute, invariably of 
+test success / fail or skip.
+
+
+* COULD
+
+
+* WOULD BE NICE
+
+
