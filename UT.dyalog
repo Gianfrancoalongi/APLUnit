@@ -10,7 +10,7 @@
 
 ∇ Z ← run Function;Name;Res;Tmp
         Name ← ⎕FX Function
-        Res ← ⍎ Name,' ⍬'
+        Res ← execute_function Name
         :If 1 = ⍴⍴ Res
                 ⎕ ← 'FAILED:',function_header Name 
                 ⎕ ← 'Expected'
@@ -20,6 +20,15 @@
                 Z ← 0
         :Else
                 Z ← Res
+        :EndIf
+∇
+
+∇ Z ← execute_function Name;R;C
+        (R C) ← ⍴ ⎕CR Name
+        :If R > 1 
+                Z ← ⍎ Name
+        :Else
+                Z ← ⍎ Name,' ⍬'
         :EndIf
 ∇
 
