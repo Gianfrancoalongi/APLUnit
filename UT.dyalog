@@ -1,9 +1,8 @@
 :NameSpace UT
 
 ∇ Z ← LHS eq RHS
-        :If LHS ≡ RHS
-                Z ← 1
-        :Else
+        Z ← 1
+        :If LHS ≢ RHS
                 Z ← LHS RHS
         :EndIf
 ∇
