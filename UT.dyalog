@@ -13,11 +13,7 @@
         Res ← execute_function Name
         Z ← Res
         :If 1 = ⍴⍴ Res
-                ⎕ ← 'FAILED:',function_header Name 
-                ⎕ ← 'Expected'
-                ⎕ ← show_term ⊃Res[1]
-                ⎕ ← 'Got'
-                ⎕ ← show_term ⊃Res[2]
+                Name display_expected_got Res
                 Z ← 0
         :EndIf
 ∇
@@ -30,6 +26,15 @@
                 Z ← ⍎ Name,' ⍬'
         :EndIf
 ∇
+
+∇ Name display_expected_got Res
+        ⎕ ← 'FAILED:',function_header Name 
+        ⎕ ← 'Expected'
+        ⎕ ← show_term ⊃Res[1]
+        ⎕ ← 'Got'
+        ⎕ ← show_term ⊃Res[2]
+∇
+
 
 ∇ Z ← function_header Name;Matrix;R;C
         Matrix ← ⎕CR Name
