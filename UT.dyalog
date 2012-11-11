@@ -11,6 +11,7 @@
 ∇ Z ← run Function;Name;Res;Tmp
         Name ← ⎕FX Function
         Res ← execute_function Name
+        Z ← Res
         :If 1 = ⍴⍴ Res
                 ⎕ ← 'FAILED:',function_header Name 
                 ⎕ ← 'Expected'
@@ -18,8 +19,6 @@
                 ⎕ ← 'Got'
                 ⎕ ← show_term ⊃Res[2]
                 Z ← 0
-        :Else
-                Z ← Res
         :EndIf
 ∇
 
