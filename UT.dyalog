@@ -83,7 +83,7 @@
         :If Index > ⍴ FunctionName
                 Tmp ← FunctionName
         :Else
-                Tmp ← FunctionName[⍳Index]
+                Tmp ← FunctionName[⍳(¯1 + Index)]
         :EndIf
         Z ← '_TEST' ≡ ¯5 ↑ Tmp
 ∇

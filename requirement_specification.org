@@ -94,11 +94,10 @@ them all in one go.
 #+END_EXAMPLE
 
 During the execution of the test cases, every failed test is displayed as 
-in the single line Unit Test execution - additionally a line number is 
-expected to show the failing test and which line it is on.
+in the single line Unit Test execution.
 
 #+BEGIN_EXAMPLE
- FAILED 12: my_TEST ← { LHS ⎕ RHS }
+ FAILED: my_TEST ← { LHS ⎕ RHS }
  Expected 
    ┌→────────┐
    │   ┌→──┐ │
