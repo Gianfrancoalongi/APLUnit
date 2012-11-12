@@ -55,7 +55,7 @@
         :EndIf
 ∇
 
-∇ Z ← run_file Path;TmpSpace;Fns;Res
+∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed
         'TmpSpace' ⎕NS ''
         'TmpSpace' ⎕NS '#.DISPLAY' '#.UT.is_test' '#.UT.get_namespace'
         ⎕CS 'TmpSpace'
@@ -68,10 +68,15 @@
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run∘⎕OR ¨ Fns
+        (Passed Failed) ← (⊃+/1=Res) (⊃+/0=Res)
+        ⎕ ← ''
+        ⎕ ← Path 'unit tests'
+        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
+        ⎕ ← '⍒ ',(⍕ Passed),' FAILED'
         ⎕CS ##
         ⎕CS ##
         ⎕EX 'TmpSpace'
-        Z ← (⊃+/1=Res) (⊃+/0=Res)
+        Z ← Passed Failed
 ∇
 
 ∇ Z ← get_namespace
