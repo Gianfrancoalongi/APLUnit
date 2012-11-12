@@ -1,0 +1,53 @@
+
+Example execution
+
+#+BEGIN_EXAMPLE
+     )clear                                           
+clear ws
+      )copy display
+/opt/mdyalog/13.0/32/unicode/ws/display saved Fri Apr  1 16:57:51 2011
+      ⎕ ← ⎕SE.SALT.Load '/home/gianfranco/APL/UnitTestFrameWork/*.dyalog'
+ #.UT  #.UTFile  #.UTT
+      UTT.Tests
+FAILED: single_line_failing_TEST←{2 #.UT.eq 1}
+Expected
+ 2                                                                                                           
+Got                                                                                                          
+ 1                                                                                                           
+FAILED: single_line_array_failing_TEST←{(1 2 3 4)#.UT.eq⍳3}                                                  
+Expected  
+ ┌→──────┐
+ │1 2 3 4│
+ └~──────┘
+Got     
+ ┌→────┐
+ │1 2 3│
+ └~────┘
+FAILED: Z←multi_line_failing_scalar_TEST;A;B ...  Z←3 #.UT.eq(A+B+B)
+Expected
+ 3
+Got
+ 5
+FAILED: Z←multi_line_array_failing_TEST;A;B ...  Z←((1 2)(2 3 4))#.UT.eq⍳¨A B
+Expected
+ ┌→──────────────┐
+ │ ┌→──┐ ┌→────┐ │
+ │ │1 2│ │2 3 4│ │
+ │ └~──┘ └~────┘ │
+ └∊──────────────┘
+Got               
+ ┌→──────────────┐
+ │ ┌→──┐ ┌→────┐ │
+ │ │1 2│ │1 2 3│ │
+ │ └~──┘ └~────┘ │
+ └∊──────────────┘
+FAILED: fromfile_single_line_failing_scalar_TEST←{3 #.UT.eq 1+1}
+Expected
+ 3
+Got
+ 2
+
+ /home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog  unit tests
+⍋ 1 PASSED
+⍒ 1 FAILED
+#+END_EXAMPLE
