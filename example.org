@@ -2,7 +2,7 @@
 Example execution
 
 #+BEGIN_EXAMPLE
-     )clear                                           
+     )clear
 clear ws
       )copy display
 /opt/mdyalog/13.0/32/unicode/ws/display saved Fri Apr  1 16:57:51 2011
@@ -11,11 +11,11 @@ clear ws
       UTT.Tests
 FAILED: single_line_failing_TEST←{2 #.UT.eq 1}
 Expected
- 2                                                                                                           
-Got                                                                                                          
- 1                                                                                                           
-FAILED: single_line_array_failing_TEST←{(1 2 3 4)#.UT.eq⍳3}                                                  
-Expected  
+ 2
+Got
+ 1
+FAILED: single_line_array_failing_TEST←{(1 2 3 4)#.UT.eq⍳3}
+Expected
  ┌→──────┐
  │1 2 3 4│
  └~──────┘
