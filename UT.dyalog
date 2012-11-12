@@ -64,15 +64,12 @@
         (⍕ ⎕THIS) ⎕NS '#.UT.is_test'
         (⍕ ⎕THIS) ⎕NS '#.UT.run' '#.UT.eq' '#.UT.execute_function'
         (⍕ ⎕THIS) ⎕NS '#.UT.display_expected_got' '#.UT.function_header' 
-        (⍕ ⎕THIS) ⎕NS '#.UT.show_term' '#.DISPLAY'        
+        (⍕ ⎕THIS) ⎕NS '#.UT.show_term' '#.DISPLAY' '#.UT.print_file_result'
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run∘⎕OR ¨ Fns
         (Passed Failed) ← (⊃+/1=Res) (⊃+/0=Res)
-        ⎕ ← ''
-        ⎕ ← Path 'unit tests'
-        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
-        ⎕ ← '⍒ ',(⍕ Passed),' FAILED'
+        print_file_result Passed Failed
         ⎕CS ##
         ⎕CS ##
         ⎕EX 'TmpSpace'
@@ -91,6 +88,14 @@
                 Tmp ← FunctionName[⍳(¯1 + Index)]
         :EndIf
         Z ← '_TEST' ≡ ¯5 ↑ Tmp
+∇
+
+∇ print_file_result (Passed Failed)
+        ⎕ ← ''
+        ⎕ ← Path 'unit tests'
+        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
+        ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
+
 ∇
 
 :EndNameSpace
