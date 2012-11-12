@@ -15,6 +15,7 @@
                 Name display_expected_got Res
                 Z ← 0
         :EndIf
+        ⎕EX Name
 ∇
 
 ∇ Z ← execute_function Name;R;C
@@ -54,5 +55,37 @@
         :EndIf
 ∇
 
+∇ Z ← run_file Path;TmpSpace;Fns;Res
+        'TmpSpace' ⎕NS ''
+        'TmpSpace' ⎕NS '#.DISPLAY' '#.UT.is_test' '#.UT.get_namespace'
+        ⎕CS 'TmpSpace'
+        ⎕SE.SALT.Load Path
+        ⎕CS get_namespace
+        (⍕ ⎕THIS) ⎕NS '#.UT.is_test'
+        (⍕ ⎕THIS) ⎕NS '#.UT.run' '#.UT.eq' '#.UT.execute_function'
+        (⍕ ⎕THIS) ⎕NS '#.UT.display_expected_got' '#.UT.function_header' 
+        (⍕ ⎕THIS) ⎕NS '#.UT.show_term' '#.DISPLAY'        
+        Fns ← ↓ ⎕THIS.⎕NL 3
+        Fns ← ( is_test ¨ Fns) / Fns
+        Res ← run∘⎕OR ¨ Fns
+        ⎕CS ##
+        ⎕CS ##
+        ⎕EX 'TmpSpace'
+        Z ← (⊃+/1=Res) (⊃+/0=Res)
+∇
+
+∇ Z ← get_namespace
+        Z ← ⊃ ↓ ⎕NL 9
+∇
+
+∇ Z ← is_test FunctionName;Index;Tmp
+        Index ← FunctionName ⍳ ' '
+        :If Index > ⍴ FunctionName
+                Tmp ← FunctionName
+        :Else
+                Tmp ← FunctionName[⍳Index]
+        :EndIf
+        Z ← '_TEST' ≡ ¯5 ↑ Tmp
+∇
 
 :EndNameSpace
