@@ -1,7 +1,7 @@
 #+OPTIONS: ^:{}
 
 * MUST
-** Automatic execution of single line Unit Test
+** [d] Automatic execution of single line Unit Test
    
 A test - written on one line, with the expected value on the 
 left hand side (LHS) of a special unit test equality operator 
@@ -54,7 +54,7 @@ a test.
  My_TEST
 #+END_EXAMPLE
 
-** Automatic execution of multi-line Unit Test
+** [d] Automatic execution of multi-line Unit Test
 
 A test written across several lines. The match operator is used within 
 the function definition. 
@@ -84,7 +84,7 @@ It will truncate the displayed function, showing the first and last lines.
    └~────┘
 #+END_EXAMPLE
 
-** Automatic execution of all Unit Tests from file
+** [d] Automatic execution of all Unit Tests from file
    
 Having multiple Single line tests in a file, it must be possible to execute
 them all in one go. 
@@ -122,7 +122,6 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-
 ** Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated
@@ -175,7 +174,7 @@ The page itself shall have at the top
 2. The amount of covered lines
 3. The amount of uncovered lines
 
-** Test exception robustness
+** [o] Test exception robustness
    
 Exceptions in one test shall not disrupt the execution 
 of other tests. As such, the tests shall be isolated
