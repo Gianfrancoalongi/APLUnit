@@ -57,14 +57,12 @@
 
 ∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed
         'TmpSpace' ⎕NS ''
-        'TmpSpace' ⎕NS '#.DISPLAY' '#.UT.is_test' '#.UT.get_namespace'
+        'TmpSpace' ⎕NS '#.DISPLAY' 
+        {'TmpSpace'  ⎕NS ⍵ } ¨ ↓ #.UT.⎕NL 3
         ⎕CS 'TmpSpace'
         ⎕SE.SALT.Load Path
         ⎕CS get_namespace
-        (⍕ ⎕THIS) ⎕NS '#.UT.is_test'
-        (⍕ ⎕THIS) ⎕NS '#.UT.run' '#.UT.eq' '#.UT.execute_function'
-        (⍕ ⎕THIS) ⎕NS '#.UT.display_expected_got' '#.UT.function_header' 
-        (⍕ ⎕THIS) ⎕NS '#.UT.show_term' '#.DISPLAY' '#.UT.print_file_result'
+        { (⍕ ⎕THIS) ⎕NS '#.UT.',⍵ } ¨ ↓ #.UT.⎕NL 3
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run∘⎕OR ¨ Fns
