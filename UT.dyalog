@@ -82,9 +82,8 @@
 
 ∇ Z ← is_test FunctionName;Index;Tmp
         Index ← FunctionName ⍳ ' '
-        :If Index > ⍴ FunctionName
-                Tmp ← FunctionName
-        :Else
+        Tmp ← FunctionName
+        :If Index ≤ ⍴ FunctionName
                 Tmp ← FunctionName[⍳(¯1 + Index)]
         :EndIf
         Z ← '_TEST' ≡ ¯5 ↑ Tmp
@@ -95,7 +94,6 @@
         ⎕ ← Path 'unit tests'
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
-
 ∇
 
 :EndNameSpace
