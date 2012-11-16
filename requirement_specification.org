@@ -122,6 +122,21 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
+** Assertion operator to expect events with certain ⎕EN
+
+It shall be possible to assert that the RHS execution will
+result in an exception event with a given ⎕EN and possibly
+a defined ⎕DM.
+
+#+BEGIN_EXAMPLE
+exception_TEST ← {  LHS UT.exception RHS }
+#+END_EXAMPLE
+
+The behaviour should behave similarly as the return value 
+assertion operator. If the RHS raises an exception, and the 
+⎕EN matches the LHS - it shall return 1. If the ⎕EN does not match
+the LHS it shall return 0. If no exception is raised, return 0.
+
 ** Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated
