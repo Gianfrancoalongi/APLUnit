@@ -14,7 +14,7 @@ and the function to be called on the right hand side (RHS).
 This single line Unit Test can then be executed
 
 #+BEGIN_EXAMPLE
- ⎕UT.run first_TEST
+ UT.run first_TEST
 #+END_EXAMPLE
 
 Upon execution and evaluation of RHS, if the LHS does not match the 
@@ -90,7 +90,7 @@ Having multiple Single line tests in a file, it must be possible to execute
 them all in one go. 
 
 #+BEGIN_EXAMPLE
- (Passing Failing) ← ⎕UT.run_file File.dyalog
+ (Passing Failing) ← UT.run_file File.dyalog
 #+END_EXAMPLE
 
 During the execution of the test cases, every failed test is displayed as 
@@ -118,7 +118,7 @@ a vector. This shall also be printed for quick readability.
  File.dyalog unit tests
  ⍋ 152 PASSED  
  ⍒ 2   FAILED 
- (Passing Failing) ← ⎕UT.run_file File.dyalog
+ (Passing Failing) ← UT.run_file File.dyalog
 #+END_EXAMPLE
 
 * SHOULD 
@@ -129,8 +129,8 @@ as a result of the Unit Test execution. Recommended is that the output directory
 can be specified.
 
 #+BEGIN_EXAMPLE
- ⎕UT.coverage 1
- ⎕UT.out 'coverage'
+ UT.coverage 1
+ UT.out 'coverage'
 #+END_EXAMPLE
 
 but that the coverage report is as follows: An index.html file, showing the agregated
@@ -189,7 +189,7 @@ this result shall also be shown in the returned array.
  ⋄ 3   SKIPPED
  ⍒ 2   FAILED 
  
- (Passing Skipped Failing) ← ⎕UT.run File.dyalog 
+ (Passing Skipped Failing) ← UT.run File.dyalog 
 #+END_EXAMPLE
 
 ** Test Groups
@@ -207,13 +207,13 @@ a group.
 
 #+BEGIN_EXAMPLE
 Test_GROUP ← (first_TEST ... last_TEST)
-⎕UT.run Test_GROUP
+UT.run Test_GROUP
 #+END_EXAMPLE
 
 It shall also be possible to target a specific group within a File
 
 #+BEGIN_EXAMPLE
-⎕UT.run Test_GROUP File.dyalog
+UT.run Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 Output result shall for both cases show that this was a group
@@ -223,7 +223,7 @@ Output result shall for both cases show that this was a group
  ⍋ 10 PASSED  
  ⋄ 0  SKIPPED
  ⍒ 0  FAILED 
- (Passing Skipped Failing) ← ⎕UT Test_GROUP File.dyalog
+ (Passing Skipped Failing) ← UT Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 ** Test Suites
@@ -240,13 +240,13 @@ a suite.
 
 #+BEGIN_EXAMPLE
 Test_SUITE ← (first_GROUP .. last_GROUP)
-⎕UT.run Test_SUITE
+UT.run Test_SUITE
 #+END_EXAMPLE
 
 It shall also be possible to target a specific suite within a File
 
 #+BEGIN_EXAMPLE
-⎕UT.run Test_SUITE File.dyalog
+UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 Output result shall for both cases show thart this was a suite 
@@ -266,7 +266,7 @@ being executed that contains groups.
   ⍋ 23 PASSED
   ⋄ 0  SKIPPED
   ⍒ 1  FAILED
- (Passing Skipped Failing) ← ⎕UT.run Test_SUITE File.dyalog
+ (Passing Skipped Failing) ← UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 ** Init and End per Test / Group / Suite
@@ -311,13 +311,13 @@ It shall be possible to configure if the execution time of each
 TEST/GROUP/SUITE is to be collected and reported.
 
 #+BEGIN_EXAMPLE
- ⎕UT.runtime 1
+ UT.runtime 1
 #+END_EXAMPLE
 
 Example of wanted output for single TEST execution
 
 #+BEGIN_EXAMPLE
- RunTime ← ⎕UT.run first_TEST
+ RunTime ← UT.run first_TEST
  PASSED - 0.01 Seconds
 #+END_EXAMPLE
 
@@ -329,7 +329,7 @@ Example of wanted output for single GROUP execution
  ⋄ 0  SKIPPED
  ⍒ 0  FAILED 
  ○ 0.02 Seconds
- (Passing Skipped Failing RunTime) ← ⎕UT Test_GROUP File.dyalog
+ (Passing Skipped Failing RunTime) ← UT Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 Example of wanted output for single SUITE execution
@@ -351,7 +351,7 @@ Example of wanted output for single SUITE execution
   ⋄ 0  SKIPPED
   ⍒ 1  FAILED
   ○ 0.03 Seconds
- (Passing Skipped Failing RunTime) ← ⎕UT.run Test_SUITE File.dyalog
+ (Passing Skipped Failing RunTime) ← UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 * WOULD BE NICE
