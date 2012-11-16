@@ -34,6 +34,12 @@ single_line_array_failing_TEST ← { (1 2 3 4) #.UT.eq ⍳ 3 }
 
 single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
 
+∇ Z ← multi_line_index_error_TEST
+        A ← 3
+        B ← 4
+        Z ← A #.UT.eq B ⌷ ⍳ A
+∇
+
 ∇ Z ← Tests 
         Z ← ⍬
         Z ,← 1 ≡ #.UT.run ⎕OR 'single_line_TEST'
@@ -46,6 +52,7 @@ single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
         Z ,← 0 ≡ #.UT.run ⎕OR 'multi_line_array_failing_TEST'
         Z ,← (2 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         Z ,← 2 ≡ #.UT.run ⎕OR 'single_line_syntax_error_TEST'
+        Z ,← 3 ≡ #.UT.run ⎕OR 'multi_line_index_error_TEST'
 ∇
 
 :EndNameSpace
