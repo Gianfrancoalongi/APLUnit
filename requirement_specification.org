@@ -180,17 +180,29 @@ Exceptions in one test shall not disrupt the execution
 of other tests. As such, the tests shall be isolated
 entities.
 
-Tests that fail with exception shall be marked as 'skipped'
+When running multiple tests, if a test fails to execute
+due to an exception, it shall be marked as 'exception'
 this result shall also be shown in the returned array.
 
 #+BEGIN_EXAMPLE
  File.dyalog unit tests
  ⍋ 152 PASSED  
- ⋄ 3   SKIPPED
+ ⋄ 3   EXCEPTION
  ⍒ 2   FAILED 
  
- (Passing Skipped Failing) ← UT.run File.dyalog 
+ (Passing Exception Failing) ← UT.run File.dyalog 
 #+END_EXAMPLE
+
+Every exception:d test execution shall display the
+exception as 
+
+#+BEGIN_EXAMPLE
+ EXCEPTION: first_TEST ← { LHS ⎕ RHS }
+ - some additional information here -
+#+END_EXAMPLE
+
+The return value of a test failing due to exception
+is the event number.
 
 ** Test Groups
 
@@ -221,9 +233,9 @@ Output result shall for both cases show that this was a group
 #+BEGIN_EXAMPLE
  Group Test_GROUP unit tests
  ⍋ 10 PASSED  
- ⋄ 0  SKIPPED
+ ⋄ 0  EXCEPTION
  ⍒ 0  FAILED 
- (Passing Skipped Failing) ← UT Test_GROUP File.dyalog
+ (Passing Exception Failing) ← UT Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 ** Test Suites
@@ -256,17 +268,17 @@ being executed that contains groups.
  Suite Test_SUITE unit tests
    Group first_GROUP
     ⍋ 10 PASSED  
-    ⋄ 0  SKIPPED
+    ⋄ 0  EXCEPTION
     ⍒ 0  FAILED 
    Group second_GROUP
     ⍋ 13 PASSED  
-    ⋄ 0  SKIPPED
+    ⋄ 0  EXCEPTION
     ⍒ 1  FAILED 
  --------------------------
   ⍋ 23 PASSED
-  ⋄ 0  SKIPPED
+  ⋄ 0  EXCEPTION
   ⍒ 1  FAILED
- (Passing Skipped Failing) ← UT.run Test_SUITE File.dyalog
+ (Passing Exception Failing) ← UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 ** Init and End per Test / Group / Suite
@@ -326,10 +338,10 @@ Example of wanted output for single GROUP execution
 #+BEGIN_EXAMPLE
  Group Test_GROUP unit tests
  ⍋ 10 PASSED  
- ⋄ 0  SKIPPED
+ ⋄ 0  EXCEPTION
  ⍒ 0  FAILED 
  ○ 0.02 Seconds
- (Passing Skipped Failing RunTime) ← UT Test_GROUP File.dyalog
+ (Passing Exception Failing RunTime) ← UT Test_GROUP File.dyalog
 #+END_EXAMPLE
 
 Example of wanted output for single SUITE execution
@@ -338,20 +350,20 @@ Example of wanted output for single SUITE execution
  Suite Test_SUITE unit tests
    Group first_GROUP
     ⍋ 10 PASSED  
-    ⋄ 0  SKIPPED
+    ⋄ 0  EXCEPTION
     ⍒ 0  FAILED 
     ○ 0.01 Seconds
    Group second_GROUP
     ⍋ 13 PASSED  
-    ⋄ 0  SKIPPED
+    ⋄ 0  EXCEPTION
     ⍒ 1  FAILED 
     ○ 0.02 Seconds
  --------------------------
   ⍋ 23 PASSED
-  ⋄ 0  SKIPPED
+  ⋄ 0  EXCEPTION
   ⍒ 1  FAILED
   ○ 0.03 Seconds
- (Passing Skipped Failing RunTime) ← UT.run Test_SUITE File.dyalog
+ (Passing Exception Failing RunTime) ← UT.run Test_SUITE File.dyalog
 #+END_EXAMPLE
 
 * WOULD BE NICE

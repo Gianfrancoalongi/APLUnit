@@ -7,14 +7,19 @@
         :EndIf
 ∇
 
-∇ Z ← run Function;Name;Res;Tmp
+∇ Z ← run Function;Name;Res;Tmp        
         Name ← ⎕FX Function
-        Res ← execute_function Name
-        Z ← Res
-        :If 1 = ⍴⍴ Res
-                Name display_expected_got Res
-                Z ← 0
-        :EndIf
+        :Trap 0
+                Res ← execute_function Name
+                Z ← Res
+                :If 1 = ⍴⍴ Res
+                        Name display_expected_got Res
+                        Z ← 0
+                :EndIf
+        :Else
+                display_exception Name
+                Z ← ⎕EN
+        :EndTrap
         ⎕EX Name
 ∇
 
@@ -33,6 +38,13 @@
         ⎕ ← show_term ⊃Res[1]
         ⎕ ← 'Got'
         ⎕ ← show_term ⊃Res[2]
+∇
+
+∇ display_exception Name
+        ⎕ ← 'EXCEPTION:',function_header Name 
+        ⎕ ← ' LC:',⎕LC
+        ⎕ ← ' EN:',⎕EN
+        ⎕ ← ↑⎕DM
 ∇
 
 
@@ -55,7 +67,7 @@
         :EndIf
 ∇
 
-∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed
+∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed;Exception
         'TmpSpace' ⎕NS ''
         'TmpSpace' ⎕NS '#.DISPLAY' 
         {'TmpSpace'  ⎕NS ⍵ } ¨ ↓ #.UT.⎕NL 3
@@ -66,12 +78,12 @@
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run∘⎕OR ¨ Fns
-        (Passed Failed) ← (⊃+/1=Res) (⊃+/0=Res)
-        print_file_result Passed Failed
+        (Passed Exception Failed) ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
+        print_file_result Passed Exception Failed
         ⎕CS ##
         ⎕CS ##
         ⎕EX 'TmpSpace'
-        Z ← Passed Failed
+        Z ← Passed Exception Failed
 ∇
 
 ∇ Z ← get_namespace
@@ -87,10 +99,11 @@
         Z ← '_TEST' ≡ ¯5 ↑ Tmp
 ∇
 
-∇ print_file_result (Passed Failed)
+∇ print_file_result (Passed Exception Failed)
         ⎕ ← ''
         ⎕ ← Path 'unit tests'
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
+        ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
 ∇
 

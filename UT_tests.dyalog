@@ -32,6 +32,8 @@ single_line_array_failing_TEST ← { (1 2 3 4) #.UT.eq ⍳ 3 }
         Z ←  ((1 2) (2 3 4)) #.UT.eq ⍳ ¨ A B
 ∇
 
+single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
+
 ∇ Z ← Tests 
         Z ← ⍬
         Z ,← 1 ≡ #.UT.run ⎕OR 'single_line_TEST'
@@ -42,7 +44,8 @@ single_line_array_failing_TEST ← { (1 2 3 4) #.UT.eq ⍳ 3 }
         Z ,← 0 ≡ #.UT.run ⎕OR 'multi_line_failing_scalar_TEST'
         Z ,← 1 ≡ #.UT.run ⎕OR 'multi_line_array_TEST'
         Z ,← 0 ≡ #.UT.run ⎕OR 'multi_line_array_failing_TEST'
-        Z ,← (2 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        Z ,← (2 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        Z ,← 2 ≡ #.UT.run ⎕OR 'single_line_syntax_error_TEST'
 ∇
 
 :EndNameSpace
