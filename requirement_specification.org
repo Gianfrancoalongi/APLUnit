@@ -133,7 +133,7 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [t] Assertion operator to expect events with ⎕EN and possibly ⎕DM
+** [o] Assertion operator to expect events with ⎕EN and possibly ⎕DM
 
 It shall be possible to assert that the RHS execution will
 result in an exception with a given ⎕EN and a possibly given ⎕DM.
