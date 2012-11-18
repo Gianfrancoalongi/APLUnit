@@ -42,17 +42,17 @@ single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
 
 ∇ Z ← Tests 
         Z ← ⍬
-        Z ,← 1 ≡ #.UT.run ⎕OR 'single_line_TEST'
-        Z ,← 0 ≡ #.UT.run ⎕OR 'single_line_failing_TEST'
-        Z ,← 1 ≡ #.UT.run ⎕OR 'single_line_array_TEST'
-        Z ,← 0 ≡ #.UT.run ⎕OR 'single_line_array_failing_TEST'
-        Z ,← 1 ≡ #.UT.run ⎕OR 'multi_line_scalar_TEST'
-        Z ,← 0 ≡ #.UT.run ⎕OR 'multi_line_failing_scalar_TEST'
-        Z ,← 1 ≡ #.UT.run ⎕OR 'multi_line_array_TEST'
-        Z ,← 0 ≡ #.UT.run ⎕OR 'multi_line_array_failing_TEST'
+        Z ,← 1 ≡ #.UT.run 'single_line_TEST'
+        Z ,← 0 ≡ #.UT.run 'single_line_failing_TEST'
+        Z ,← 1 ≡ #.UT.run 'single_line_array_TEST'
+        Z ,← 0 ≡ #.UT.run 'single_line_array_failing_TEST'
+        Z ,← 1 ≡ #.UT.run 'multi_line_scalar_TEST'
+        Z ,← 0 ≡ #.UT.run 'multi_line_failing_scalar_TEST'
+        Z ,← 1 ≡ #.UT.run 'multi_line_array_TEST'
+        Z ,← 0 ≡ #.UT.run 'multi_line_array_failing_TEST'
         Z ,← (2 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
-        Z ,← 2 ≡ #.UT.run ⎕OR 'single_line_syntax_error_TEST'
-        Z ,← 3 ≡ #.UT.run ⎕OR 'multi_line_index_error_TEST'
+        Z ,← 2 ≡ #.UT.run 'single_line_syntax_error_TEST'
+        Z ,← 3 ≡ #.UT.run 'multi_line_index_error_TEST'
 ∇
 
 :EndNameSpace

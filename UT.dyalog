@@ -7,20 +7,21 @@
         :EndIf
 ∇
 
-∇ Z ← run Function;Name;Res;Tmp        
-        Name ← ⎕FX Function
+∇ Z ← run Function;Res;Tmp        
+        Tmp ← 1 ⊃ ⎕RSI
+        Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         :Trap 0
-                Res ← execute_function Name
+                Res ← execute_function Function
                 Z ← Res
                 :If 1 = ⍴⍴ Res
-                        Name display_expected_got Res
+                        Function display_expected_got Res
                         Z ← 0
                 :EndIf
         :Else
-                display_exception Name
+                display_exception Function
                 Z ← ⎕EN
         :EndTrap
-        ⎕EX Name
+        ⎕EX Function
 ∇
 
 ∇ Z ← execute_function Name;R;C
@@ -77,7 +78,7 @@
         { (⍕ ⎕THIS) ⎕NS '#.UT.',⍵ } ¨ ↓ #.UT.⎕NL 3
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
-        Res ← run∘⎕OR ¨ Fns
+        Res ← run ¨ Fns
         (Passed Exception Failed) ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
         print_file_result Passed Exception Failed
         ⎕CS ##
