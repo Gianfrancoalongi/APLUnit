@@ -1,5 +1,16 @@
 #+OPTIONS: ^:{}
 
+* Legends
+
+For all items in MUST / SHOULD / COULD / WOULD BE NICE, the following
+legends are defined.
+
+| Legend | Means                          |
+|--------+--------------------------------|
+| [d]    | Done - implemented             |
+| [o]    | Ongoing - currently working on |
+| [t]    | To do - waiting to be started  |
+
 * MUST
 ** [d] Automatic execution of single line Unit Test
    
@@ -122,7 +133,7 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** Assertion operator to expect events with certain ⎕EN
+** [t] Assertion operator to expect events with certain ⎕EN
 
 It shall be possible to assert that the RHS execution will
 result in an exception event with a given ⎕EN and possibly
@@ -137,7 +148,7 @@ assertion operator. If the RHS raises an exception, and the
 ⎕EN matches the LHS - it shall return 1. If the ⎕EN does not match
 the LHS it shall return 0. If no exception is raised, return 0.
 
-** Coverage report from Unit Test execution
+** [t] Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated
 as a result of the Unit Test execution. Recommended is that the output directory
@@ -219,7 +230,7 @@ exception as
 The return value of a test failing due to exception
 is the event number.
 
-** Test Groups
+** [t] Test Groups
 
 A test group is an array of test functions. It shall be possible 
 to create test groups and execute only a certain group.
@@ -253,7 +264,7 @@ Output result shall for both cases show that this was a group
  (Passing Exception Failing) ← Test_GROUP UT.run_grup File.dyalog
 #+END_EXAMPLE
 
-** Test Suites
+** [t] Test Suites
 
 A test suite is an array of test groups. It shall be possible to 
 organize tests into Test Suites and execute only a certain suite.
@@ -296,7 +307,7 @@ being executed that contains groups.
  (Passing Exception Failing) ← Test_SUITE UT.run_suite File.dyalog
 #+END_EXAMPLE
 
-** Init and End per Test / Group / Suite
+** [t] Init and End per Test / Group / Suite
 
 For Tests, Groups and Suites, it shall be possible to specify
 an Initialization function, and an End function that is executed
@@ -332,7 +343,7 @@ If defined, the Init and End functions must be able to execute, invariably of
 test success / fail or skip.
 
 * COULD
-** Collect and show execution time
+** [t] Collect and show execution time
  
 It shall be possible to configure if the execution time of each
 TEST/GROUP/SUITE is to be collected and reported.
