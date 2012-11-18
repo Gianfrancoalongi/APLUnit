@@ -8,7 +8,7 @@ left hand side (LHS) of a special unit test equality operator
 and the function to be called on the right hand side (RHS).
 
 #+BEGIN_EXAMPLE
- first_TEST ← { LHS ⎕ RHS }
+ first_TEST ← { LHS UT.eq RHS }
 #+END_EXAMPLE
 
 This single line Unit Test can then be executed
@@ -24,7 +24,7 @@ value and the Actual value - along with the textual representation
 of the test.
 
 #+BEGIN_EXAMPLE
- FAILED: first_TEST ← { LHS ⎕ RHS }
+ FAILED: first_TEST ← { LHS UT.eq RHS }
  Expected 
    ┌→────────┐
    │   ┌→──┐ │
@@ -62,7 +62,7 @@ the function definition.
 #+BEGIN_EXAMPLE
 ∇ Z ← my_TEST
   ...
-  Z ← LHS ⎕ RHS
+  Z ← LHS UT.eq RHS
 ∇
 #+END_EXAMPLE
 
@@ -71,7 +71,7 @@ except that for the failure case, the whole function is not shown.
 It will truncate the displayed function, showing the first and last lines.
 
 #+BEGIN_EXAMPLE
- FAILED: ∇ Z ← my_TEST ... Z ← LHS ⎕ RHS ∇
+ FAILED: ∇ Z ← my_TEST ... Z ← LHS UT.eq RHS ∇
  Expected 
    ┌→────────┐
    │   ┌→──┐ │
@@ -97,7 +97,7 @@ During the execution of the test cases, every failed test is displayed as
 in the single line Unit Test execution.
 
 #+BEGIN_EXAMPLE
- FAILED: my_TEST ← { LHS ⎕ RHS }
+ FAILED: my_TEST ← { LHS UT.eq RHS }
  Expected 
    ┌→────────┐
    │   ┌→──┐ │
@@ -205,14 +205,14 @@ this result shall also be shown in the returned array.
  ⋄ 3   EXCEPTION
  ⍒ 2   FAILED 
  
- (Passing Exception Failing) ← UT.run File.dyalog 
+ (Passing Exception Failing) ← UT.run_file File.dyalog 
 #+END_EXAMPLE
 
 Every exception:d test execution shall display the
 exception as 
 
 #+BEGIN_EXAMPLE
- EXCEPTION: first_TEST ← { LHS ⎕ RHS }
+ EXCEPTION: first_TEST ← { LHS UT.eq RHS }
  - some additional information here -
 #+END_EXAMPLE
 
@@ -234,23 +234,23 @@ a group.
 
 #+BEGIN_EXAMPLE
 Test_GROUP ← (first_TEST ... last_TEST)
-UT.run Test_GROUP
+UT.run_group Test_GROUP
 #+END_EXAMPLE
 
 It shall also be possible to target a specific group within a File
 
 #+BEGIN_EXAMPLE
-UT.run Test_GROUP File.dyalog
+Test_GROUP UT.run_group_file  File.dyalog
 #+END_EXAMPLE
 
 Output result shall for both cases show that this was a group
 
 #+BEGIN_EXAMPLE
- Group Test_GROUP unit tests
+ Group Test_GROUP in File.dyalog
  ⍋ 10 PASSED  
  ⋄ 0  EXCEPTION
  ⍒ 0  FAILED 
- (Passing Exception Failing) ← UT Test_GROUP File.dyalog
+ (Passing Exception Failing) ← Test_GROUP UT.run_grup File.dyalog
 #+END_EXAMPLE
 
 ** Test Suites
@@ -267,20 +267,20 @@ a suite.
 
 #+BEGIN_EXAMPLE
 Test_SUITE ← (first_GROUP .. last_GROUP)
-UT.run Test_SUITE
+UT.run_suite Test_SUITE
 #+END_EXAMPLE
 
 It shall also be possible to target a specific suite within a File
 
 #+BEGIN_EXAMPLE
-UT.run Test_SUITE File.dyalog
+Test_SUITE UT.run_suite File.dyalog
 #+END_EXAMPLE
 
 Output result shall for both cases show thart this was a suite 
 being executed that contains groups.
 
 #+BEGIN_EXAMPLE
- Suite Test_SUITE unit tests
+ Suite Test_SUITE in File.dyalog
    Group first_GROUP
     ⍋ 10 PASSED  
     ⋄ 0  EXCEPTION
@@ -293,7 +293,7 @@ being executed that contains groups.
   ⍋ 23 PASSED
   ⋄ 0  EXCEPTION
   ⍒ 1  FAILED
- (Passing Exception Failing) ← UT.run Test_SUITE File.dyalog
+ (Passing Exception Failing) ← Test_SUITE UT.run_suite File.dyalog
 #+END_EXAMPLE
 
 ** Init and End per Test / Group / Suite
@@ -308,13 +308,13 @@ the End function and the test result of the Single test / Group / Suite
 is passed as the right argument of the End function. 
 
 #+BEGIN_EXAMPLE
-    ⎕_init 
+    X_init 
       |
       ├-→ Test/Group/Suite execution
       │       │
       │     result
       │       │
-      ∇ ⎕_end ∇
+      ∇ X_end ∇
 #+END_EXAMPLE
 
 The relation between Test object and Initialization 
@@ -323,10 +323,10 @@ and End functions shall be as follows.
 
 | Unit Test Object | Name    | Init function name | End function name |
 |------------------+---------+--------------------+-------------------|
-| Single Line      | ⎕_TEST  | ⎕_TEST_init        | ⎕_TEST_end        |
-| Multi line       | ⎕_TEST  | ⎕_TEST_init        | ⎕_TEST_end        |
-| Group            | ⎕_GROUP | ⎕_GROUP_init       | ⎕_GROUP_end       |
-| Suite            | ⎕_SUITE | ⎕_SUITE_init       | ⎕_SUITE_end       |
+| Single Line      | X_TEST  | X_TEST_init        | X_TEST_end        |
+| Multi line       | X_TEST  | X_TEST_init        | X_TEST_end        |
+| Group            | X_GROUP | X_GROUP_init       | X_GROUP_end       |
+| Suite            | X_SUITE | X_SUITE_init       | X_SUITE_end       |
 
 If defined, the Init and End functions must be able to execute, invariably of 
 test success / fail or skip.
@@ -351,18 +351,18 @@ Example of wanted output for single TEST execution
 Example of wanted output for single GROUP execution
 
 #+BEGIN_EXAMPLE
- Group Test_GROUP unit tests
+ Group Test_GROUP in File.dyalog
  ⍋ 10 PASSED  
  ⋄ 0  EXCEPTION
  ⍒ 0  FAILED 
  ○ 0.02 Seconds
- (Passing Exception Failing RunTime) ← UT Test_GROUP File.dyalog
+ (Passing Exception Failing RunTime) ← Test_GROUP UT.run_group File.dyalog
 #+END_EXAMPLE
 
 Example of wanted output for single SUITE execution
 
 #+BEGIN_EXAMPLE
- Suite Test_SUITE unit tests
+ Suite Test_SUITE in File.dyalog
    Group first_GROUP
     ⍋ 10 PASSED  
     ⋄ 0  EXCEPTION
@@ -378,7 +378,7 @@ Example of wanted output for single SUITE execution
   ⋄ 0  EXCEPTION
   ⍒ 1  FAILED
   ○ 0.03 Seconds
- (Passing Exception Failing RunTime) ← UT.run Test_SUITE File.dyalog
+ (Passing Exception Failing RunTime) ← Test_SUITE UT.run_suite File.dyalog
 #+END_EXAMPLE
 
 * WOULD BE NICE
