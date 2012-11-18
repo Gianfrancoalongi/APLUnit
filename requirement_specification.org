@@ -189,7 +189,7 @@ The page itself shall have at the top
 2. The amount of covered lines
 3. The amount of uncovered lines
 
-** [o] Test exception robustness
+** [d] Test exception robustness
    
 Exceptions in one test shall not disrupt the execution 
 of other tests. As such, the tests shall be isolated
