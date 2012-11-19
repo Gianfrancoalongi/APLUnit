@@ -162,6 +162,42 @@ equal to TEXT this will return 1, in all other cases - it will return 0.
 exception_TEST ← {  LHS UT.exception RHS }
 #+END_EXAMPLE
 
+As of now - I do not know how to achieve this, given that I do not
+know how to construct macros in order to transform
+
+#+BEGIN_EXAMPLE
+ LHS OP RHS
+#+END_EXAMPLE
+
+into a trap with ⎕EN and ⎕DM testing
+
+#+BEGIN_EXAMPLE
+ :Trap 0
+     RHS
+ :Else
+     ...
+ :EndTrap
+#+END_EXAMPLE
+
+The new description will then be. It shall be possible to use 
+UT-namespace global variables to express that a function call 
+in the test will generate an exception.
+
+#+BEGIN_EXAMPLE
+ exception_TEST ← { UT.EN ← 2 ⋄ ⍳ }
+#+END_EXAMPLE
+
+the multi line version would be similar 
+
+#+BEGIN_EXAMPLE
+∇ multi_line_exception_TEST
+      UT.EN ← 6
+      UT.DM ← 'some message'
+      some_function_call
+∇
+#+END_EXAMPLE
+
+
 ** [t] Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated

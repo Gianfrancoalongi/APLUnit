@@ -1,5 +1,8 @@
 :NameSpace UT
 
+EN ← ⍬
+DM ← ⍬
+
 ∇ Z ← LHS eq RHS
         Z ← 1
         :If LHS ≢ RHS
@@ -18,8 +21,17 @@
                         Z ← 0
                 :EndIf
         :Else
-                display_exception Function
-                Z ← ⎕EN
+                :If EN ≢ ⍬
+                        Z ← 1
+                        :If EN ≢ ⎕EN                                
+                                Z ← 0                        
+                        :EndIf
+                        EN ← ⍬
+                        DM ← ⍬
+                :Else
+                        display_exception Function
+                        Z ← ⎕EN
+                :EndIf
         :EndTrap
         ⎕EX Function
 ∇

@@ -40,6 +40,8 @@ single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
         Z ← A #.UT.eq B ⌷ ⍳ A
 ∇
 
+single_line_exception_2_TEST ← { #.UT.EN ← 2 ⋄ ⍳ }
+
 ∇ Z ← Tests 
         Z ← ⍬
         Z ,← 1 ≡ #.UT.run 'single_line_TEST'
@@ -53,6 +55,7 @@ single_line_syntax_error_TEST ← { 1 #.UT.eq ⍳ }
         Z ,← (2 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         Z ,← 2 ≡ #.UT.run 'single_line_syntax_error_TEST'
         Z ,← 3 ≡ #.UT.run 'multi_line_index_error_TEST'
+        Z ,← 1 ≡ #.UT.run 'single_line_exception_2_TEST'
 ∇
 
 :EndNameSpace
