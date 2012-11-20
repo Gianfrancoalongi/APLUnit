@@ -24,6 +24,7 @@ DM ← ⍬
                 :If EN ≢ ⍬
                         Z ← 1
                         :If EN ≢ ⎕EN                                
+                                Function display_expected_got EN ⎕EN
                                 Z ← 0                        
                         :EndIf
                         EN ← ⍬
