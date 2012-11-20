@@ -44,6 +44,11 @@ single_line_exception_2_TEST ← { #.UT.EN ← 2 ⋄ ⍳ }
 
 single_line_exception_2_failing_TEST ← { #.UT.EN ← 3 ⋄ ⍳ }
 
+∇ multi_line_exception_3_TEST
+        #.UT.EN ← 3
+        4 ⌷ ⍳ 3
+∇
+
 ∇ Z ← Tests 
         Z ← ⍬
         Z ,← 1 ≡ #.UT.run 'single_line_TEST'
@@ -59,6 +64,7 @@ single_line_exception_2_failing_TEST ← { #.UT.EN ← 3 ⋄ ⍳ }
         Z ,← 3 ≡ #.UT.run 'multi_line_index_error_TEST'
         Z ,← 1 ≡ #.UT.run 'single_line_exception_2_TEST'
         Z ,← 0 ≡ #.UT.run 'single_line_exception_2_failing_TEST'
+        Z ,← 1 ≡ #.UT.run 'multi_line_exception_3_TEST'
 ∇
 
 :EndNameSpace
