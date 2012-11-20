@@ -1,7 +1,6 @@
 :NameSpace UT
 
 EN ← ⍬
-DM ← ⍬
 
 ∇ Z ← LHS eq RHS
         Z ← 1
@@ -15,10 +14,15 @@ DM ← ⍬
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         :Trap 0
                 Res ← execute_function Function
-                Z ← Res
-                :If 1 = ⍴⍴ Res
-                        Function display_expected_got Res
+                :If EN ≢ ⍬                        
+                        Function display_expected_got EN ⍬
                         Z ← 0
+                :Else
+                        Z ← Res
+                        :If 1 = ⍴⍴ Res
+                                Function display_expected_got Res
+                                Z ← 0
+                        :EndIf
                 :EndIf
         :Else
                 :If EN ≢ ⍬
@@ -28,7 +32,6 @@ DM ← ⍬
                                 Z ← 0                        
                         :EndIf
                         EN ← ⍬
-                        DM ← ⍬
                 :Else
                         display_exception Function
                         Z ← ⎕EN
@@ -85,10 +88,12 @@ DM ← ⍬
         'TmpSpace' ⎕NS ''
         'TmpSpace' ⎕NS '#.DISPLAY' 
         {'TmpSpace'  ⎕NS ⍵ } ¨ ↓ #.UT.⎕NL 3
+        {'TmpSpace'  ⎕NS ⍵ } ¨ ↓ #.UT.⎕NL 2
         ⎕CS 'TmpSpace'
         ⎕SE.SALT.Load Path
         ⎕CS get_namespace
         { (⍕ ⎕THIS) ⎕NS '#.UT.',⍵ } ¨ ↓ #.UT.⎕NL 3
+        { (⍕ ⎕THIS) ⎕NS '#.UT.',⍵ } ¨ ↓ #.UT.⎕NL 2
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run ¨ Fns
