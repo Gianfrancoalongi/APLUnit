@@ -16,4 +16,6 @@ fromfile_single_line_failing_array_TEST ← { 1 (1 2) (1 2 3) #.UT.eq ⍳¨⍳3 
 
 fromfile_single_line_exception_3_TEST ← { #.UT.EN ← 3 ⋄ 4 ⌷ ⍳ 3 }
 
+fromfile_single_line_index_error_TEST ← { 4 ⌷ ⍳ 3 }
+
 :EndNameSpace

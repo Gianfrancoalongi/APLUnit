@@ -75,7 +75,7 @@ no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 }
         Z ,← 0 ≡ #.UT.run 'multi_line_exception_3_failing_TEST'
         Z ,← 0 ≡ #.UT.run 'no_exception_single_line_exception_TEST'
         ⎕ ← '====== Execution from file'
-        Z ,← (4 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        Z ,← (4 1 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         ⎕ ← '================= Finished Unit Test Execution =================='
 ∇
 
