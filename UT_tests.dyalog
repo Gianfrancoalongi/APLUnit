@@ -58,6 +58,7 @@ no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 }
 
 ∇ Z ← Tests 
         Z ← ⍬
+        ⎕ ← '================== Starting Unit Test Execution ================='
         Z ,← 1 ≡ #.UT.run 'single_line_TEST'
         Z ,← 0 ≡ #.UT.run 'single_line_failing_TEST'
         Z ,← 1 ≡ #.UT.run 'single_line_array_TEST'
@@ -66,7 +67,6 @@ no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 }
         Z ,← 0 ≡ #.UT.run 'multi_line_failing_scalar_TEST'
         Z ,← 1 ≡ #.UT.run 'multi_line_array_TEST'
         Z ,← 0 ≡ #.UT.run 'multi_line_array_failing_TEST'
-        Z ,← (2 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         Z ,← 2 ≡ #.UT.run 'single_line_syntax_error_TEST'
         Z ,← 3 ≡ #.UT.run 'multi_line_index_error_TEST'
         Z ,← 1 ≡ #.UT.run 'single_line_exception_2_TEST'
@@ -74,6 +74,9 @@ no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 }
         Z ,← 1 ≡ #.UT.run 'multi_line_exception_3_TEST'
         Z ,← 0 ≡ #.UT.run 'multi_line_exception_3_failing_TEST'
         Z ,← 0 ≡ #.UT.run 'no_exception_single_line_exception_TEST'
+        ⎕ ← '====== Execution from file'
+        Z ,← (3 0 2) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        ⎕ ← '================= Finished Unit Test Execution =================='
 ∇
 
 :EndNameSpace

@@ -8,5 +8,10 @@ fromfile_single_line_array_TEST ← { (1,⍬) (1 2) (1 2 3) #.UT.eq ⍳¨⍳3 }
 
 fromfile_single_line_failing_array_TEST ← { 1 (1 2) (1 2 3) #.UT.eq ⍳¨⍳3 }
 
+∇ fromfile_multi_line_exception_2_TEST;A
+        A ← 3
+        #.UT.EN ← 2
+        A ⍳
+∇
 
 :EndNameSpace

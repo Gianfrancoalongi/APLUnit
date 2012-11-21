@@ -12,11 +12,12 @@ EN ← ⍬
 ∇ Z ← run Function;Res;Tmp        
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
-        :Trap 0
+        :Trap 0                
                 Res ← execute_function Function
-                :If EN ≢ ⍬                        
-                        Function display_expected_got EN ⍬
+                :If #.UT.EN ≢ ⍬                        
+                        Function display_expected_got #.UT.EN ⍬
                         Z ← 0
+                        #.UT.EN ← ⍬
                 :Else
                         Z ← Res
                         :If 1 = ⍴⍴ Res
@@ -25,13 +26,13 @@ EN ← ⍬
                         :EndIf
                 :EndIf
         :Else
-                :If EN ≢ ⍬
+                :If #.UT.EN ≢ ⍬
                         Z ← 1
-                        :If EN ≢ ⎕EN                                
-                                Function display_expected_got EN ⎕EN
+                        :If #.UT.EN ≢ ⎕EN                                
+                                Function display_expected_got #.UT.EN ⎕EN
                                 Z ← 0                        
                         :EndIf
-                        EN ← ⍬
+                        #.UT.EN ← ⍬
                 :Else
                         display_exception Function
                         Z ← ⎕EN
