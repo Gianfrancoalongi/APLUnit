@@ -133,55 +133,13 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [o] Assertion operator to expect events with ⎕EN and possibly ⎕DM
+** [o] Assertion operator to expect events with specific ⎕EN
 
-It shall be possible to assert that the RHS execution will
-result in an exception with a given ⎕EN and a possibly given ⎕DM.
+It shall be possible to assert that the executed function in the 
+TEST will result in an exception with a given ⎕EN.
 
-The operator shall accept scalars and 2 element arrays as left argument.
-If a scalar is given as left argument, it signifies the expected ⎕EN.
-
-#+BEGIN_EXAMPLE
- SCALAR UT.exception RHS
-#+END_EXAMPLE
-
-If the RHS raises an exception with ⎕EN equal to SCALAR, this returns 1,
-in all other cases - it will return 0.
-
-In the 2-element array form , the first element is the scalar signifying
-the expected ⎕EN and the second element is the expected ⎕DM.
-
-#+BEGIN_EXAMPLE
- (SCALAR TEXT) UT.exception RHS
-#+END_EXAMPLE
-
-If the RHS raises an exception with ⎕EN equal to SCALAR and ⎕DM 
-equal to TEXT this will return 1, in all other cases - it will return 0.
-
-#+BEGIN_EXAMPLE
-exception_TEST ← {  LHS UT.exception RHS }
-#+END_EXAMPLE
-
-As of now - I do not know how to achieve this, given that I do not
-know how to construct macros in order to transform
-
-#+BEGIN_EXAMPLE
- LHS OP RHS
-#+END_EXAMPLE
-
-into a trap with ⎕EN and ⎕DM testing
-
-#+BEGIN_EXAMPLE
- :Trap 0
-     RHS
- :Else
-     ...
- :EndTrap
-#+END_EXAMPLE
-
-The new description will then be. It shall be possible to use 
-UT-namespace global variables to express that a function call 
-in the test will generate an exception.
+This is achieved by setting the UT.EN variable at the beginning
+of the test (or before the exception is expected).
 
 #+BEGIN_EXAMPLE
  exception_TEST ← { UT.EN ← 2 ⋄ ⍳ }
@@ -192,11 +150,9 @@ the multi line version would be similar
 #+BEGIN_EXAMPLE
 ∇ multi_line_exception_TEST
       UT.EN ← 6
-      UT.DM ← 'some message'
       some_function_call
 ∇
 #+END_EXAMPLE
-
 
 ** [t] Coverage report from Unit Test execution
 
