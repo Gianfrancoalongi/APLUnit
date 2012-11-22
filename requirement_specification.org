@@ -133,7 +133,7 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [o] Assertion operator to expect events with specific ⎕EN
+** [d] Assertion operator to expect events with specific ⎕EN
 
 It shall be possible to assert that the executed function in the 
 TEST will result in an exception with a given ⎕EN.
