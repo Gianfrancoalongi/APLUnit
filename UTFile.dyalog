@@ -18,4 +18,9 @@ fromfile_single_line_exception_3_TEST ← { #.UT.EN ← 3 ⋄ 4 ⌷ ⍳ 3 }
 
 fromfile_single_line_index_error_TEST ← { 4 ⌷ ⍳ 3 }
 
+∇ multi_line_syntax_error_TEST;A
+        A ← 1
+        ⍳
+∇ 
+
 :EndNameSpace
