@@ -138,7 +138,7 @@ EN ← ⍬
 ∇ display_exception Name
         ⎕ ← 'EXCEPTION:',function_header Name 
         ⎕ ← ' EN:',⎕EN
-        ⎕ ← ↑⎕DM
+        ⎕ ← ' EM:',⎕EM ⎕EN
 ∇
 
 ∇ print_file_result Result
