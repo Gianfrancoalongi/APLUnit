@@ -268,7 +268,7 @@ target_GROUP UT.run_group_file File.dyalog
 Output result shall for both cases show that this was a group
 
 #+BEGIN_EXAMPLE
- (Passing Exception Failing) ← Test_GROUP UT.run_grup File.dyalog
+ (Passing Exception Failing) ← Test_GROUP UT.run_group File.dyalog
  Group Test_GROUP in File.dyalog
  ⍋ 10 PASSED  
  ⋄ 0  EXCEPTION
