@@ -142,24 +142,20 @@ EN ← ⍬
 ∇
 
 ∇ print_file_result Result
-        ⎕ ← ''
-        ⎕ ← Path 'unit tests'
-        print_totals Result
+        (Path,' unit tests') print_totals Result
 ∇
 
 ∇ Group print_group_result Result
-        ⎕ ← ''
-        ⎕ ← 'Group ',Group
-        print_totals Result
+        ('Group ',Group) print_totals Result
 ∇
 
 ∇ Group print_file_group_result Result
-        ⎕ ← ''
-        ⎕ ← 'Group ',Group,' in ',Path
-        print_totals Result
+        ('Group ',Group,' in ',Path)  print_totals Result
 ∇
 
-∇ print_totals (Passed Exception Failed)
+∇ Header print_totals (Passed Exception Failed)
+        ⎕ ← ' '
+        ⎕ ← Header
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
