@@ -118,14 +118,6 @@ EN ← ⍬
         Z ← '_TEST' ≡ ¯5 ↑ Tmp
 ∇
 
-∇ print_file_result (Passed Exception Failed)
-        ⎕ ← ''
-        ⎕ ← Path 'unit tests'
-        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
-        ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
-        ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
-∇
-
 ∇ Z ← run_group Group;Res
         ⎕CS 1 ⊃ ⎕RSI
         Res ← #.UT.run ¨ (⍎ Group)
@@ -133,14 +125,6 @@ EN ← ⍬
         Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
         Group print_group_result Res
         Z ← Res
-∇
-
-∇ Group print_group_result (Passed Exception Failed)
-        ⎕ ← ''
-        ⎕ ← 'Group ',Group
-        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
-        ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
-        ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
 ∇
 
 ∇ Z ← Group run_group_file Path;Res
@@ -157,9 +141,25 @@ EN ← ⍬
         Z ← Res
 ∇
 
-∇ Group print_file_group_result (Passed Exception Failed)
+∇ print_file_result Result
+        ⎕ ← ''
+        ⎕ ← Path 'unit tests'
+        print_totals Result
+∇
+
+∇ Group print_group_result Result
+        ⎕ ← ''
+        ⎕ ← 'Group ',Group
+        print_totals Result
+∇
+
+∇ Group print_file_group_result Result
         ⎕ ← ''
         ⎕ ← 'Group ',Group,' in ',Path
+        print_totals Result
+∇
+
+∇ print_totals (Passed Exception Failed)
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
