@@ -9,7 +9,7 @@ EN ← ⍬
         :EndIf
 ∇
 
-∇ Z ← run Function;Res;Tmp        
+∇ Z ← run Function;Res;Tmp
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         :Trap 0                
@@ -122,6 +122,23 @@ EN ← ⍬
 ∇ print_file_result (Passed Exception Failed)
         ⎕ ← ''
         ⎕ ← Path 'unit tests'
+        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
+        ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
+        ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
+∇
+
+∇ Z ← run_group Group;Res
+        ⎕CS 1 ⊃ ⎕RSI
+        Res ← #.UT.run ¨ (⍎ Group)
+        ⎕CS #.UT
+        Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
+        Group print_group_result Res
+        Z ← Res
+∇
+
+∇ Group print_group_result (Passed Exception Failed)
+        ⎕ ← ''
+        ⎕ ← 'Group ',Group
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'

@@ -236,38 +236,43 @@ exception as
 The return value of a test failing due to exception
 is the event number.
 
-** [t] Test Groups
+** [o] Test Groups
 
-A test group is an array of test functions. It shall be possible 
+A test group is an array of test function names. It shall be possible 
 to create test groups and execute only a certain group.
-It can be wise to set and follow a fixed naming convention. 
-For example, all variables with the suffix '_GROUP' are
-a group.
+All variables with the suffix '_GROUP' are to be interpreted as a group
+definition.
 
 #+BEGIN_EXAMPLE
- My_GROUP
+  my_GROUP ← (first_TEST ... last_TEST)
 #+END_EXAMPLE
 
+Groups are executed with the UT.run_group function
 
 #+BEGIN_EXAMPLE
-Test_GROUP ← (first_TEST ... last_TEST)
-UT.run_group Test_GROUP
+  UT.run_group test_GROUP
+  Group test_GROUP
+  ⍋ 10 PASSED  
+  ⋄ 0  EXCEPTION
+  ⍒ 0  FAILED 
 #+END_EXAMPLE
 
-It shall also be possible to target a specific group within a File
+It shall also be possible to execute a specific group within a File
+using the UT.run_group_file function by naming the group in the left 
+argument.
 
 #+BEGIN_EXAMPLE
-Test_GROUP UT.run_group_file  File.dyalog
+target_GROUP UT.run_group_file File.dyalog
 #+END_EXAMPLE
 
 Output result shall for both cases show that this was a group
 
 #+BEGIN_EXAMPLE
+ (Passing Exception Failing) ← Test_GROUP UT.run_grup File.dyalog
  Group Test_GROUP in File.dyalog
  ⍋ 10 PASSED  
  ⋄ 0  EXCEPTION
- ⍒ 0  FAILED 
- (Passing Exception Failing) ← Test_GROUP UT.run_grup File.dyalog
+ ⍒ 0  FAILED  
 #+END_EXAMPLE
 
 ** [t] Test Suites

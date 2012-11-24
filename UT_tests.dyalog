@@ -56,6 +56,8 @@ single_line_exception_2_failing_TEST ← { #.UT.EN ← 3 ⋄ ⍳ }
 
 no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 } 
 
+test_GROUP ← ('single_line_TEST' 'single_line_failing_TEST' 'single_line_syntax_error_TEST')
+
 ∇ Z ← Tests 
         Z ← ⍬
         ⎕ ← '================== Starting Unit Test Execution ================='
@@ -80,6 +82,8 @@ no_exception_single_line_exception_TEST ← { #.UT.EN ← 2 ⋄ 1 + 2 }
         Z ,← 0 ≡ #.UT.run 'no_exception_single_line_exception_TEST'
         ⎕ ← '-------------------- Execution from file'
         Z ,← (4 2 3) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        ⎕ ← '-------------------- Execution of GROUP'
+        Z ,← (1 1 1) ≡ #.UT.run_group 'test_GROUP'
         ⎕ ← '================= Finished Unit Test Execution =================='
 ∇
 
