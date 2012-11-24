@@ -153,8 +153,16 @@ EN ← ⍬
         ⎕EX 'TmpSpace'
         ⎕CS #.UT
         Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
-        Group print_group_result Res
+        Group print_file_group_result Res
         Z ← Res
+∇
+
+∇ Group print_file_group_result (Passed Exception Failed)
+        ⎕ ← ''
+        ⎕ ← 'Group ',Group,' in ',Path
+        ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
+        ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
+        ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
 ∇
 
 :EndNameSpace
