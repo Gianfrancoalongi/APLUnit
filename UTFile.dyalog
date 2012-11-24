@@ -25,4 +25,6 @@ fromfile_single_line_index_error_TEST ← { 4 ⌷ ⍳ 3 }
 
 fromfile_single_line_expect_exception_failing_TEST ← { #.UT.EN ← 2 ⋄ 1 + 1 }
 
+file_GROUP ← ('fromfile_single_line_TEST' 'fromfile_single_line_failing_scalar_TEST')
+
 :EndNameSpace

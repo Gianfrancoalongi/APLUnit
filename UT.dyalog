@@ -60,7 +60,6 @@ EN ← ⍬
 
 ∇ display_exception Name
         ⎕ ← 'EXCEPTION:',function_header Name 
-        ⎕ ← ' LC:',⎕LC
         ⎕ ← ' EN:',⎕EN
         ⎕ ← ↑⎕DM
 ∇
@@ -142,6 +141,20 @@ EN ← ⍬
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
+∇
+
+∇ Z ← Group run_group_file Path;Res
+        'TmpSpace' ⎕NS ''
+        ⎕CS 'TmpSpace'
+        ⎕SE.SALT.Load Path
+        ⎕CS ⊃ ↓ ⎕NL 9
+        Res ← #.UT.run ¨ ⍎ Group
+        ⎕CS ##
+        ⎕EX 'TmpSpace'
+        ⎕CS #.UT
+        Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
+        Group print_group_result Res
+        Z ← Res
 ∇
 
 :EndNameSpace

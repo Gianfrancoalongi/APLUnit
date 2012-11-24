@@ -84,6 +84,8 @@ test_GROUP ← ('single_line_TEST' 'single_line_failing_TEST' 'single_line_synta
         Z ,← (4 2 3) ≡ #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         ⎕ ← '-------------------- Execution of GROUP'
         Z ,← (1 1 1) ≡ #.UT.run_group 'test_GROUP'
+        ⎕ ← '-------------------- Execution of GROUP from File'
+        Z ,← (1 0 1) ≡ 'file_GROUP' #.UT.run_group_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         ⎕ ← '================= Finished Unit Test Execution =================='
 ∇
 
