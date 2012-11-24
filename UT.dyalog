@@ -2,13 +2,6 @@
 
 EN ← ⍬
 
-∇ Z ← LHS eq RHS
-        Z ← 1
-        :If LHS ≢ RHS
-                Z ← LHS RHS
-        :EndIf
-∇
-
 ∇ Z ← run Function;Res;Tmp
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
@@ -41,49 +34,6 @@ EN ← ⍬
         ⎕EX Function
 ∇
 
-∇ Z ← execute_function Name;R;C
-        (R C) ← ⍴ ⎕CR Name
-        :If R > 1 
-                Z ← ⍎ Name
-        :Else
-                Z ← ⍎ Name,' ⍬'
-        :EndIf
-∇
-
-∇ Name display_expected_got Res
-        ⎕ ← 'FAILED:',function_header Name 
-        ⎕ ← 'Expected'
-        ⎕ ← show_term ⊃Res[1]
-        ⎕ ← 'Got'
-        ⎕ ← show_term ⊃Res[2]
-∇
-
-∇ display_exception Name
-        ⎕ ← 'EXCEPTION:',function_header Name 
-        ⎕ ← ' EN:',⎕EN
-        ⎕ ← ↑⎕DM
-∇
-
-
-∇ Z ← function_header Name;Matrix;R;C
-        Matrix ← ⎕CR Name
-        (R C) ← ⍴ Matrix
-        :If R > 1
-                Z ← ,Matrix[1;],' ... ',Matrix[R;]
-        :Else
-                Z ← ,Matrix
-        :EndIf
-∇
-
-∇ Z ← show_term Term;Tmp
-        :If 0=≡Term
-                Z ← ' ',⍕Term
-        :Else
-                Tmp ← #.DISPLAY Term                
-                Z ← ((⍴Tmp)[1] ⍴ ' '),Tmp
-        :EndIf
-∇
-
 ∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed;Exception
         'TmpSpace' ⎕NS ''
         'TmpSpace' ⎕NS '#.DISPLAY' 
@@ -103,19 +53,6 @@ EN ← ⍬
         ⎕CS ##
         ⎕EX 'TmpSpace'
         Z ← Passed Exception Failed
-∇
-
-∇ Z ← get_namespace
-        Z ← ⊃ ↓ ⎕NL 9
-∇
-
-∇ Z ← is_test FunctionName;Index;Tmp
-        Index ← FunctionName ⍳ ' '
-        Tmp ← FunctionName
-        :If Index ≤ ⍴ FunctionName
-                Tmp ← FunctionName[⍳(¯1 + Index)]
-        :EndIf
-        Z ← '_TEST' ≡ ¯5 ↑ Tmp
 ∇
 
 ∇ Z ← run_group Group;Res
@@ -139,6 +76,69 @@ EN ← ⍬
         Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
         Group print_file_group_result Res
         Z ← Res
+∇
+
+∇ Z ← LHS eq RHS
+        Z ← 1
+        :If LHS ≢ RHS
+                Z ← LHS RHS
+        :EndIf
+∇
+
+∇ Z ← execute_function Name;R;C
+        (R C) ← ⍴ ⎕CR Name
+        :If R > 1 
+                Z ← ⍎ Name
+        :Else
+                Z ← ⍎ Name,' ⍬'
+        :EndIf
+∇
+
+
+∇ Z ← function_header Name;Matrix;R;C
+        Matrix ← ⎕CR Name
+        (R C) ← ⍴ Matrix
+        :If R > 1
+                Z ← ,Matrix[1;],' ... ',Matrix[R;]
+        :Else
+                Z ← ,Matrix
+        :EndIf
+∇
+
+∇ Z ← show_term Term;Tmp
+        :If 0=≡Term
+                Z ← ' ',⍕Term
+        :Else
+                Tmp ← #.DISPLAY Term                
+                Z ← ((⍴Tmp)[1] ⍴ ' '),Tmp
+        :EndIf
+∇
+
+∇ Z ← get_namespace
+        Z ← ⊃ ↓ ⎕NL 9
+∇
+
+∇ Z ← is_test FunctionName;Index;Tmp
+        Index ← FunctionName ⍳ ' '
+        Tmp ← FunctionName
+        :If Index ≤ ⍴ FunctionName
+                Tmp ← FunctionName[⍳(¯1 + Index)]
+        :EndIf
+        Z ← '_TEST' ≡ ¯5 ↑ Tmp
+∇
+
+∇ Name display_expected_got Res
+        ⎕ ← 'FAILED:',function_header Name 
+        ⎕ ← 'Expected'
+        ⎕ ← show_term ⊃Res[1]
+        ⎕ ← 'Got'
+        ⎕ ← show_term ⊃Res[2]
+∇
+
+∇ display_exception Name
+        ⎕ ← 'EXCEPTION:',function_header Name 
+        ⎕ ← ' EN:',⎕EN
+        ⎕ ← ↑⎕DM
 ∇
 
 ∇ print_file_result Result
