@@ -133,58 +133,6 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [t] Coverage report from Unit Test execution
-
-There shall be a setting indicating that a coverage report is to be generated
-as a result of the Unit Test execution. Recommended is that the output directory
-can be specified.
-
-#+BEGIN_EXAMPLE
- UT.coverage 1
- UT.out 'coverage'
-#+END_EXAMPLE
-
-but that the coverage report is as follows: An index.html file, showing the agregated
-total coverage, and the specific coverage for each dyalog module, with links to the specific
-dyalog module cover reports.
-
-#+BEGIN_EXAMPLE
- coverage/
-  |- index.html
-  |- a.html
-  +- b.html
-#+END_EXAMPLE
-
-a.html and b.html are dyalog module specific coverage reports.
-The information displayed on the pages shall be at least as follows
-
-*** index.html
-
-1. Total project (dyalog files) coverage in percentage
-2. Total project covered lines
-3. Total project uncovered lines
-4. Link to each dyalog specific coverage page
-5. For each link
- -  name of the file
- -  coverage in percentage
- -  covered lines
- -  uncovered lines
-
-*** dyalog specific coverage page
-
-The X.dyalog file specific coverage page will show the source
-code in a page, and the covered lines are marked as black, while
-the uncovered lines are red.
-
-Additionally, there will be a rightmost column with numbering
-showing the amount of times every line is executed.
-
-The page itself shall have at the top
-
-1. The total coverage %
-2. The amount of covered lines
-3. The amount of uncovered lines
-
 ** [t] Test Suites
 
 A test suite is an array of test groups. It shall be possible to 
@@ -354,6 +302,58 @@ Output result shall for both cases show that this was a group
 #+END_EXAMPLE
 
 * COULD
+** [t] Coverage report from Unit Test execution
+
+There shall be a setting indicating that a coverage report is to be generated
+as a result of the Unit Test execution. Recommended is that the output directory
+can be specified.
+
+#+BEGIN_EXAMPLE
+ UT.coverage 1
+ UT.out 'coverage'
+#+END_EXAMPLE
+
+but that the coverage report is as follows: An index.html file, showing the agregated
+total coverage, and the specific coverage for each dyalog module, with links to the specific
+dyalog module cover reports.
+
+#+BEGIN_EXAMPLE
+ coverage/
+  |- index.html
+  |- a.html
+  +- b.html
+#+END_EXAMPLE
+
+a.html and b.html are dyalog module specific coverage reports.
+The information displayed on the pages shall be at least as follows
+
+*** index.html
+
+1. Total project (dyalog files) coverage in percentage
+2. Total project covered lines
+3. Total project uncovered lines
+4. Link to each dyalog specific coverage page
+5. For each link
+ -  name of the file
+ -  coverage in percentage
+ -  covered lines
+ -  uncovered lines
+
+*** dyalog specific coverage page
+
+The X.dyalog file specific coverage page will show the source
+code in a page, and the covered lines are marked as black, while
+the uncovered lines are red.
+
+Additionally, there will be a rightmost column with numbering
+showing the amount of times every line is executed.
+
+The page itself shall have at the top
+
+1. The total coverage %
+2. The amount of covered lines
+3. The amount of uncovered lines
+
 ** [t] Collect and show execution time
  
 It shall be possible to configure if the execution time of each
