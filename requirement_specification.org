@@ -354,37 +354,38 @@ The page itself shall have at the top
 2. The amount of covered lines
 3. The amount of uncovered lines
 
-** [t] Collect and show execution time
+** [o] Collect and show execution time
  
-It shall be possible to configure if the execution time of each
+It shall be possible to configure if the execution time of a 
 TEST/GROUP/SUITE is to be collected and reported.
 
 #+BEGIN_EXAMPLE
- UT.runtime 1
+ UT.time 1
 #+END_EXAMPLE
 
-Example of wanted output for single TEST execution
+Example of wanted output for a single TEST execution
 
 #+BEGIN_EXAMPLE
- RunTime ← UT.run first_TEST
+ UT.run first_TEST
  PASSED - 0.01 Seconds
 #+END_EXAMPLE
 
-Example of wanted output for single GROUP execution
+Example of wanted output for a single GROUP execution
 
 #+BEGIN_EXAMPLE
+(Passing Exception Failing RunTime) ← 'Test_GROUP' UT.run_group File.dyalog
  Group Test_GROUP in File.dyalog
  ⍋ 10 PASSED  
  ⋄ 0  EXCEPTION
  ⍒ 0  FAILED 
- ○ 0.02 Seconds
- (Passing Exception Failing RunTime) ← Test_GROUP UT.run_group File.dyalog
+ ○ 0.02 Seconds 
 #+END_EXAMPLE
 
 Example of wanted output for single SUITE execution
 
 #+BEGIN_EXAMPLE
- Suite Test_SUITE in File.dyalog
+ (Passing Exception Failing RunTime) ← 'Test_SUITE' UT.run_suite File.dyalog
+ 'Test_SUITE' Suite in File.dyalog
    Group first_GROUP
     ⍋ 10 PASSED  
     ⋄ 0  EXCEPTION
@@ -400,7 +401,6 @@ Example of wanted output for single SUITE execution
   ⋄ 0  EXCEPTION
   ⍒ 1  FAILED
   ○ 0.03 Seconds
- (Passing Exception Failing RunTime) ← Test_SUITE UT.run_suite File.dyalog
 #+END_EXAMPLE
 
 * WOULD BE NICE
