@@ -133,27 +133,6 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [d] Assertion operator to expect events with specific ⎕EN
-
-It shall be possible to assert that the executed function in the 
-TEST will result in an exception with a given ⎕EN.
-
-This is achieved by setting the UT.EN variable at the beginning
-of the test (or before the exception is expected).
-
-#+BEGIN_EXAMPLE
- exception_TEST ← { UT.EN ← 2 ⋄ ⍳ }
-#+END_EXAMPLE
-
-the multi line version would be similar 
-
-#+BEGIN_EXAMPLE
-∇ multi_line_exception_TEST
-      UT.EN ← 6
-      some_function_call
-∇
-#+END_EXAMPLE
-
 ** [t] Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated
@@ -205,75 +184,6 @@ The page itself shall have at the top
 1. The total coverage %
 2. The amount of covered lines
 3. The amount of uncovered lines
-
-** [d] Test exception robustness
-   
-Exceptions in one test shall not disrupt the execution 
-of other tests. As such, the tests shall be isolated
-entities.
-
-When running multiple tests, if a test fails to execute
-due to an exception, it shall be marked as 'exception'
-this result shall also be shown in the returned array.
-
-#+BEGIN_EXAMPLE
- File.dyalog unit tests
- ⍋ 152 PASSED  
- ⋄ 3   EXCEPTION
- ⍒ 2   FAILED 
- 
- (Passing Exception Failing) ← UT.run_file File.dyalog 
-#+END_EXAMPLE
-
-Every exception:d test execution shall display the
-exception as 
-
-#+BEGIN_EXAMPLE
- EXCEPTION: first_TEST ← { LHS UT.eq RHS }
- - some additional information here -
-#+END_EXAMPLE
-
-The return value of a test failing due to exception
-is the event number.
-
-** [d] Test Groups
-
-A test group is an array of test function names. It shall be possible 
-to create test groups and execute only a certain group.
-All variables with the suffix '_GROUP' are to be interpreted as a group
-definition.
-
-#+BEGIN_EXAMPLE
-  my_GROUP ← (first_TEST ... last_TEST)
-#+END_EXAMPLE
-
-Groups are executed with the UT.run_group function
-
-#+BEGIN_EXAMPLE
-  UT.run_group test_GROUP
-  Group test_GROUP
-  ⍋ 10 PASSED  
-  ⋄ 0  EXCEPTION
-  ⍒ 0  FAILED 
-#+END_EXAMPLE
-
-It shall also be possible to execute a specific group within a File
-using the UT.run_group_file function by naming the group in the left 
-argument.
-
-#+BEGIN_EXAMPLE
-target_GROUP UT.run_group_file File.dyalog
-#+END_EXAMPLE
-
-Output result shall for both cases show that this was a group
-
-#+BEGIN_EXAMPLE
- (Passing Exception Failing) ← ' Test_GROUP' UT.run_group_file File.dyalog
- Group Test_GROUP in File.dyalog
- ⍋ 10 PASSED  
- ⋄ 0  EXCEPTION
- ⍒ 0  FAILED  
-#+END_EXAMPLE
 
 ** [t] Test Suites
 
@@ -352,6 +262,96 @@ and End functions shall be as follows.
 
 If defined, the Init and End functions must be able to execute, invariably of 
 test success / fail or skip.
+
+** [d] Assertion operator to expect events with specific ⎕EN
+
+It shall be possible to assert that the executed function in the 
+TEST will result in an exception with a given ⎕EN.
+
+This is achieved by setting the UT.EN variable at the beginning
+of the test (or before the exception is expected).
+
+#+BEGIN_EXAMPLE
+ exception_TEST ← { UT.EN ← 2 ⋄ ⍳ }
+#+END_EXAMPLE
+
+the multi line version would be similar 
+
+#+BEGIN_EXAMPLE
+∇ multi_line_exception_TEST
+      UT.EN ← 6
+      some_function_call
+∇
+#+END_EXAMPLE
+
+** [d] Test exception robustness
+   
+Exceptions in one test shall not disrupt the execution 
+of other tests. As such, the tests shall be isolated
+entities.
+
+When running multiple tests, if a test fails to execute
+due to an exception, it shall be marked as 'exception'
+this result shall also be shown in the returned array.
+
+#+BEGIN_EXAMPLE
+ File.dyalog unit tests
+ ⍋ 152 PASSED  
+ ⋄ 3   EXCEPTION
+ ⍒ 2   FAILED 
+ 
+ (Passing Exception Failing) ← UT.run_file File.dyalog 
+#+END_EXAMPLE
+
+Every exception:d test execution shall display the
+exception as 
+
+#+BEGIN_EXAMPLE
+ EXCEPTION: first_TEST ← { LHS UT.eq RHS }
+ - some additional information here -
+#+END_EXAMPLE
+
+The return value of a test failing due to exception
+is the event number.
+
+** [d] Test Groups
+
+A test group is an array of test function names. It shall be possible 
+to create test groups and execute only a certain group.
+All variables with the suffix '_GROUP' are to be interpreted as a group
+definition.
+
+#+BEGIN_EXAMPLE
+  my_GROUP ← (first_TEST ... last_TEST)
+#+END_EXAMPLE
+
+Groups are executed with the UT.run_group function
+
+#+BEGIN_EXAMPLE
+  UT.run_group test_GROUP
+  Group test_GROUP
+  ⍋ 10 PASSED  
+  ⋄ 0  EXCEPTION
+  ⍒ 0  FAILED 
+#+END_EXAMPLE
+
+It shall also be possible to execute a specific group within a File
+using the UT.run_group_file function by naming the group in the left 
+argument.
+
+#+BEGIN_EXAMPLE
+target_GROUP UT.run_group_file File.dyalog
+#+END_EXAMPLE
+
+Output result shall for both cases show that this was a group
+
+#+BEGIN_EXAMPLE
+ (Passing Exception Failing) ← ' Test_GROUP' UT.run_group_file File.dyalog
+ Group Test_GROUP in File.dyalog
+ ⍋ 10 PASSED  
+ ⋄ 0  EXCEPTION
+ ⍒ 0  FAILED  
+#+END_EXAMPLE
 
 * COULD
 ** [t] Collect and show execution time
