@@ -236,7 +236,7 @@ exception as
 The return value of a test failing due to exception
 is the event number.
 
-** [o] Test Groups
+** [d] Test Groups
 
 A test group is an array of test function names. It shall be possible 
 to create test groups and execute only a certain group.
