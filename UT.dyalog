@@ -21,26 +21,39 @@ EN ← ⍬
         Z ← 0
 ∇
 
+∇ Z ← exception_number_does_not_match_expected
+        Z ← #.UT.EN ≢ ⎕EN
+∇
+
+∇ Z ← failure_exception_failed Function
+        Function display_expected_got #.UT.EN ⎕EN
+        Z ← 0
+∇
+
+∇ Z ← Function check_success_or_failure Res
+        :If expecting_an_exception
+                Z ← failure_due_to_no_exception Function
+        :Else
+                :If test_failure Res
+                        Z ← Function failure_test_failed Res
+                :Else
+                        Z ← Res
+                :EndIf
+        :EndIf
+∇
+
 ∇ Z ← run Function;Res;Tmp
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         :Trap 0                
                 Res ← execute_function Function
-                :If expecting_an_exception
-                        Z ← failure_due_to_no_exception Function
-                :Else
-                        :If test_failure Res
-                                Z ← Function failure_test_failed Res
-                        :Else
-                                Z ← Res
-                        :EndIf
-                :EndIf
+                Z ← Function check_success_or_failure Res
         :Else
-                :If #.UT.EN ≢ ⍬
-                        Z ← 1
-                        :If #.UT.EN ≢ ⎕EN                                
-                                Function display_expected_got #.UT.EN ⎕EN
-                                Z ← 0                        
+                :If expecting_an_exception
+                        :If exception_number_does_not_match_expected
+                                Z ← failure_exception_failed Function
+                        :Else
+                                Z ← 1
                         :EndIf
                         #.UT.EN ← ⍬
                 :Else
