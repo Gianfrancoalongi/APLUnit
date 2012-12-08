@@ -2,20 +2,37 @@
 
 EN ← ⍬
 
+∇ Z ← expecting_an_exception
+        Z ← #.UT.EN ≢ ⍬
+∇
+        
+∇ Z ← failure_due_to_no_exception Function
+        Function display_expected_got #.UT.EN ⍬
+        #.UT.EN ← ⍬
+        Z ← 0
+∇
+
+∇ Z ← test_failure Res
+        Z ← 1 = ⍴⍴ Res
+∇
+
+∇ Z ← Function failure_test_failed Res
+        Function display_expected_got Res
+        Z ← 0
+∇
+
 ∇ Z ← run Function;Res;Tmp
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         :Trap 0                
                 Res ← execute_function Function
-                :If #.UT.EN ≢ ⍬                        
-                        Function display_expected_got #.UT.EN ⍬
-                        Z ← 0
-                        #.UT.EN ← ⍬
+                :If expecting_an_exception
+                        Z ← failure_due_to_no_exception Function
                 :Else
-                        Z ← Res
-                        :If 1 = ⍴⍴ Res
-                                Function display_expected_got Res
-                                Z ← 0
+                        :If test_failure Res
+                                Z ← Function failure_test_failed Res
+                        :Else
+                                Z ← Res
                         :EndIf
                 :EndIf
         :Else
