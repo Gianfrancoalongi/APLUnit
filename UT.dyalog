@@ -30,6 +30,24 @@ EN ← ⍬
         Z ← 0
 ∇
 
+∇ Z ← success_or_failure_with_exception
+        :If exception_number_does_not_match_expected
+                Z ← failure_exception_failed Function
+        :Else
+                Z ← 1
+        :EndIf
+        #.UT.EN ← ⍬
+∇
+
+∇ Z ← check_success_or_failure_exception Function
+        :If expecting_an_exception
+                Z ← success_or_failure_with_exception
+        :Else
+                display_exception Function
+                Z ← ⎕EN
+        :EndIf        
+∇
+
 ∇ Z ← Function check_success_or_failure Res
         :If expecting_an_exception
                 Z ← failure_due_to_no_exception Function
@@ -49,17 +67,7 @@ EN ← ⍬
                 Res ← execute_function Function
                 Z ← Function check_success_or_failure Res
         :Else
-                :If expecting_an_exception
-                        :If exception_number_does_not_match_expected
-                                Z ← failure_exception_failed Function
-                        :Else
-                                Z ← 1
-                        :EndIf
-                        #.UT.EN ← ⍬
-                :Else
-                        display_exception Function
-                        Z ← ⎕EN
-                :EndIf
+                Z ← check_success_or_failure_exception Function
         :EndTrap
         ⎕EX Function
 ∇
