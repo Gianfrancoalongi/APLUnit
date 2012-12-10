@@ -60,19 +60,23 @@ EN ← ⍬
         :EndIf
 ∇
 
-∇ Z ← run Function;Res;Tmp
+∇ Z ← run Function;Res;Tmp;T;ignore
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
+        ignore ← ⎕PROFILE 'start' 'elapsed'
         :Trap 0                
                 Res ← execute_function Function
-                Z ← Function check_success_or_failure Res
+                Tmp ← Function check_success_or_failure Res
         :Else
-                Z ← check_success_or_failure_exception Function
-        :EndTrap
+                Tmp ← check_success_or_failure_exception Function
+        :EndTrap        
+        ignore ← ⎕PROFILE 'stop'
+        T ← ⎕PROFILE 'data'
+        Z ← Tmp ((÷1000)×+/T[;4])
         ⎕EX Function
 ∇
 
-∇ Z ← run_file Path;TmpSpace;Fns;Res;Passed;Failed;Exception
+∇ Z ← run_file Path;TmpSpace;Fns;Res;Test_res
         'TmpSpace' ⎕NS ''
         'TmpSpace' ⎕NS '#.DISPLAY' 
         {'TmpSpace'  ⎕NS ⍵ } ¨ ↓ #.UT.⎕NL 3
@@ -85,19 +89,19 @@ EN ← ⍬
         Fns ← ↓ ⎕THIS.⎕NL 3
         Fns ← ( is_test ¨ Fns) / Fns
         Res ← run ¨ Fns
-        (Passed Exception Failed) ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
-        print_file_result Passed Exception Failed
+        Test_res ← extract_test_execution_results Res
+        print_file_result Test_res
         ⎕CS ##
         ⎕CS ##
         ⎕EX 'TmpSpace'
-        Z ← Passed Exception Failed
+        Z ← Test_res
 ∇
 
 ∇ Z ← run_group Group;Res
         ⎕CS 1 ⊃ ⎕RSI
         Res ← #.UT.run ¨ (⍎ Group)
         ⎕CS #.UT
-        Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
+        Res ← extract_test_execution_results Res
         Group print_group_result Res
         Z ← Res
 ∇
@@ -111,9 +115,16 @@ EN ← ⍬
         ⎕CS ##
         ⎕EX 'TmpSpace'
         ⎕CS #.UT
-        Res ← (⊃+/1=Res) (⊃+/0≠Res∧1≠Res) (⊃+/0=Res) 
+        Res ← extract_test_execution_results Res
         Group print_file_group_result Res
         Z ← Res
+∇
+
+∇ Z ← extract_test_execution_results ResultArray;Binary;Time
+        ResultArray ← ↑ ResultArray 
+        Binary ← ResultArray[;1]
+        Time ← ResultArray[;2]
+        Z ← (⊃+/1=Binary) (⊃+/0≠Binary∧1≠Binary) (⊃+/0=Binary) (+/Time)
 ∇
 
 ∇ Z ← LHS eq RHS
@@ -191,12 +202,13 @@ EN ← ⍬
         ('Group ',Group,' in ',Path)  print_totals Result
 ∇
 
-∇ Header print_totals (Passed Exception Failed)
+∇ Header print_totals (Passed Exception Failed Time)
         ⎕ ← ' '
         ⎕ ← Header
         ⎕ ← '⍋ ',(⍕ Passed),' PASSED'
         ⎕ ← '⋄ ',(⍕ Exception),' EXCEPTION'
         ⎕ ← '⍒ ',(⍕ Failed),' FAILED'
+        ⎕ ← '○ ',(⍕ Time),' Seconds'
 ∇
 
 :EndNameSpace
