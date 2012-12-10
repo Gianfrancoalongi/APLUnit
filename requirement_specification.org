@@ -356,12 +356,7 @@ The page itself shall have at the top
 
 ** [o] Collect and show execution time
  
-It shall be possible to configure if the execution time of a 
-TEST/GROUP/SUITE is to be collected and reported.
-
-#+BEGIN_EXAMPLE
- UT.time 1
-#+END_EXAMPLE
+The execution time of a TEST/GROUP/SUITE is to be collected and reported.
 
 Example of wanted output for a single TEST execution
 
