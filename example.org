@@ -1,14 +1,11 @@
-
-Example execution
-
-#+BEGIN_EXAMPLE
-     )clear
-clear ws
       )copy display
 /opt/mdyalog/13.0/32/unicode/ws/display saved Fri Apr  1 16:57:51 2011
       ⎕ ← ⎕SE.SALT.Load '/home/gianfranco/APL/UnitTestFrameWork/*.dyalog'
  #.UT  #.UTFile  #.UTT
       UTT.Tests
+================== Starting Unit Test Execution =================
+--------------------- Singe line tests
+--------------------- Single line failing tests
 FAILED: single_line_failing_TEST←{2 #.UT.eq 1}
 Expected
  2
@@ -19,10 +16,20 @@ Expected
  ┌→──────┐
  │1 2 3 4│
  └~──────┘
-Got     
+Got
  ┌→────┐
  │1 2 3│
  └~────┘
+EXCEPTION: single_line_syntax_error_TEST←{1 #.UT.eq⍳}
+ EN: 2
+ EM:SYNTAX ERROR
+FAILED: single_line_exception_2_failing_TEST←{#.UT.EN←3 ⋄ ⍳}
+Expected
+ 3
+Got
+ 2
+-------------------- Multi line tests
+-------------------- Multi line failing tests
 FAILED: Z←multi_line_failing_scalar_TEST;A;B ...  Z←3 #.UT.eq(A+B+B)
 Expected
  3
@@ -35,19 +42,92 @@ Expected
  │ │1 2│ │2 3 4│ │
  │ └~──┘ └~────┘ │
  └∊──────────────┘
-Got               
+Got
  ┌→──────────────┐
  │ ┌→──┐ ┌→────┐ │
  │ │1 2│ │1 2 3│ │
  │ └~──┘ └~────┘ │
  └∊──────────────┘
+EXCEPTION: Z←multi_line_index_error_TEST ...  Z←A #.UT.eq B⌷⍳A
+ EN: 3
+ EM:INDEX ERROR
+FAILED: multi_line_exception_3_failing_TEST ...  4⌷⍳
+Expected
+ 3
+Got
+ 2
+FAILED: no_exception_single_line_exception_TEST←{#.UT.EN←2 ⋄ 1+2}
+Expected
+ 2
+Got
+ ┌⊖┐
+ │0│
+ └~┘
+-------------------- Execution from file
+FAILED: fromfile_single_line_expect_exception_failing_TEST←{#.UT.EN←2 ⋄ 1+1}
+Expected
+ 2
+Got
+ ┌⊖┐
+ │0│
+ └~┘
+FAILED: fromfile_single_line_failing_array_TEST←{1(1 2)(1 2 3)#.UT.eq⍳¨⍳3}
+Expected
+ ┌→────────────────┐
+ │   ┌→──┐ ┌→────┐ │
+ │ 1 │1 2│ │1 2 3│ │
+ │   └~──┘ └~────┘ │
+ └∊────────────────┘
+Got
+ ┌→──────────────────┐
+ │ ┌→┐ ┌→──┐ ┌→────┐ │
+ │ │1│ │1 2│ │1 2 3│ │
+ │ └~┘ └~──┘ └~────┘ │
+ └∊──────────────────┘
+FAILED: fromfile_single_line_failing_scalar_TEST←{3 #.UT.eq 1+1}
+Expected
+ 3
+Got
+ 2
+EXCEPTION: fromfile_single_line_index_error_TEST←{4⌷⍳3}
+ EN: 3
+ EM:INDEX ERROR
+⍳
+EXCEPTION: multi_line_syntax_error_TEST;A ...  ⍳
+ EN: 6
+ EM:VALUE ERROR
+
+/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog unit tests
+⍋ 4 PASSED
+⋄ 2 EXCEPTION
+⍒ 3 FAILED
+○ 5.067394343 Seconds
+-------------------- Execution of GROUP
+FAILED: single_line_failing_TEST←{2 #.UT.eq 1}
+Expected
+ 2
+Got
+ 1
+EXCEPTION: single_line_syntax_error_TEST←{1 #.UT.eq⍳}
+ EN: 2
+ EM:SYNTAX ERROR
+
+Group test_GROUP
+⍋ 1 PASSED
+⋄ 1 EXCEPTION
+⍒ 1 FAILED
+○ 1.958391802 Seconds
+-------------------- Execution of GROUP from File
 FAILED: fromfile_single_line_failing_scalar_TEST←{3 #.UT.eq 1+1}
 Expected
  3
 Got
  2
 
- /home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog  unit tests
+Group file_GROUP in /home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog
 ⍋ 1 PASSED
+⋄ 0 EXCEPTION
 ⍒ 1 FAILED
-#+END_EXAMPLE
+○ 1.365065489 Seconds
+================= Finished Unit Test Execution ==================
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
