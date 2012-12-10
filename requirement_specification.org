@@ -133,84 +133,6 @@ a vector. This shall also be printed for quick readability.
 #+END_EXAMPLE
 
 * SHOULD 
-** [t] Test Suites
-
-A test suite is an array of test groups. It shall be possible to 
-organize tests into Test Suites and execute only a certain suite.
-It can be wise to set and follow a fixed naming convention.
-For example, all variables with the suffix '_SUITE' are 
-a suite.
-
-#+BEGIN_EXAMPLE
- My_SUITE
-#+END_EXAMPLE
-
-#+BEGIN_EXAMPLE
-Test_SUITE ← (first_GROUP .. last_GROUP)
-UT.run_suite Test_SUITE
-#+END_EXAMPLE
-
-It shall also be possible to target a specific suite within a File
-
-#+BEGIN_EXAMPLE
-Test_SUITE UT.run_suite File.dyalog
-#+END_EXAMPLE
-
-Output result shall for both cases show thart this was a suite 
-being executed that contains groups.
-
-#+BEGIN_EXAMPLE
- Suite Test_SUITE in File.dyalog
-   Group first_GROUP
-    ⍋ 10 PASSED  
-    ⋄ 0  EXCEPTION
-    ⍒ 0  FAILED 
-   Group second_GROUP
-    ⍋ 13 PASSED  
-    ⋄ 0  EXCEPTION
-    ⍒ 1  FAILED 
- --------------------------
-  ⍋ 23 PASSED
-  ⋄ 0  EXCEPTION
-  ⍒ 1  FAILED
- (Passing Exception Failing) ← Test_SUITE UT.run_suite File.dyalog
-#+END_EXAMPLE
-
-** [t] Init and End per Test / Group / Suite
-
-For Tests, Groups and Suites, it shall be possible to specify
-an Initialization function, and an End function that is executed
-before, and after the Test / Group / Suite.
-
-The Init and End functions are niladic and dyadic, such that the
-result of the Init evaluation is passed onto the left argument of
-the End function and the test result of the Single test / Group / Suite
-is passed as the right argument of the End function. 
-
-#+BEGIN_EXAMPLE
-    X_init 
-      |
-      ├-→ Test/Group/Suite execution
-      │       │
-      │     result
-      │       │
-      ∇ X_end ∇
-#+END_EXAMPLE
-
-The relation between Test object and Initialization 
-and End functions shall be as follows.
-
-
-| Unit Test Object | Name    | Init function name | End function name |
-|------------------+---------+--------------------+-------------------|
-| Single Line      | X_TEST  | X_TEST_init        | X_TEST_end        |
-| Multi line       | X_TEST  | X_TEST_init        | X_TEST_end        |
-| Group            | X_GROUP | X_GROUP_init       | X_GROUP_end       |
-| Suite            | X_SUITE | X_SUITE_init       | X_SUITE_end       |
-
-If defined, the Init and End functions must be able to execute, invariably of 
-test success / fail or skip.
-
 ** [d] Assertion operator to expect events with specific ⎕EN
 
 It shall be possible to assert that the executed function in the 
@@ -399,5 +321,83 @@ Example of wanted output for single SUITE execution
 #+END_EXAMPLE
 
 * WOULD BE NICE
+** [t] Test Suites
+
+A test suite is an array of test groups. It shall be possible to 
+organize tests into Test Suites and execute only a certain suite.
+It can be wise to set and follow a fixed naming convention.
+For example, all variables with the suffix '_SUITE' are 
+a suite.
+
+#+BEGIN_EXAMPLE
+ My_SUITE
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+Test_SUITE ← (first_GROUP .. last_GROUP)
+UT.run_suite Test_SUITE
+#+END_EXAMPLE
+
+It shall also be possible to target a specific suite within a File
+
+#+BEGIN_EXAMPLE
+Test_SUITE UT.run_suite File.dyalog
+#+END_EXAMPLE
+
+Output result shall for both cases show thart this was a suite 
+being executed that contains groups.
+
+#+BEGIN_EXAMPLE
+ Suite Test_SUITE in File.dyalog
+   Group first_GROUP
+    ⍋ 10 PASSED  
+    ⋄ 0  EXCEPTION
+    ⍒ 0  FAILED 
+   Group second_GROUP
+    ⍋ 13 PASSED  
+    ⋄ 0  EXCEPTION
+    ⍒ 1  FAILED 
+ --------------------------
+  ⍋ 23 PASSED
+  ⋄ 0  EXCEPTION
+  ⍒ 1  FAILED
+ (Passing Exception Failing) ← Test_SUITE UT.run_suite File.dyalog
+#+END_EXAMPLE
+
+** [t] Init and End per Test / Group / Suite
+
+For Tests, Groups and Suites, it shall be possible to specify
+an Initialization function, and an End function that is executed
+before, and after the Test / Group / Suite.
+
+The Init and End functions are niladic and dyadic, such that the
+result of the Init evaluation is passed onto the left argument of
+the End function and the test result of the Single test / Group / Suite
+is passed as the right argument of the End function. 
+
+#+BEGIN_EXAMPLE
+    X_init 
+      |
+      ├-→ Test/Group/Suite execution
+      │       │
+      │     result
+      │       │
+      ∇ X_end ∇
+#+END_EXAMPLE
+
+The relation between Test object and Initialization 
+and End functions shall be as follows.
+
+
+| Unit Test Object | Name    | Init function name | End function name |
+|------------------+---------+--------------------+-------------------|
+| Single Line      | X_TEST  | X_TEST_init        | X_TEST_end        |
+| Multi line       | X_TEST  | X_TEST_init        | X_TEST_end        |
+| Group            | X_GROUP | X_GROUP_init       | X_GROUP_end       |
+| Suite            | X_SUITE | X_SUITE_init       | X_SUITE_end       |
+
+If defined, the Init and End functions must be able to execute, invariably of 
+test success / fail or skip.
+
 
 
