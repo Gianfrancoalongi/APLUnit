@@ -224,7 +224,7 @@ Output result shall for both cases show that this was a group
 #+END_EXAMPLE
 
 * COULD
-** [t] Coverage report from Unit Test execution
+** [o] Coverage report from Unit Test execution
 
 There shall be a setting indicating that a coverage report is to be generated
 as a result of the Unit Test execution. Recommended is that the output directory
