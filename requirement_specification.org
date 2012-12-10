@@ -354,7 +354,7 @@ The page itself shall have at the top
 2. The amount of covered lines
 3. The amount of uncovered lines
 
-** [o] Collect and show execution time
+** [d] Collect and show execution time
  
 The execution time of a TEST/GROUP/SUITE is to be collected and reported.
 
