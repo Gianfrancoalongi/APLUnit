@@ -231,11 +231,11 @@ as a result of the Unit Test execution. Recommended is that the output directory
 can be specified.
 
 #+BEGIN_EXAMPLE
- UT.coverage 1
- UT.out 'coverage'
+ #.UT.coverage ← 1
+ #.UT.out ← 'coverage'
 #+END_EXAMPLE
 
-but that the coverage report is as follows: An index.html file, showing the agregated
+The coverage report is as follows: An index.html file, showing the agregated
 total coverage, and the specific coverage for each dyalog module, with links to the specific
 dyalog module cover reports.
 
