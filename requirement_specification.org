@@ -59,7 +59,7 @@ the test is considered as passed and a passed message is printed
   Passed
 #+END_EXAMPLE
 
-** [o] Execution of multiple unit tests
+** [d] Execution of multiple unit tests
 
 It shall be possible to execute multiple unit tests from 
 an array of unit tests by name
@@ -79,7 +79,6 @@ at the end of the execution.
     ⍋ Passed: 20
     ⍒ Failed: 3
 #+END_EXAMPLE
-
 
 ** [t] Automatic execution of all Test Functions from file
    
