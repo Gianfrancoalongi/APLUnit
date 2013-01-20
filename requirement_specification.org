@@ -83,7 +83,8 @@ at the end of the execution.
 ** [o] Test Execution Robustness
 
 A crashing test must not cause subsequent tests not to be executed.
-Crashing test cases are reported in the final result as 'Crashed'
+Crashing test cases are reported in the final result as 'Crashed' 
+when executing a list of testcases.
 
 #+BEGIN_EXAMPLE
    ⍋  Passed: 4
@@ -91,6 +92,16 @@ Crashing test cases are reported in the final result as 'Crashed'
    ⍒  Failed: 1
 #+END_EXAMPLE
 
+On single test case execution, the test will be reported
+as failed with the following output, where ${DIAGNOSTIC_MESSAGE}
+is replaced with the ⎕DM of the crash
+
+#+BEGIN_EXAMPLE
+ CRASHED: one_plus_one_TEST
+ Expected 
+    2
+ ${DIAGNOSTIC_MESSAGE}
+#+END_EXAMPLE
 
 ** [t] Automatic execution of all Test Functions from file
    
