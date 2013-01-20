@@ -80,6 +80,18 @@ at the end of the execution.
     ⍒ Failed: 3
 #+END_EXAMPLE
 
+** [t] Test Execution Robustness
+
+A crashing test must not cause subsequent tests not to be executed.
+Crashing test cases are reported in the final result as 'Crashed'
+
+#+BEGIN_EXAMPLE
+   ⍋  Passed: 4
+   ⍟ Crashed: 2
+   ⍒  Failed: 1
+#+END_EXAMPLE
+
+
 ** [t] Automatic execution of all Test Functions from file
    
 Having multiple Single line tests in a file, it must be possible to execute
