@@ -10,9 +10,12 @@
         Z ← ⊂ 1
 ∇
 
+List ← 'passing_basic_TEST' 'failing_basic_TEST'
+
 ∇ Tests 
         #.UT.run 'passing_basic_TEST'
         #.UT.run 'failing_basic_TEST'
+        #.UT.run_tests List
 ∇
 
 :EndNameSpace

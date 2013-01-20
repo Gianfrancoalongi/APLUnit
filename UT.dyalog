@@ -2,8 +2,24 @@
 :NameSpace UT
 
 expect ← ⍬
+passed ← 0
+failed ← 0
 
-∇ Z ← run Function;FunctionResult;Tmp
+∇ run_tests Tests
+        ⎕CS 1 ⊃ ⎕NSI
+        #.UT.passed ← 0
+        #.UT.failed ← 0
+        #.UT.run ¨ Tests
+        #.UT.print_result_of_array_test
+∇
+
+∇ print_result_of_array_test
+        ⎕ ← 'Text execution report'
+        ⎕ ← '    ⍋ Passed: ',#.UT.passed
+        ⎕ ← '    ⍒ Failed: ',#.UT.failed
+∇
+
+∇ run Function;FunctionResult;Tmp
         Tmp ← 1 ⊃ ⎕RSI
         Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
         FunctionResult ← execute_function Function
@@ -15,10 +31,12 @@ expect ← ⍬
         Z ← ⍎ Name
 ∇
 
-∇ Function test_result_printed_to_screen FunctionResult
+∇ Z ← Function test_result_printed_to_screen FunctionResult
         :If matches_expected FunctionResult
-                ⎕ ← 'Passed'        
+                ⎕ ← 'Passed'
+                #.UT.passed ← #.UT.passed + 1
         :Else
+                #.UT.failed ← #.UT.failed + 1
                 Function display_expected_got FunctionResult
         :EndIf
 ∇
