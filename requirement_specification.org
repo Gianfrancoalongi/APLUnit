@@ -12,7 +12,7 @@ legends are defined.
 | [t]    | To do - waiting to be started  |
 
 * MUST
-** [t] Execution of unit test
+** [d] Execution of unit test
    
 A test function, defined by the function name ending in '_TEST'
 contains a variable assignment to the variable 'expect' in the 
@@ -58,6 +58,28 @@ the test is considered as passed and a passed message is printed
   UT.run 'one_plus_one_TEST'
   Passed
 #+END_EXAMPLE
+
+** [o] Execution of multiple unit tests
+
+It shall be possible to execute multiple unit tests from 
+an array of unit tests by name
+
+#+BEGIN_EXAMPLE
+Tests ← 'a_TEST' 'b_TEST' 'c_TEST' 'd_TEST'
+#.UT.run_tests Tests
+#+END_EXAMPLE
+
+The result of the execution of tests shall display the result
+of each test as if executed by #.UT.run. 
+There shall also be an agregated result displayed on the screen
+at the end of the execution.
+
+#+BEGIN_EXAMPLE
+  Test execution result
+    ⍋ Passed: 20
+    ⍒ Failed: 3
+#+END_EXAMPLE
+
 
 ** [t] Automatic execution of all Test Functions from file
    
