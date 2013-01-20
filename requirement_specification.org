@@ -80,7 +80,7 @@ at the end of the execution.
     ⍒ Failed: 3
 #+END_EXAMPLE
 
-** [t] Test Execution Robustness
+** [o] Test Execution Robustness
 
 A crashing test must not cause subsequent tests not to be executed.
 Crashing test cases are reported in the final result as 'Crashed'
