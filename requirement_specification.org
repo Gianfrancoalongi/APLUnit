@@ -113,23 +113,16 @@ them all in one go.
   UT.run_file File.dyalog
 #+END_EXAMPLE
 
-During the execution of the test cases, every failed test is displayed as 
-in the single line Unit Test execution.
-
-#+BEGIN_EXAMPLE
- FAILED: one_plus_one_TEST
- Expected 
-    2
- Got
-    1
-#+END_EXAMPLE
+During the execution of the test cases, every passed/failed/crashed test is displayed as 
+in the single test/multiple test execution.
 
 At the end of the execution, an aggregated result is printed to the screen.
-The amount of Failed and the amount of Passed testcases displayed.
+The amount of Passed/Crashed/Failed testcases displayed.
 
 #+BEGIN_EXAMPLE
  File.dyalog tests
  ⍋ 152 PASSED  
+ ⍟ 0   CRASHED
  ⍒ 2   FAILED 
 #+END_EXAMPLE
 
