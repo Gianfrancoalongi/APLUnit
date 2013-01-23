@@ -73,7 +73,7 @@ expect ← ⍬
 
 ∇ determine_message UTRes
         :If UTRes.Crashed
-                UTRes.Text ← ⎕DM
+                UTRes.Text ← crash_message UTRes
         :ElseIf UTRes.Passed
                 UTRes.Text ← 'Passed'
         :Else
@@ -93,6 +93,21 @@ expect ← ⍬
         Text ← #.DISPLAY Term
         Rows ← 1 ⊃ ⍴ Text
         Z ← (Rows 4 ⍴ ''),Text
+∇
+
+∇ Z ← crash_message UTRes
+        expectedTerm ← term_to_text #.UT.expect
+        resultTerm ← ↑ ⎕DM
+        header ← 'CRASHED: ',UTRes.Name
+        expected ← 'Expected'
+        (R1 C1) ← ⍴ expectedTerm
+        got ← 'Got'
+        (R2 C2) ← ⍴ resultTerm
+        W ← ⊃ ⊃ ⌈ / C1 C2 (⍴ header) (⍴ expected) (⍴ got) 
+        Z ← (W ↑ header),[0.5] (W ↑ expected)
+        Z ← Z⍪(R2 W ↑ expectedTerm)
+        Z ← Z⍪(W ↑ got)
+        Z ← Z⍪(R1 W ↑ resultTerm)
 ∇
 
 ∇ Z ← failure_message UTRes;expectedTerm;resultTerm;header;expected;got;W;R1;C1;R2;C2
