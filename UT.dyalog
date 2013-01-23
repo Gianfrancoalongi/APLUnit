@@ -95,34 +95,33 @@ expect ← ⍬
         Z ← (Rows 4 ⍴ ''),Text
 ∇
 
-∇ Z ← crash_message UTRes
-        expectedTerm ← term_to_text #.UT.expect
-        resultTerm ← ↑ ⎕DM
-        header ← 'CRASHED: ',UTRes.Name
-        expected ← 'Expected'
-        (R1 C1) ← ⍴ expectedTerm
+∇ Z ← crash_message UTRes;hdr;exp;expterm;got;gotterm
+        hdr ← 'CRASHED: ',UTRes.Name
+        exp ← 'Expected'
+        expterm ← term_to_text #.UT.expect
         got ← 'Got'
-        (R2 C2) ← ⍴ resultTerm
-        W ← ⊃ ⊃ ⌈ / C1 C2 (⍴ header) (⍴ expected) (⍴ got) 
-        Z ← (W ↑ header),[0.5] (W ↑ expected)
-        Z ← Z⍪(R2 W ↑ expectedTerm)
-        Z ← Z⍪(W ↑ got)
-        Z ← Z⍪(R1 W ↑ resultTerm)
+        gotterm ← ↑ ⎕DM
+        Z ← align_and_join_message_parts hdr exp expterm got gotterm
 ∇
 
-∇ Z ← failure_message UTRes;expectedTerm;resultTerm;header;expected;got;W;R1;C1;R2;C2
-        expectedTerm ← term_to_text #.UT.expect
-        resultTerm ← term_to_text UTRes.Returned
-        header ← 'FAILED: ',UTRes.Name
-        expected ← 'Expected'
-        (R1 C1) ← ⍴ expectedTerm
+∇ Z ← failure_message UTRes;hdr;exp;expterm;got;gotterm
+        hdr ← 'FAILED: ',UTRes.Name
+        exp ← 'Expected'
+        expterm ← term_to_text #.UT.expect
         got ← 'Got'
-        (R2 C2) ← ⍴ resultTerm
-        W ← ⊃ ⊃ ⌈ / C1 C2 (⍴ header) (⍴ expected) (⍴ got) 
-        Z ← (W ↑ header),[0.5] (W ↑ expected)
-        Z ← Z⍪(R2 W ↑ expectedTerm)
+        gotterm ← term_to_text UTRes.Returned
+        Z ← align_and_join_message_parts hdr exp expterm got gotterm
+∇
+
+∇ Z ← align_and_join_message_parts Parts;hdr;exp;expterm;got;gotterm;R1;C1;R2;C2;W
+        (hdr exp expterm got gotterm) ← Parts
+        (R1 C1) ← ⍴ expterm
+        (R2 C2) ← ⍴ gotterm
+        W ← ⊃ ⊃ ⌈ / C1 C2 (⍴ hdr) (⍴ exp) (⍴ got) 
+        Z ← (W ↑ hdr),[0.5] (W ↑ exp)
+        Z ← Z⍪(R2 W ↑ expterm)
         Z ← Z⍪(W ↑ got)
-        Z ← Z⍪(R1 W ↑ resultTerm)
+        Z ← Z⍪(R1 W ↑ gotterm)
 ∇
 
 :EndNameSpace
