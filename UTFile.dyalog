@@ -1,7 +1,7 @@
 :NameSpace UTFile
 
 ∇ Z ← pick_elem_TEST
-        #.UT.expect ← 2
+        #.UT.expect ← 3
         Z ← 2 ⊃ ⍳ 2
 ∇
 

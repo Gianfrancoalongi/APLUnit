@@ -82,7 +82,9 @@ expect ← ⍬
         print_result_of_array_test ArrayRes
 ∇
 
-∇ Z ← is_test FunctionName
+∇ Z ← is_test FunctionName;wsIndex
+        wsIndex ← FunctionName ⍳ ' '
+        FunctionName ← (wsIndex - 1) ↑ FunctionName
         Z ← '_TEST' ≡ ¯5 ↑ FunctionName
 ∇
 
