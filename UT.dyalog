@@ -25,6 +25,23 @@
 
 expect ← ⍬
 
+∇ run_file PathToFile;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions
+        LoadedNameSpace ← ⎕SE.SALT.Load PathToFile
+        FunctionsFromNameSpace  ← ↓ LoadedNameSpace.⎕NL 3
+        TestFunctions ←  (is_test ¨ FunctionsFromNameSpace) / FunctionsFromNameSpace
+        LoadedNameSpace run_loaded_tests TestFunctions
+        ⎕EX (⍕ LoadedNameSpace)
+∇
+
+∇ Z ← is_test FunctionName
+        Z ← '_TEST' ≡ ¯5 ↑ FunctionName
+∇
+
+∇ LoadedNameSpace run_loaded_tests TestFunctions
+        ArrayRes ← { LoadedNameSpace UT.run ⍵ } ¨ TestFunctions
+        print_result_of_array_test ArrayRes
+∇
+
 ∇ run_tests Tests;ArrayRes
         ⎕CS 1 ⊃ ⎕NSI
         ArrayRes ← #.UT.run ¨ Tests
@@ -47,7 +64,6 @@ expect ← ⍬
         determine_message UTRes
         print_message_to_screen UTRes
         ⎕EX Function
-        Z ← UTRes
 ∇
 
 ∇ Z ← execute_function Name;UTRes

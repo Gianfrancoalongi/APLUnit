@@ -104,6 +104,7 @@ is replaced with the ⎕DM of the crash
  ${DIAGNOSTIC_MESSAGE}
 #+END_EXAMPLE
 
+* SHOULD
 ** [t] Automatic execution of all Test Functions from file
    
 Having multiple Single line tests in a file, it must be possible to execute
@@ -125,4 +126,9 @@ The amount of Passed/Crashed/Failed testcases displayed.
  ⍟ 0   CRASHED
  ⍒ 2   FAILED 
 #+END_EXAMPLE
+
+Executed tests include all TEST functions (functions whose name ends in _TEST).
+Such as this_TEST.
+
+Arrays containing testcases will not be executed.
 
