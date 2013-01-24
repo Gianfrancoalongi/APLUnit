@@ -23,29 +23,72 @@
         
 :EndClass 
 
+:Class UTobj
+        :Field Public NameSpace
+        :Field Public FunctionName
+        
+        ∇ testobj namespace
+        :Access Public
+        :Implements Constructor
+        NameSpace ← namespace
+        FunctionName ← ⍬
+        ∇
+
+:EndClass
+
 expect ← ⍬
 
-∇ run_file PathToFile;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions
+∇ run_file PathToFile;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions;UTobjs;ArrayRes
         LoadedNameSpace ← ⎕SE.SALT.Load PathToFile
         FunctionsFromNameSpace  ← ↓ LoadedNameSpace.⎕NL 3
         TestFunctions ←  (is_test ¨ FunctionsFromNameSpace) / FunctionsFromNameSpace
-        LoadedNameSpace run_loaded_tests TestFunctions
+        UTobjs ← { ⎕NEW UTobj LoadedNameSpace } ¨ TestFunctions
+        { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
+        ArrayRes ← run_ut_obj ¨ UTobjs
+        print_result_of_array_test ArrayRes
         ⎕EX (⍕ LoadedNameSpace)
+∇
+
+∇ run FunctionName;testobject
+        testobject ← ⎕NEW UTobj (1 ⊃ ⎕RSI)
+        testobject.FunctionName ← FunctionName
+        run_ut_obj testobject
+∇
+
+∇ Z ← run_ut_obj testobject;UTRes
+        UTRes ← execute_function testobject
+        determine_pass_fail UTRes
+        determine_message UTRes
+        print_message_to_screen UTRes       
+        Z ← UTRes
+∇
+
+∇ Z ← execute_function testobject;UTRes
+        UTRes ← ⎕NEW UTresult
+        UTRes.Name ← testobject.FunctionName
+        :Trap 0
+                UTRes.Returned ← ⍎ (⍕testobject.NameSpace),'.',testobject.FunctionName
+        :Else
+                UTRes.Crashed ← 1
+        :EndTrap
+        Z ← UTRes                
+∇
+
+∇ run_tests Tests;UTObjs;ArrayRes;FromSpace
+        FromSpace ← (1 ⊃ ⎕RSI) 
+        UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Tests
+        { UTobjs[⍵].FunctionName ← ⊃ Tests[⍵] } ¨ ⍳ ⍴ Tests
+        ArrayRes ← run_ut_obj ¨ UTobjs
+        print_result_of_array_test ArrayRes
 ∇
 
 ∇ Z ← is_test FunctionName
         Z ← '_TEST' ≡ ¯5 ↑ FunctionName
 ∇
 
-∇ LoadedNameSpace run_loaded_tests TestFunctions
-        ArrayRes ← { LoadedNameSpace UT.run ⍵ } ¨ TestFunctions
+∇ run_test_objects TestObjects;ArrayRes
+        ArrayRes ← run_ut_obj ¨ TestObjects
         print_result_of_array_test ArrayRes
-∇
-
-∇ run_tests Tests;ArrayRes
-        ⎕CS 1 ⊃ ⎕NSI
-        ArrayRes ← #.UT.run ¨ Tests
-        #.UT.print_result_of_array_test ArrayRes
 ∇
 
 ∇ print_result_of_array_test ArrayRes
@@ -54,27 +97,6 @@ expect ← ⍬
         ⎕ ← '    ⍋  Passed: ',+/ { ⍵.Passed } ¨ ArrayRes
         ⎕ ← '    ⍟ Crashed: ',+/ { ⍵.Crashed } ¨ ArrayRes
         ⎕ ← '    ⍒  Failed: ',+/ { ⍵.Failed } ¨ ArrayRes
-∇
-
-∇ Z ← run Function;FunctionResult;Tmp;UTRes
-        Tmp ← 1 ⊃ ⎕RSI
-        Tmp ← (⍕ ⎕THIS) ⎕NS ((⍕ Tmp),'.',Function)
-        UTRes ← execute_function Function
-        determine_pass_fail UTRes
-        determine_message UTRes
-        print_message_to_screen UTRes
-        ⎕EX Function
-∇
-
-∇ Z ← execute_function Name;UTRes
-        UTRes ← ⎕NEW UTresult
-        UTRes.Name ← Name
-        :Trap 0
-                UTRes.Returned ← ⍎ Name
-        :Else
-                UTRes.Crashed ← 1
-        :EndTrap
-        Z ← UTRes                
 ∇
 
 ∇ determine_pass_fail UTRes
