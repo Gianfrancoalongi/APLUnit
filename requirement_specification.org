@@ -105,7 +105,7 @@ is replaced with the ⎕DM of the crash
 #+END_EXAMPLE
 
 * SHOULD
-** [t] Automatic execution of all Test Functions from file
+** [d] Automatic execution of all Test Functions from file
    
 Having multiple Single line tests in a file, it must be possible to execute
 them all in one go. 
