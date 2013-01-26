@@ -104,6 +104,36 @@ is replaced with the ⎕DM of the crash
  ${DIAGNOSTIC_MESSAGE}
 #+END_EXAMPLE
 
+** [t] Expect Exception in Unit Test
+
+It shall be possible to epxress that the test will
+result in an exception and to set what Diagnostic Message
+is to be expected
+
+#+BEGIN_EXAMPLE
+∇ exception_generating_TEST
+    #.UT.exception ← 'DOMAIN_ERROR'
+    Z ← 1 ÷ 0
+∇
+#+END_EXAMPLE
+
+Upon execution of such a test, the test is considered successfull
+if the test function generates an exception which has a ⎕DM matching
+the #.UT.exception text.
+
+On failure, a message is displayed, clearly indicating the expected
+and actual diagnostic messages.
+
+#+BEGIN_EXAMPLE
+ FAILED: failure_case_TEST
+ Expected 
+    'DOMAIN_ERROR'
+ Got
+    'LENGTH_ERROR'
+#+END_EXAMPLE
+
+On success, the output is 'Passed'.
+
 * SHOULD
 ** [d] Automatic execution of all Test Functions from file
    
@@ -132,3 +162,9 @@ Such as this_TEST.
 
 Arrays containing testcases will not be executed.
 
+
+** [t] Generate HTML page with coverage result of Unit Tests
+
+It shall  be possible to request that the unit test execution
+generates an HTML page with the coverage result of the code
+under test.
