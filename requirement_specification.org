@@ -104,7 +104,7 @@ is replaced with the ⎕DM of the crash
  ${DIAGNOSTIC_MESSAGE}
 #+END_EXAMPLE
 
-** [t] Expect Exception in Unit Test
+** [o] Expect Exception in Unit Test
 
 It shall be possible to epxress that the test will
 result in an exception and to set what Diagnostic Message
@@ -161,7 +161,6 @@ Executed tests include all TEST functions (functions whose name ends in _TEST).
 Such as this_TEST.
 
 Arrays containing testcases will not be executed.
-
 
 ** [t] Generate HTML page with coverage result of Unit Tests
 

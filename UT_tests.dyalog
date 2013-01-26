@@ -15,7 +15,12 @@
         Z ← 5 ⊃ ⍳ 4
 ∇
 
-List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
+∇ rank_error_TEST
+        #.UT.exception ← 'RANK ERROR'
+        1 ⊃ 1
+∇
+
+List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_TEST'
 
 ∇ Tests 
         #.UT.run 'passing_basic_TEST'

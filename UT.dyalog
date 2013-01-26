@@ -37,6 +37,7 @@
 :EndClass
 
 expect ← ⍬
+exception ← ⍬
 
 ∇ run_file PathToFile;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions;UTobjs;ArrayRes
         LoadedNameSpace ← ⎕SE.SALT.Load PathToFile
@@ -65,13 +66,24 @@ expect ← ⍬
 
 ∇ Z ← execute_function testobject;UTRes
         UTRes ← ⎕NEW UTresult
-        UTRes.Name ← testobject.FunctionName
+        UTRes.Name ← testobject.FunctionName  
+        reset_UT_globals
         :Trap 0
                 UTRes.Returned ← ⍎ (⍕testobject.NameSpace),'.',testobject.FunctionName
         :Else
-                UTRes.Crashed ← 1
-        :EndTrap
+                :If exception ≢ ⍬
+                        expect ← exception
+                        UTRes.Returned ← 1 ⊃ ⎕DM
+                :Else
+                        UTRes.Crashed ← 1
+                :EndIf
+        :EndTrap        
         Z ← UTRes                
+∇
+
+∇ reset_UT_globals
+        expect ← ⍬
+        exception ← ⍬
 ∇
 
 ∇ run_tests Tests;UTObjs;ArrayRes;FromSpace
