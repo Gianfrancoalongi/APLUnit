@@ -162,7 +162,7 @@ Such as this_TEST.
 
 Arrays containing testcases will not be executed.
 
-** [t] Generate HTML page with coverage result of Unit Tests
+** [o] Generate HTML page with coverage result of Unit Tests
 
 It shall  be possible to request that the unit test execution
 generates an HTML page with the coverage result of the code
