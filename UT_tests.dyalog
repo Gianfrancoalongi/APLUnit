@@ -20,7 +20,12 @@
         1 ⊃ 1
 ∇
 
-List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_TEST'
+∇ failing_error_TEST
+        #.UT.exception ← 'DOMAIN ERROR'
+        1 ⊃ 1
+∇
+
+List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_TEST' 'failing_error_TEST'
 
 ∇ Tests 
         #.UT.run 'passing_basic_TEST'

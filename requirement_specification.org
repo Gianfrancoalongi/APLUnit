@@ -104,7 +104,7 @@ is replaced with the ⎕DM of the crash
  ${DIAGNOSTIC_MESSAGE}
 #+END_EXAMPLE
 
-** [o] Expect Exception in Unit Test
+** [d] Expect Exception in Unit Test
 
 It shall be possible to epxress that the test will
 result in an exception and to set what Diagnostic Message
