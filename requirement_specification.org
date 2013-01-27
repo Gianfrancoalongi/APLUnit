@@ -164,6 +164,50 @@ Arrays containing testcases will not be executed.
 
 ** [o] Generate HTML page with coverage result of Unit Tests
 
-It shall  be possible to request that the unit test execution
-generates an HTML page with the coverage result of the code
-under test.
+It shall be possible to generate a coverage report of selected
+functions as a result of unit test execution. 
+
+Coverage report generation is requested by execution using the corresponding
+coverage versions of 'run', 'run_tests' and 'run_file'
+
+#+BEGIN_EXAMPLE
+UT.run_coverage 'one_plus_one_TEST'
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+UT.run_tests_coverage 'List'
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+UT.run_file_coverage '/t/File.dyalog'
+#+END_EXAMPLE
+
+The resulting HTML page will be generated to a file in the path 
+defined by the user through the parameter 'UT.pages'.
+The name of the page will be determined by the used coverage
+function and/or the argument.
+
+| Coverage                           | Page Output in | Page Name            |
+|------------------------------------+----------------+----------------------|
+| run_coverage 'a_TEST'              | UT.pages       | a_TEST_coverage.html |
+| run_tests_coverage List            | UT.pages       | list_coverage.html   |
+| run_file_coverage '/t/File.dyalog' | UT.pages       | File_coverage.html   |
+
+The functions to be coverage analyzed are defined as an array through the 
+configuration parameter 'UT.cover'
+
+Thus, the example
+
+#+BEGIN_EXAMPLE
+UT.pages ← '/home/APL/coverage/'
+
+UT.cover ← ⊂ 'timetable_selector'
+
+UT.run_coverage 'out_of_bound_TEST'
+
+Passed
+#+END_EXAMPLE
+
+Will generate a coverage result for the function timetable_selector,
+the result coverage page is written to the file 
+'/home/APL/coverage/out_of_bound_TEST.html'
