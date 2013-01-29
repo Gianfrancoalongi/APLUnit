@@ -13,14 +13,14 @@ legends are defined.
 
 * MUST
 ** [d] Execution of unit test
-   
+
 A test function, defined by the function name ending in '_TEST'
-contains a variable assignment to the variable 'expect' in the 
+contains a variable assignment to the variable 'expect' in the
 UT namespace (#.UT.expect) which defines the expected return
 value of the function.
 
 #+BEGIN_EXAMPLE
-∇ Z ← one_plus_one_TEST 
+∇ Z ← one_plus_one_TEST
   #.UT.expect ← 2
   Z ← 1 * 1
 ∇
@@ -34,18 +34,18 @@ name as the argument
   #.UT.run 'one_plus_one_TEST'
 #+END_EXAMPLE
 
-Upon execution of the test function (one_plus_one_TEST), the 
+Upon execution of the test function (one_plus_one_TEST), the
 returned value (in Z) is checked against the expecte value
 (in UT_expected).
 
-If the returned values does not match the expected value, 
+If the returned values does not match the expected value,
 the test is considered as failed, appropriate text is displayed,
-clearly outlining the Expected value and the Actual value, 
+clearly outlining the Expected value and the Actual value,
 along with the name of the test.
 
 #+BEGIN_EXAMPLE
  FAILED: one_plus_one_TEST
- Expected 
+ Expected
     2
  Got
     1
@@ -61,7 +61,7 @@ the test is considered as passed and a passed message is printed
 
 ** [d] Execution of multiple unit tests
 
-It shall be possible to execute multiple unit tests from 
+It shall be possible to execute multiple unit tests from
 an array of unit tests by name
 
 #+BEGIN_EXAMPLE
@@ -70,7 +70,7 @@ Tests ← 'a_TEST' 'b_TEST' 'c_TEST' 'd_TEST'
 #+END_EXAMPLE
 
 The result of the execution of tests shall display the result
-of each test as if executed by #.UT.run. 
+of each test as if executd by #.UT.run
 There shall also be an agregated result displayed on the screen
 at the end of the execution.
 
@@ -83,7 +83,7 @@ at the end of the execution.
 ** [d] Test Execution Robustness
 
 A crashing test must not cause subsequent tests not to be executed.
-Crashing test cases are reported in the final result as 'Crashed' 
+Crashing test cases are reported in the final result as 'Crashed'
 when executing a list of testcases.
 
 #+BEGIN_EXAMPLE
@@ -98,7 +98,7 @@ is replaced with the ⎕DM of the crash
 
 #+BEGIN_EXAMPLE
  CRASHED: one_plus_one_TEST
- Expected 
+ Expected
     2
  Got
  ${DIAGNOSTIC_MESSAGE}
@@ -125,47 +125,51 @@ On failure, a message is displayed, clearly indicating the expected
 and actual diagnostic messages.
 
 #+BEGIN_EXAMPLE
- FAILED: failure_case_TEST
- Expected 
-    'DOMAIN_ERROR'
- Got
-    'LENGTH_ERROR'
+FAILED: failing_error_TEST
+Expected
+    ┌→───────────┐
+    │DOMAIN ERROR│
+    └────────────┘
+Got
+    ┌→─────────┐
+    │RANK ERROR│
+    └──────────┘
 #+END_EXAMPLE
 
 On success, the output is 'Passed'.
 
 * SHOULD
 ** [d] Automatic execution of all Test Functions from file
-   
+
 Having multiple Single line tests in a file, it must be possible to execute
-them all in one go. 
+them all in one go.
 
 #+BEGIN_EXAMPLE
-  UT.run File.dyalog
+  UT.run '/path/to/File.dyalog'
 #+END_EXAMPLE
 
-During the execution of the test cases, every passed/failed/crashed test is displayed as 
+During the execution of the test cases, every passed/failed/crashed test is displayed as
 in the single test/multiple test execution.
 
 At the end of the execution, an aggregated result is printed to the screen.
 The amount of Passed/Crashed/Failed testcases displayed.
 
 #+BEGIN_EXAMPLE
- File.dyalog tests
- ⍋ 152 PASSED  
- ⍟ 0   CRASHED
- ⍒ 2   FAILED 
+ /path/to/File.dyalog tests
+ ⍋   Passed: 10
+ ⍟  Crashed: 3
+ ⍒   Failed: 0
 #+END_EXAMPLE
 
-Executed tests include all TEST functions (functions whose name ends in _TEST).
-Such as this_TEST.
+Executed tests include all _TEST functions (functions whose name ends in _TEST).
+Such as 'this_TEST'.
 
 Arrays containing testcases will not be executed.
 
 ** [o] Generate HTML page with coverage result of Unit Tests
 
 It shall be possible to generate a coverage report of selected
-functions as a result of unit test execution. 
+functions as a result of unit test execution.
 
 Coverage report generation is requested by execution using the corresponding
 coverage versions of 'run', 'run_tests' and 'run_file'
@@ -182,7 +186,7 @@ UT.run_tests_coverage 'List'
 UT.run_file_coverage '/t/File.dyalog'
 #+END_EXAMPLE
 
-The resulting HTML page will be generated to a file in the path 
+The resulting HTML page will be generated to a file in the path
 defined by the user through the parameter 'UT.pages'.
 The name of the page will be determined by the used coverage
 function and/or the argument.
@@ -193,7 +197,7 @@ function and/or the argument.
 | run_tests_coverage List            | UT.pages       | list_coverage.html   |
 | run_file_coverage '/t/File.dyalog' | UT.pages       | File_coverage.html   |
 
-The functions to be coverage analyzed are defined as an array through the 
+The functions to be coverage analyzed are defined as an array through the
 configuration parameter 'UT.cover'
 
 Thus, the example
@@ -209,5 +213,5 @@ Passed
 #+END_EXAMPLE
 
 Will generate a coverage result for the function timetable_selector,
-the result coverage page is written to the file 
+the result coverage page is written to the file
 '/home/APL/coverage/out_of_bound_TEST.html'

@@ -60,11 +60,10 @@ exception ← ⍬
                 UTobjs ← { ⎕NEW UTobj LoadedNameSpace } ¨ TestFunctions
                 { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
                 ArrayRes ← run_ut_obj ¨ UTobjs
-                print_result_of_array_test ArrayRes
+                Argument print_result_of_file_test ArrayRes
                 ⎕EX (⍕ LoadedNameSpace)
                 
         :EndIf
-                
 ∇
 
 ∇ Z ← is_function Argument
@@ -120,9 +119,19 @@ exception ← ⍬
         print_result_of_array_test ArrayRes
 ∇
 
+∇ FilePath print_result_of_file_test ArrayRes
+        ⎕ ← '-----------------------------------------'
+        ⎕ ← FilePath,' tests'
+        print_passed_crashed_failed ArrayRes
+∇
+
 ∇ print_result_of_array_test ArrayRes
         ⎕ ← '-----------------------------------------'
         ⎕ ← 'Text execution report'
+        print_passed_crashed_failed ArrayRes
+ ∇
+
+∇ print_passed_crashed_failed ArrayRes
         ⎕ ← '    ⍋  Passed: ',+/ { ⍵.Passed } ¨ ArrayRes
         ⎕ ← '    ⍟ Crashed: ',+/ { ⍵.Crashed } ¨ ArrayRes
         ⎕ ← '    ⍒  Failed: ',+/ { ⍵.Failed } ¨ ArrayRes
