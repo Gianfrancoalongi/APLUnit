@@ -66,7 +66,7 @@ an array of unit tests by name
 
 #+BEGIN_EXAMPLE
 Tests ← 'a_TEST' 'b_TEST' 'c_TEST' 'd_TEST'
-#.UT.run_tests Tests
+#.UT.run Tests
 #+END_EXAMPLE
 
 The result of the execution of tests shall display the result
@@ -141,7 +141,7 @@ Having multiple Single line tests in a file, it must be possible to execute
 them all in one go. 
 
 #+BEGIN_EXAMPLE
-  UT.run_file File.dyalog
+  UT.run File.dyalog
 #+END_EXAMPLE
 
 During the execution of the test cases, every passed/failed/crashed test is displayed as 

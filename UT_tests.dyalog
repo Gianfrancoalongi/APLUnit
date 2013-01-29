@@ -30,8 +30,8 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_T
 ∇ Tests 
         #.UT.run 'passing_basic_TEST'
         #.UT.run 'failing_basic_TEST'
-        #.UT.run_tests List
-        #.UT.run_file '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        #.UT.run List
+        #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
 ∇
 
 :EndNameSpace

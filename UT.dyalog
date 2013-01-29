@@ -39,21 +39,44 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ run_file PathToFile;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions;UTobjs;ArrayRes
-        LoadedNameSpace ← ⎕SE.SALT.Load PathToFile
-        FunctionsFromNameSpace  ← ↓ LoadedNameSpace.⎕NL 3
-        TestFunctions ←  (is_test ¨ FunctionsFromNameSpace) / FunctionsFromNameSpace
-        UTobjs ← { ⎕NEW UTobj LoadedNameSpace } ¨ TestFunctions
-        { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-        ArrayRes ← run_ut_obj ¨ UTobjs
-        print_result_of_array_test ArrayRes
-        ⎕EX (⍕ LoadedNameSpace)
+∇ run Argument;testobject;UTObjs;ArrayRes;FromSpace;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions
+
+        :If is_function Argument
+                testobject ← ⎕NEW UTobj (1 ⊃ ⎕RSI)
+                testobject.FunctionName ← Argument
+                run_ut_obj testobject        
+
+        :ElseIf is_list_of_functions Argument
+                FromSpace ← (1 ⊃ ⎕RSI) 
+                UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Argument
+                { UTobjs[⍵].FunctionName ← ⊃ Argument[⍵] } ¨ ⍳ ⍴ Argument
+                ArrayRes ← run_ut_obj ¨ UTobjs
+                print_result_of_array_test ArrayRes
+
+        :ElseIf is_file Argument
+                LoadedNameSpace ← ⎕SE.SALT.Load Argument
+                FunctionsFromNameSpace  ← ↓ LoadedNameSpace.⎕NL 3
+                TestFunctions ←  (is_test ¨ FunctionsFromNameSpace) / FunctionsFromNameSpace
+                UTobjs ← { ⎕NEW UTobj LoadedNameSpace } ¨ TestFunctions
+                { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
+                ArrayRes ← run_ut_obj ¨ UTobjs
+                print_result_of_array_test ArrayRes
+                ⎕EX (⍕ LoadedNameSpace)
+                
+        :EndIf
+                
 ∇
 
-∇ run FunctionName;testobject
-        testobject ← ⎕NEW UTobj (1 ⊃ ⎕RSI)
-        testobject.FunctionName ← FunctionName
-        run_ut_obj testobject
+∇ Z ← is_function Argument
+        Z ← '_TEST' ≡ ¯5 ↑ Argument
+∇
+
+∇ Z ← is_list_of_functions Argument
+        Z ← 2 =≡ Argument
+∇
+
+∇ Z ← is_file Argument
+        Z ← '.dyalog' ≡ ¯7 ↑ Argument
 ∇
 
 ∇ Z ← run_ut_obj testobject;UTRes
@@ -84,14 +107,6 @@ exception ← ⍬
 ∇ reset_UT_globals
         expect ← ⍬
         exception ← ⍬
-∇
-
-∇ run_tests Tests;UTObjs;ArrayRes;FromSpace
-        FromSpace ← (1 ⊃ ⎕RSI) 
-        UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Tests
-        { UTobjs[⍵].FunctionName ← ⊃ Tests[⍵] } ¨ ⍳ ⍴ Tests
-        ArrayRes ← run_ut_obj ¨ UTobjs
-        print_result_of_array_test ArrayRes
 ∇
 
 ∇ Z ← is_test FunctionName;wsIndex
