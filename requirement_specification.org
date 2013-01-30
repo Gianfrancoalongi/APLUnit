@@ -171,43 +171,51 @@ Arrays containing testcases will not be executed.
 It shall be possible to generate a coverage report of selected
 functions as a result of unit test execution.
 
-Coverage report generation is requested by execution using the corresponding
-coverage versions of 'run', 'run_tests' and 'run_file'
+Coverage report generation is requested by creating an instance of the UTcover class
 
 #+BEGIN_EXAMPLE
-UT.run_coverage 'one_plus_one_TEST'
+Conf ← ⎕NEW UTcover
 #+END_EXAMPLE
 
-#+BEGIN_EXAMPLE
-UT.run_tests_coverage 'List'
-#+END_EXAMPLE
+Setting the cover page generation output directory property
 
 #+BEGIN_EXAMPLE
-UT.run_file_coverage '/t/File.dyalog'
+Conf.pages ← '/home/APL/coverage'
+#+END_EXAMPLE
+
+And setting the array of functions to cover property
+
+#+BEGIN_EXAMPLE
+Conf.cover ← ⊂ 'plus_function'
+#+END_EXAMPLE
+
+This instance is then given as left argument to the ordinary UT.run function.
+
+#+BEGIN_EXAMPLE
+Conf ← ⎕NEW UTcover
+Conf.pages ← '/home/APL/coverage'
+Conf.cover ← ⊂ 'plus_function'
+Conf UT.run 'one_plus_one_TEST'
 #+END_EXAMPLE
 
 The resulting HTML page will be generated to a file in the path
 defined by the user through the parameter 'UT.pages'.
-The name of the page will be determined by the used coverage
-function and/or the argument.
+The name of the page will be determined by the type of Tests being executed 
+(the right argument of UT.run).
 
-| Coverage                           | Page Output in | Page Name            |
-|------------------------------------+----------------+----------------------|
-| run_coverage 'a_TEST'              | UT.pages       | a_TEST_coverage.html |
-| run_tests_coverage List            | UT.pages       | list_coverage.html   |
-| run_file_coverage '/t/File.dyalog' | UT.pages       | File_coverage.html   |
-
-The functions to be coverage analyzed are defined as an array through the
-configuration parameter 'UT.cover'
+| Coverage on                     | Page Output in | Page Name            |
+|---------------------------------+----------------+----------------------|
+| Conf #.UT.run 'a_TEST'          | Conf.pages     | a_TEST_coverage.html |
+| Conf #.UT.run 'a_TEST' 'b_TEST' | Conf.pages     | list_coverage.html   |
+| Conf #.UT.run '/t/File.dyalog'  | Conf.pages     | File_coverage.html   |
 
 Thus, the example
 
 #+BEGIN_EXAMPLE
-UT.pages ← '/home/APL/coverage/'
-
-UT.cover ← ⊂ 'timetable_selector'
-
-UT.run_coverage 'out_of_bound_TEST'
+Conf ← ⎕NEW UTcover
+Conf.pages ← '/home/APL/coverage'
+Conf.cover ← ⊂ 'timetable_selector'
+Conf UT.run 'out_of_bound_TEST'
 
 Passed
 #+END_EXAMPLE
