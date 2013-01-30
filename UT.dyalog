@@ -39,7 +39,7 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ run Argument;testobject;UTObjs;ArrayRes;FromSpace;LoadedNameSpace;FunctionsFromNameSpace;TestFunctions
+∇ run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions
 
         :If is_function Argument
                 testobject ← ⎕NEW UTobj (1 ⊃ ⎕RSI)
@@ -50,18 +50,16 @@ exception ← ⍬
                 FromSpace ← (1 ⊃ ⎕RSI) 
                 UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Argument
                 { UTobjs[⍵].FunctionName ← ⊃ Argument[⍵] } ¨ ⍳ ⍴ Argument
-                ArrayRes ← run_ut_obj ¨ UTobjs
-                print_result_of_array_test ArrayRes
+                print_result_of_array_test run_ut_obj ¨ UTobjs
 
         :ElseIf is_file Argument
-                LoadedNameSpace ← ⎕SE.SALT.Load Argument
-                FunctionsFromNameSpace  ← ↓ LoadedNameSpace.⎕NL 3
-                TestFunctions ←  (is_test ¨ FunctionsFromNameSpace) / FunctionsFromNameSpace
-                UTobjs ← { ⎕NEW UTobj LoadedNameSpace } ¨ TestFunctions
+                FromSpace ← ⎕SE.SALT.Load Argument
+                Functions  ← ↓ FromSpace.⎕NL 3
+                TestFunctions ←  (is_test ¨ Functions) / Functions
+                UTobjs ← { ⎕NEW UTobj FromSpace } ¨ TestFunctions
                 { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-                ArrayRes ← run_ut_obj ¨ UTobjs
-                Argument print_result_of_file_test ArrayRes
-                ⎕EX (⍕ LoadedNameSpace)
+                Argument print_result_of_file_test run_ut_obj ¨ UTobjs
+                ⎕EX (⍕ FromSpace)
                 
         :EndIf
 ∇
