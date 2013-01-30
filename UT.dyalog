@@ -20,7 +20,6 @@
         Text ← ''
         Name ← ''
         ∇
-        
 :EndClass 
 
 :Class UTobj
@@ -33,7 +32,6 @@
         NameSpace ← namespace
         FunctionName ← ⍬
         ∇
-
 :EndClass
 
 expect ← ⍬
@@ -80,7 +78,7 @@ exception ← ⍬
         UTRes ← execute_function testobject
         determine_pass_fail UTRes
         determine_message UTRes
-        print_message_to_screen UTRes       
+        print_message_to_screen UTRes
         Z ← UTRes
 ∇
 
@@ -91,9 +89,9 @@ exception ← ⍬
         :Trap 0
                 UTRes.Returned ← ⍎ (⍕testobject.NameSpace),'.',testobject.FunctionName
         :Else
+                UTRes.Returned ← 1 ⊃ ⎕DM
                 :If exception ≢ ⍬
                         expect ← exception
-                        UTRes.Returned ← 1 ⊃ ⎕DM
                 :Else
                         UTRes.Crashed ← 1
                 :EndIf
@@ -118,18 +116,16 @@ exception ← ⍬
 ∇
 
 ∇ FilePath print_result_of_file_test ArrayRes
-        ⎕ ← '-----------------------------------------'
-        ⎕ ← FilePath,' tests'
-        print_passed_crashed_failed ArrayRes
+        (FilePath,' tests') print_passed_crashed_failed ArrayRes
 ∇
 
 ∇ print_result_of_array_test ArrayRes
-        ⎕ ← '-----------------------------------------'
-        ⎕ ← 'Text execution report'
-        print_passed_crashed_failed ArrayRes
+        ('Text execution report') print_passed_crashed_failed ArrayRes
  ∇
 
-∇ print_passed_crashed_failed ArrayRes
+∇ Heading print_passed_crashed_failed ArrayRes
+        ⎕ ← '-----------------------------------------'
+        ⎕ ← Heading
         ⎕ ← '    ⍋  Passed: ',+/ { ⍵.Passed } ¨ ArrayRes
         ⎕ ← '    ⍟ Crashed: ',+/ { ⍵.Crashed } ¨ ArrayRes
         ⎕ ← '    ⍒  Failed: ',+/ { ⍵.Failed } ¨ ArrayRes
@@ -147,11 +143,11 @@ exception ← ⍬
 
 ∇ determine_message UTRes
         :If UTRes.Crashed
-                UTRes.Text ← crash_message UTRes
+                UTRes.Text ← 'CRASHED: ' failure_message UTRes
         :ElseIf UTRes.Passed
                 UTRes.Text ← 'Passed'
         :Else
-                UTRes.Text ← failure_message UTRes
+                UTRes.Text ← 'FAILED: ' failure_message UTRes
         :EndIf
 ∇
 
@@ -169,17 +165,8 @@ exception ← ⍬
         Z ← (Rows 4 ⍴ ''),Text
 ∇
 
-∇ Z ← crash_message UTRes;hdr;exp;expterm;got;gotterm
-        hdr ← 'CRASHED: ',UTRes.Name
-        exp ← 'Expected'
-        expterm ← term_to_text #.UT.expect
-        got ← 'Got'
-        gotterm ← ↑ ⎕DM
-        Z ← align_and_join_message_parts hdr exp expterm got gotterm
-∇
-
-∇ Z ← failure_message UTRes;hdr;exp;expterm;got;gotterm
-        hdr ← 'FAILED: ',UTRes.Name
+∇ Z ← Cause failure_message UTRes;hdr;exp;expterm;got;gotterm
+        hdr ← Cause,UTRes.Name
         exp ← 'Expected'
         expterm ← term_to_text #.UT.expect
         got ← 'Got'
