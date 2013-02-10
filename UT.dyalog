@@ -34,15 +34,58 @@
         ∇
 :EndClass
 
+:Class UTcover
+        :Field Public Page_name
+        :Field Public Pages
+        :Field Public Cover
+        
+        ∇ coverobj
+        :Access Public
+        :Implements Constructor
+        Pages ← ⍬
+        Cover ← ⍬
+        ∇
+        
+:EndClass
+
+:Class CoverResult
+        :Field Public CoveredLines
+        :Field Public FunctionLines
+        :Field Public Representation
+        ∇ coverresult
+        :Access Public
+        :Implements Constructor
+        CoveredLines ← ⍬
+        FunctionLines ← ⍬
+        Representation ← ⍬
+        ∇
+:EndClass
+
 expect ← ⍬
 exception ← ⍬
 
-∇ run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions
+∇ {CoverConf} run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions;ProfileData;CheckForCoverage;CoverResults
 
         :If is_function Argument
-                testobject ← ⎕NEW UTobj (1 ⊃ ⎕RSI)
+
+                :If 0 ≠ ⎕NC 'CoverConf'
+                        ⎕PROFILE 'start'
+                :EndIf
+                FromSpace ← 1 ⊃ ⎕RSI
+                testobject ← ⎕NEW UTobj FromSpace
                 testobject.FunctionName ← Argument
                 run_ut_obj testobject        
+
+                :If 0 ≠ ⎕NC 'CoverConf'
+                        ⎕PROFILE 'stop'
+                        CoverConf.Page_name ← Argument,'_coverage.html'
+                        ProfileData ← ⎕PROFILE 'data'
+                        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
+                        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
+                        CoverConf write_cover_page generate_cover_page CoverResults
+                        
+                :EndIf
+
 
         :ElseIf is_list_of_functions Argument
                 FromSpace ← (1 ⊃ ⎕RSI) 
@@ -60,6 +103,61 @@ exception ← ⍬
                 ⎕EX (⍕ FromSpace)
                 
         :EndIf
+∇
+
+∇ Z ← ProfileData calc_cover Args;FunctionName;FunctionVR;Indices;Line;Res
+        (FunctionName Representation) ← Args
+        Indices ← (FunctionName∘≡¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
+        Lines ← ProfileData[Indices;2]
+        Res ← ⎕NEW CoverResult
+        Res.CoveredLines ← (⍬∘≢ ¨ Lines) / Lines
+        Res.FunctionLines ← ¯1 + ⍴ ↓ Representation
+        Res.Representation ← Representation
+        Z ← Res
+∇
+
+∇ Z ← generate_cover_page CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Page
+        TotalCov ← ⎕NEW CoverResult
+        Covered ← ⊃⊃+/ { ⍴ ⍵.CoveredLines } ¨ CoverResults
+        Total ← ⊃⊃+/ { ⍵.FunctionLines } ¨ CoverResults
+        Percentage ← 100 × Covered ÷ Total
+        CoverageText ← 'Coverage: ',Percentage,'% (',Covered,'/',Total,')'
+        ColorizedCode ← ⊃ ,/ { colorize_code_by_coverage ⍵ } ¨ CoverResults
+        Page ← ⍬
+        Page ,← ⊂ ⍬,'<html>'
+        Page ,← ⊂ ⍬,'<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>'
+        Page ,← ⊂ ⍬,CoverageText
+        Page ,← ColorizedCode
+        Page ,← ⊂ ⍬,'</html>'
+        Z ← ↑ Page
+∇
+
+∇ Z ← colorize_code_by_coverage CoverResult;Color;red_font;green_font;black_font;end_of_line
+        Color ← { '<font color=',⍵,'><pre>' } 
+        red_font ← Color 'red'
+        green_font ← Color 'green'
+        black_font ← Color 'black'
+        end_of_line ← '</pre></font>'
+
+        Code ← ↓ CoverResult.Representation
+        Code[1] ← ⊂'∇',⊃Code[1]
+        Code ,← ⊂'∇'
+
+        Colors ← (2 + CoverResult.FunctionLines) ⍴ ⊂ ⍬,red_font
+
+        Colors[1] ← ⊂ black_font
+        Colors[⍴Colors] ← ⊂ black_font
+
+        Colors[ 1 + CoverResult.CoveredLines ] ← ⊂ ⍬,green_font
+
+        Z ← Colors,[1.5]Code
+        Z ← ,/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
+∇
+
+∇ CoverConf write_cover_page Page;tie
+        tie ← (CoverConf.Pages,CoverConf.Page_name) ⎕NCREATE 0
+        Simple_array ← ⍕ ⊃ ,/ ↓ Page
+        (⎕UCS 'UTF-8' ⎕UCS Simple_array) ⎕NAPPEND tie
 ∇
 
 ∇ Z ← is_function Argument

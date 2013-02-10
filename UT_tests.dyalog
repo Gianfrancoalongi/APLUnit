@@ -32,6 +32,11 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_T
         #.UT.run 'failing_basic_TEST'
         #.UT.run List
         #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        
+        Conf ← ⎕NEW #.UT.UTcover
+        Conf.Cover ← 'passing_basic_TEST' 'rank_error_TEST'
+        Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+        Conf #.UT.run 'passing_basic_TEST'
 ∇
 
 :EndNameSpace
