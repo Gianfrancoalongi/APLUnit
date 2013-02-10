@@ -64,13 +64,14 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions;ProfileData;CheckForCoverage;CoverResults
+∇ {CoverConf} run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions;ProfileData;CheckForCoverage;CoverResults;FileNS
 
         :If is_function Argument
 
                 :If 0 ≠ ⎕NC 'CoverConf'
                         ⎕PROFILE 'start'
                 :EndIf
+
                 FromSpace ← 1 ⊃ ⎕RSI
                 testobject ← ⎕NEW UTobj FromSpace
                 testobject.FunctionName ← Argument
@@ -83,7 +84,7 @@ exception ← ⍬
                         CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
                         CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
                         CoverConf write_cover_page generate_cover_page CoverResults
-                        
+                        ⎕PROFILE 'clear'
                 :EndIf
 
 
@@ -97,7 +98,7 @@ exception ← ⍬
                 UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Argument
                 { UTobjs[⍵].FunctionName ← ⊃ Argument[⍵] } ¨ ⍳ ⍴ Argument
                 print_result_of_array_test run_ut_obj ¨ UTobjs
-
+                
                 :If 0≠ ⎕NC 'CoverConf'
                         ⎕PROFILE 'stop'
                         CoverConf.Page_name ← 'list_coverage.html'
@@ -105,18 +106,40 @@ exception ← ⍬
                         CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover
                         CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
                         CoverConf write_cover_page generate_cover_page CoverResults
+                        ⎕PROFILE 'clear'
                 :EndIf
 
         :ElseIf is_file Argument
-                FromSpace ← ⎕SE.SALT.Load Argument
-                Functions  ← ↓ FromSpace.⎕NL 3
+
+                :If 0≠ ⎕NC 'CoverConf'
+                        ⎕PROFILE 'start'
+                :EndIf                
+
+                FromSpace ← 1 ⊃ ⎕RSI
+                FileNS ← ⎕SE.SALT.Load Argument
+                Functions  ← ↓ FileNS.⎕NL 3
                 TestFunctions ←  (is_test ¨ Functions) / Functions
-                UTobjs ← { ⎕NEW UTobj FromSpace } ¨ TestFunctions
+                UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
                 { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
                 Argument print_result_of_file_test run_ut_obj ¨ UTobjs
-                ⎕EX (⍕ FromSpace)
-                
+                ⎕EX (⍕ FileNS)
+
+                :If 0≠ ⎕NC 'CoverConf'
+                        ⎕PROFILE 'stop'
+                        CoverConf.Page_name ← (get_file_name Argument),'_coverage.html'
+                        ProfileData ← ⎕PROFILE 'data'
+                        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover
+                        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
+                        CoverConf write_cover_page generate_cover_page CoverResults
+                        ⎕PROFILE 'clear'
+                :EndIf
+
         :EndIf
+∇
+
+∇ Z ← get_file_name Argument;separator
+        separator ← ⌈ / ('/' = Argument) / ⍳ ⍴ Argument
+        Z ← ¯7 ↓ separator ↓ Argument
 ∇
 
 ∇ Z ← ProfileData calc_cover Args;FunctionName;FunctionVR;Indices;Line;Res
