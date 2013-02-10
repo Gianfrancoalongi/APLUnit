@@ -64,7 +64,7 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions;ProfileData;CheckForCoverage;CoverResults;FileNS
+∇ {CoverConf} run Argument;testobject;UTObjs;FromSpace;Functions;TestFunctions;FileNS
 
         :If is_function Argument
 
@@ -78,13 +78,8 @@ exception ← ⍬
                 run_ut_obj testobject        
 
                 :If 0 ≠ ⎕NC 'CoverConf'
-                        ⎕PROFILE 'stop'
                         CoverConf.Page_name ← Argument,'_coverage.html'
-                        ProfileData ← ⎕PROFILE 'data'
-                        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
-                        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
-                        CoverConf write_cover_page generate_cover_page CoverResults
-                        ⎕PROFILE 'clear'
+                        CoverConf coverage_page_generation FromSpace
                 :EndIf
 
 
@@ -100,13 +95,8 @@ exception ← ⍬
                 print_result_of_array_test run_ut_obj ¨ UTobjs
                 
                 :If 0≠ ⎕NC 'CoverConf'
-                        ⎕PROFILE 'stop'
                         CoverConf.Page_name ← 'list_coverage.html'
-                        ProfileData ← ⎕PROFILE 'data'
-                        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover
-                        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
-                        CoverConf write_cover_page generate_cover_page CoverResults
-                        ⎕PROFILE 'clear'
+                        CoverConf coverage_page_generation FromSpace
                 :EndIf
 
         :ElseIf is_file Argument
@@ -125,16 +115,20 @@ exception ← ⍬
                 ⎕EX (⍕ FileNS)
 
                 :If 0≠ ⎕NC 'CoverConf'
-                        ⎕PROFILE 'stop'
                         CoverConf.Page_name ← (get_file_name Argument),'_coverage.html'
-                        ProfileData ← ⎕PROFILE 'data'
-                        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover
-                        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
-                        CoverConf write_cover_page generate_cover_page CoverResults
-                        ⎕PROFILE 'clear'
+                        CoverConf coverage_page_generation FromSpace
                 :EndIf
 
         :EndIf
+∇
+
+∇ CoverConf coverage_page_generation FromSpace;ProfileData;CheckForCoverage;CoverResults
+        ⎕PROFILE 'stop'
+        ProfileData ← ⎕PROFILE 'data'
+        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
+        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
+        CoverConf write_cover_page generate_cover_page CoverResults
+        ⎕PROFILE 'clear'
 ∇
 
 ∇ Z ← get_file_name Argument;separator
