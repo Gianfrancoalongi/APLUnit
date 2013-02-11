@@ -77,19 +77,19 @@ exception ← ⍬
         :EndIf
 
         :If is_function Argument
-                TEST_step ← { FromSpace single_function_test_step Argument }
+                TEST_step ← single_function_test_step
                 :If 0 ≠ ⎕NC 'CoverConf'
                         COVER_step ← { CoverConf single_function_test_cover FromSpace Argument }
                 :EndIf                
 
         :ElseIf is_list_of_functions Argument                
-                TEST_step←{ FromSpace list_of_functions_test_step Argument }
+                TEST_step ← list_of_functions_test_step
                 :If 0≠ ⎕NC 'CoverConf'
                         COVER_step ← { CoverConf list_of_functions_cover FromSpace 'unused' }
                 :EndIf
 
         :ElseIf is_file Argument
-                TEST_step←{ FromSpace file_test_step Argument }
+                TEST_step ← file_test_step
                 :If 0≠ ⎕NC 'CoverConf'
                         COVER_step ← { CoverConf file_cover FromSpace Argument }
                 :EndIf
@@ -97,7 +97,7 @@ exception ← ⍬
         :EndIf
 
         PRE_test ⍬
-        TEST_step ⍬
+        FromSpace TEST_step Argument
         POST_test ⍬
         COVER_step ⍬
 ∇
