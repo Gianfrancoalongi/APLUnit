@@ -64,69 +64,82 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;PRE_test;POST_test;testobject;UTObjs;FromSpace;Functions;TestFunctions;FileNS
+∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
 
         FromSpace ← 1 ⊃ ⎕RSI
         :If 0 ≠ ⎕NC 'CoverConf'
                 PRE_test ← { ⎕PROFILE 'start' }
                 POST_test ← { ⎕PROFILE 'stop' }
         :Else
-                PRE_test ← { }
-                POST_test ← { }
+                PRE_test ← {}
+                POST_test ← {}
+                COVER_step ← {} 
         :EndIf
 
-
         :If is_function Argument
-
-                PRE_test ⍬
-              
-                testobject ← ⎕NEW UTobj FromSpace
-                testobject.FunctionName ← Argument
-                run_ut_obj testobject        
-
-                POST_test ⍬
-
+                TEST_step ← { FromSpace single_function_test_step Argument }
                 :If 0 ≠ ⎕NC 'CoverConf'
-                        CoverConf.Page_name ← Argument,'_coverage.html'
-                        CoverConf coverage_page_generation FromSpace
-                :EndIf
+                        COVER_step ← { CoverConf single_function_test_cover FromSpace Argument }
+                :EndIf                
 
-
-        :ElseIf is_list_of_functions Argument
-                
-                PRE_test ⍬
-
-                UTobjs ← { ⎕NEW UTobj FromSpace } ¨ Argument
-                { UTobjs[⍵].FunctionName ← ⊃ Argument[⍵] } ¨ ⍳ ⍴ Argument
-                print_result_of_array_test run_ut_obj ¨ UTobjs
-                
-                POST_test ⍬
-
+        :ElseIf is_list_of_functions Argument                
+                TEST_step←{ FromSpace list_of_functions_test_step Argument }
                 :If 0≠ ⎕NC 'CoverConf'
-                        CoverConf.Page_name ← 'list_coverage.html'
-                        CoverConf coverage_page_generation FromSpace
+                        COVER_step ← { CoverConf list_of_functions_cover FromSpace 'unused' }
                 :EndIf
 
         :ElseIf is_file Argument
-
-                PRE_test ⍬
-
-                FileNS ← ⎕SE.SALT.Load Argument
-                Functions  ← ↓ FileNS.⎕NL 3
-                TestFunctions ←  (is_test ¨ Functions) / Functions
-                UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
-                { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-                Argument print_result_of_file_test run_ut_obj ¨ UTobjs
-                ⎕EX (⍕ FileNS)
-
-                POST_test ⍬
-
+                TEST_step←{ FromSpace file_test_step Argument }
                 :If 0≠ ⎕NC 'CoverConf'
-                        CoverConf.Page_name ← (get_file_name Argument),'_coverage.html'
-                        CoverConf coverage_page_generation FromSpace
+                        COVER_step ← { CoverConf file_cover FromSpace Argument }
                 :EndIf
 
         :EndIf
+
+        PRE_test ⍬
+        TEST_step ⍬
+        POST_test ⍬
+        COVER_step ⍬
+∇
+
+∇ FromSpace single_function_test_step TestName;testobject
+        testobject ← ⎕NEW UTobj FromSpace
+        testobject.FunctionName ← TestName
+        run_ut_obj testobject
+∇
+
+∇ CoverConf single_function_test_cover Args;FromSpace;TestName
+        (FromSpace TestName) ← Args
+        CoverConf.Page_name ← TestName,'_coverage.html'
+        CoverConf coverage_page_generation FromSpace
+∇
+
+∇ FromSpace list_of_functions_test_step ListOfNames;UTobjs
+        UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
+        { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
+        print_result_of_array_test run_ut_obj ¨ UTobjs
+∇
+
+∇ CoverConf list_of_functions_cover Args;FromSpace
+        FromSpace ← ⊃ Args
+        CoverConf.Page_name ← 'list_coverage.html'
+        CoverConf coverage_page_generation FromSpace
+∇
+
+∇ FromSpace file_test_step FilePath;FileNS;Functions;TestFunctions;UTobjs
+        FileNS ← ⎕SE.SALT.Load FilePath
+        Functions  ← ↓ FileNS.⎕NL 3
+        TestFunctions ←  (is_test ¨ Functions) / Functions
+        UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
+        { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
+        FilePath print_result_of_file_test run_ut_obj ¨ UTobjs
+        ⎕EX (⍕ FileNS)
+∇
+
+∇ CoverConf file_cover Args;FromSpace;FilePath
+        (FromSpace FilePath) ← Args
+        CoverConf.Page_name ← (get_file_name FilePath),'_coverage.html'
+        CoverConf coverage_page_generation FromSpace
 ∇
 
 ∇ CoverConf coverage_page_generation FromSpace;ProfileData;CheckForCoverage;CoverResults
