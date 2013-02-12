@@ -76,7 +76,7 @@ exception ← ⍬
                 COVER_step ← {} 
         :EndIf
 
-        :If is_function Argument
+        :If is_function Argument                
                 TEST_step ← single_function_test_step
                 :If 0 ≠ ⎕NC 'CoverConf'
                         COVER_step ← { CoverConf single_function_test_cover FromSpace Argument }
@@ -111,7 +111,7 @@ exception ← ⍬
 ∇ FromSpace list_of_functions_test_step ListOfNames;UTobjs
         UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
         { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
-        print_result_of_array_test run_ut_obj ¨ UTobjs
+        ('Text execution report') print_passed_crashed_failed run_ut_obj ¨ UTobjs
 ∇
 
 ∇ FromSpace file_test_step FilePath;FileNS;Functions;TestFunctions;UTobjs
@@ -120,7 +120,7 @@ exception ← ⍬
         TestFunctions ←  (is_test ¨ Functions) / Functions
         UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
         { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-        FilePath print_result_of_file_test run_ut_obj ¨ UTobjs
+        (FilePath,' tests') print_passed_crashed_failed run_ut_obj ¨ UTobjs
         ⎕EX (⍕ FileNS)
 ∇
 
@@ -257,19 +257,6 @@ exception ← ⍬
         FunctionName ← (wsIndex - 1) ↑ FunctionName
         Z ← '_TEST' ≡ ¯5 ↑ FunctionName
 ∇
-
-∇ run_test_objects TestObjects;ArrayRes
-        ArrayRes ← run_ut_obj ¨ TestObjects
-        print_result_of_array_test ArrayRes
-∇
-
-∇ FilePath print_result_of_file_test ArrayRes
-        (FilePath,' tests') print_passed_crashed_failed ArrayRes
-∇
-
-∇ print_result_of_array_test ArrayRes
-        ('Text execution report') print_passed_crashed_failed ArrayRes
- ∇
 
 ∇ Heading print_passed_crashed_failed ArrayRes
         ⎕ ← '-----------------------------------------'
