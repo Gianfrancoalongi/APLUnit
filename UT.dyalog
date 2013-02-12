@@ -108,22 +108,10 @@ exception ← ⍬
         run_ut_obj testobject
 ∇
 
-∇ CoverConf single_function_test_cover Args;FromSpace;TestName
-        (FromSpace TestName) ← Args
-        CoverConf.Page_name ← TestName,'_coverage.html'
-        CoverConf coverage_page_generation FromSpace
-∇
-
 ∇ FromSpace list_of_functions_test_step ListOfNames;UTobjs
         UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
         { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
         print_result_of_array_test run_ut_obj ¨ UTobjs
-∇
-
-∇ CoverConf list_of_functions_cover Args;FromSpace
-        FromSpace ← ⊃ Args
-        CoverConf.Page_name ← 'list_coverage.html'
-        CoverConf coverage_page_generation FromSpace
 ∇
 
 ∇ FromSpace file_test_step FilePath;FileNS;Functions;TestFunctions;UTobjs
@@ -134,6 +122,18 @@ exception ← ⍬
         { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
         FilePath print_result_of_file_test run_ut_obj ¨ UTobjs
         ⎕EX (⍕ FileNS)
+∇
+
+∇ CoverConf single_function_test_cover Args;FromSpace;TestName
+        (FromSpace TestName) ← Args
+        CoverConf.Page_name ← TestName,'_coverage.html'
+        CoverConf coverage_page_generation FromSpace
+∇
+
+∇ CoverConf list_of_functions_cover Args;FromSpace
+        FromSpace ← ⊃ Args
+        CoverConf.Page_name ← 'list_coverage.html'
+        CoverConf coverage_page_generation FromSpace
 ∇
 
 ∇ CoverConf file_cover Args;FromSpace;FilePath
@@ -201,7 +201,7 @@ exception ← ⍬
         Colors[ 1 + CoverResult.CoveredLines ] ← ⊂ ⍬,green_font
 
         Z ← Colors,[1.5]Code
-        Z ← ,/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
+        Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
 
 ∇ CoverConf write_cover_page Page;tie
