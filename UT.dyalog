@@ -1,6 +1,4 @@
-
 :NameSpace UT
-
 
 :Class UTresult
         :Field Public Crashed
@@ -64,37 +62,34 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
+∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_gen;COVER_step;FromSpace
 
         FromSpace ← 1 ⊃ ⎕RSI
+
+        PRE_test ← {}
+        POST_test ← {}
+        COVER_step ← {} 
         :If 0 ≠ ⎕NC 'CoverConf'
                 PRE_test ← { ⎕PROFILE 'start' }
                 POST_test ← { ⎕PROFILE 'stop' }
-        :Else
-                PRE_test ← {}
-                POST_test ← {}
-                COVER_step ← {} 
         :EndIf
 
         :If is_function Argument                
                 TEST_step ← single_function_test_step
-                :If 0 ≠ ⎕NC 'CoverConf'
-                        COVER_step ← { CoverConf single_function_test_cover FromSpace Argument }
-                :EndIf                
+                COVER_gen ← single_function_test_cover
 
         :ElseIf is_list_of_functions Argument                
                 TEST_step ← list_of_functions_test_step
-                :If 0≠ ⎕NC 'CoverConf'
-                        COVER_step ← { CoverConf list_of_functions_cover FromSpace 'unused' }
-                :EndIf
+                COVER_gen ← list_of_functions_cover
 
         :ElseIf is_file Argument
                 TEST_step ← file_test_step
-                :If 0≠ ⎕NC 'CoverConf'
-                        COVER_step ← { CoverConf file_cover FromSpace Argument }
-                :EndIf
-
+                COVER_gen ← file_cover
         :EndIf
+
+        :If 0 ≠ ⎕NC 'CoverConf'
+                COVER_step ← { CoverConf COVER_gen FromSpace Argument }
+        :EndIf                
 
         PRE_test ⍬
         FromSpace TEST_step Argument
