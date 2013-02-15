@@ -62,7 +62,7 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_gen;COVER_step;FromSpace
+∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
         FromSpace ← 1 ⊃ ⎕RSI
 
@@ -75,20 +75,20 @@ exception ← ⍬
         :EndIf
 
         :If is_function Argument                
-                TEST_step ← single_function_test_step
-                COVER_gen ← single_function_test_cover
+                TEST_step ← single_function_test_function
+                COVER_step_function ← single_function_test_cover
 
         :ElseIf is_list_of_functions Argument                
-                TEST_step ← list_of_functions_test_step
-                COVER_gen ← list_of_functions_cover
+                TEST_step ← list_of_functions_test_function
+                COVER_step_function ← list_of_functions_cover
 
         :ElseIf is_file Argument
-                TEST_step ← file_test_step
-                COVER_gen ← file_cover
+                TEST_step ← file_test_function
+                COVER_step_function ← file_cover
         :EndIf
 
         :If 0 ≠ ⎕NC 'CoverConf'
-                COVER_step ← { CoverConf COVER_gen FromSpace Argument }
+                COVER_step ← { CoverConf COVER_step_function FromSpace Argument }
         :EndIf                
 
         PRE_test ⍬
@@ -97,19 +97,19 @@ exception ← ⍬
         COVER_step ⍬
 ∇
 
-∇ FromSpace single_function_test_step TestName;testobject
+∇ FromSpace single_function_test_function TestName;testobject
         testobject ← ⎕NEW UTobj FromSpace
         testobject.FunctionName ← TestName
         run_ut_obj testobject
 ∇
 
-∇ FromSpace list_of_functions_test_step ListOfNames;UTobjs
+∇ FromSpace list_of_functions_test_function ListOfNames;UTobjs
         UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
         { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
         ('Text execution report') print_passed_crashed_failed run_ut_obj ¨ UTobjs
 ∇
 
-∇ FromSpace file_test_step FilePath;FileNS;Functions;TestFunctions;UTobjs
+∇ FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
         FileNS ← ⎕SE.SALT.Load FilePath
         Functions  ← ↓ FileNS.⎕NL 3
         TestFunctions ←  (is_test ¨ Functions) / Functions
@@ -122,26 +122,27 @@ exception ← ⍬
 ∇ CoverConf single_function_test_cover Args;FromSpace;TestName
         (FromSpace TestName) ← Args
         CoverConf.Page_name ← TestName,'_coverage.html'
-        CoverConf coverage_page_generation FromSpace
+        CoverConf generate_coverage_page FromSpace
 ∇
 
 ∇ CoverConf list_of_functions_cover Args;FromSpace
         FromSpace ← ⊃ Args
         CoverConf.Page_name ← 'list_coverage.html'
-        CoverConf coverage_page_generation FromSpace
+        CoverConf generate_coverage_page FromSpace
 ∇
 
 ∇ CoverConf file_cover Args;FromSpace;FilePath
         (FromSpace FilePath) ← Args
         CoverConf.Page_name ← (get_file_name FilePath),'_coverage.html'
-        CoverConf coverage_page_generation FromSpace
+        CoverConf generate_coverage_page FromSpace
 ∇
 
-∇ CoverConf coverage_page_generation FromSpace;ProfileData;CheckForCoverage;CoverResults
+∇ CoverConf generate_coverage_page FromSpace;ProfileData;CheckForCoverage;CoverResults;HTML
         ProfileData ← ⎕PROFILE 'data'
         CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
-        CoverResults ← { ProfileData calc_cover ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
-        CoverConf write_cover_page generate_cover_page CoverResults
+        CoverResults ← { ProfileData generate_cover_result ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
+        HTML ← generate_html CoverResults
+        CoverConf write_html_to_page HTML
         ⎕PROFILE 'clear'
 ∇
 
@@ -150,7 +151,7 @@ exception ← ⍬
         Z ← ¯7 ↓ separator ↓ Argument
 ∇
 
-∇ Z ← ProfileData calc_cover Args;FunctionName;FunctionVR;Indices;Line;Res
+∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Line;Res
         (FunctionName Representation) ← Args
         Indices ← (FunctionName∘≡¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
         Lines ← ProfileData[Indices;2]
@@ -161,7 +162,7 @@ exception ← ⍬
         Z ← Res
 ∇
 
-∇ Z ← generate_cover_page CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Page
+∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Page
         TotalCov ← ⎕NEW CoverResult
         Covered ← ⊃⊃+/ { ⍴ ⍵.CoveredLines } ¨ CoverResults
         Total ← ⊃⊃+/ { ⍵.FunctionLines } ¨ CoverResults
@@ -174,7 +175,7 @@ exception ← ⍬
         Page ,← ⊂ ⍬,CoverageText
         Page ,← ColorizedCode
         Page ,← ⊂ ⍬,'</html>'
-        Z ← ↑ Page
+        Z ← Page
 ∇
 
 ∇ Z ← colorize_code_by_coverage CoverResult;Color;red_font;green_font;black_font;end_of_line
@@ -199,9 +200,9 @@ exception ← ⍬
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
 
-∇ CoverConf write_cover_page Page;tie
+∇ CoverConf write_html_to_page Page;tie
         tie ← (CoverConf.Pages,CoverConf.Page_name) ⎕NCREATE 0
-        Simple_array ← ⍕ ⊃ ,/ ↓ Page
+        Simple_array ← ⍕ ⊃ ,/ Page
         (⎕UCS 'UTF-8' ⎕UCS Simple_array) ⎕NAPPEND tie
 ∇
 
