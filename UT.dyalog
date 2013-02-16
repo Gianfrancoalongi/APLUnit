@@ -76,7 +76,7 @@ exception ← ⍬
 
         :If is_function Argument                
                 TEST_step ← single_function_test_function
-                COVER_step_function ← single_function_test_cover
+                COVER_step_function ← single_function_cover
 
         :ElseIf is_list_of_functions Argument                
                 TEST_step ← list_of_functions_test_function
@@ -119,7 +119,7 @@ exception ← ⍬
         ⎕EX (⍕ FileNS)
 ∇
 
-∇ CoverConf single_function_test_cover Args;FromSpace;TestName
+∇ CoverConf single_function_cover Args;FromSpace;TestName
         (FromSpace TestName) ← Args
         CoverConf.Page_name ← TestName,'_coverage.html'
         CoverConf generate_coverage_page FromSpace
