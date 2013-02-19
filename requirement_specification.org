@@ -245,7 +245,7 @@ So, an example page will have the following text at the
 bottom of the page.
 
 #+BEGIN_EXAMPLE
- Page generated: 2013-2-19 19:11:36
+ Page generated: 2013-2-19 | 19:11:36
 #+END_EXAMPLE
 
 The reason to put this info at the bottom of the page, 

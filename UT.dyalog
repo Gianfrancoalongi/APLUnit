@@ -162,18 +162,20 @@ exception ← ⍬
         Z ← Res
 ∇
 
-∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Page
+∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
         TotalCov ← ⎕NEW CoverResult
         Covered ← ⊃⊃+/ { ⍴ ⍵.CoveredLines } ¨ CoverResults
         Total ← ⊃⊃+/ { ⍵.FunctionLines } ¨ CoverResults
         Percentage ← 100 × Covered ÷ Total
         CoverageText ← 'Coverage: ',Percentage,'% (',Covered,'/',Total,')'
         ColorizedCode ← ⊃ ,/ { colorize_code_by_coverage ⍵ } ¨ CoverResults
+        Timestamp ← generate_timestamp_text
         Page ← ⍬
         Page ,← ⊂ ⍬,'<html>'
         Page ,← ⊂ ⍬,'<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>'
         Page ,← ⊂ ⍬,CoverageText
         Page ,← ColorizedCode
+        Page ,← Timestamp
         Page ,← ⊂ ⍬,'</html>'
         Z ← Page
 ∇
@@ -198,6 +200,13 @@ exception ← ⍬
 
         Z ← Colors,[1.5]Code
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
+∇
+
+∇ Z ← generate_timestamp_text;TS;YYMMDD;HHMMSS
+        TS ← ⎕TS
+        YYMMDD ← ⊃ { ⍺,'-',⍵} / 3 ↑ TS
+        HHMMSS ← ⊃ { ⍺,':',⍵} / 3 ↑ 3 ↓ TS
+        Z ← 'Page generated: ',YYMMDD,'|',HHMMSS
 ∇
 
 ∇ CoverConf write_html_to_page Page;tie;filename
