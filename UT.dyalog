@@ -200,8 +200,15 @@ exception ← ⍬
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
 
-∇ CoverConf write_html_to_page Page;tie
-        tie ← (CoverConf.Pages,CoverConf.Page_name) ⎕NCREATE 0
+∇ CoverConf write_html_to_page Page;tie;filename
+        filename ← CoverConf.Pages,CoverConf.Page_name
+        :Trap 22
+                tie ← filename ⎕NTIE 0
+                filename ⎕NERASE tie
+                filename ⎕NCREATE tie
+        :Else
+                tie ← filename ⎕NCREATE 0
+        :EndTrap
         Simple_array ← ⍕ ⊃ ,/ Page
         (⎕UCS 'UTF-8' ⎕UCS Simple_array) ⎕NAPPEND tie
 ∇
