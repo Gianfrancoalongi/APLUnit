@@ -223,3 +223,31 @@ Passed
 Will generate a coverage result for the function timetable_selector,
 the result coverage page is written to the file
 '/home/APL/coverage/out_of_bound_TEST.html'
+** [o] Cover Result Page Time Stamp
+
+The Coverage result page will have a timestamp indicating when
+the page was generated.
+
+The timestam will have the format
+
+#+BEGIN_EXAMPLE
+ YYYY-MM-DD HH:mm:SS
+#+END_EXAMPLE
+
+and be located at the bottom of the page, together with the
+text 
+
+#+BEGIN_EXAMPLE
+ Page generated: 
+#+END_EXAMPLE
+
+So, an example page will have the following text at the
+bottom of the page.
+
+#+BEGIN_EXAMPLE
+ Page generated: 2013-2-19 19:11:36
+#+END_EXAMPLE
+
+The reason to put this info at the bottom of the page, 
+is that the most interesting part is the coverage.
+
