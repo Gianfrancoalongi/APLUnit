@@ -34,15 +34,15 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST' 'rank_error_T
         #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
         
         Conf ← ⎕NEW #.UT.UTcover
-        Conf.Cover ← 'passing_basic_TEST' 'rank_error_TEST'
+        Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
         Conf #.UT.run 'passing_basic_TEST'
 
-        Conf.Cover ← 'passing_basic_TEST' 'rank_error_TEST'
+        Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
         Conf #.UT.run List
 
-        Conf.Cover ← 'passing_basic_TEST' 'rank_error_TEST' 'failing_error_TEST'
+        Conf.Cover ← '#.UTFile.pick_elem_TEST' '#.UTFile.array_of_num_TEST' '#.UTFile.indexing_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
         Conf #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
 ∇

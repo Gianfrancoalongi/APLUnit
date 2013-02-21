@@ -88,7 +88,7 @@ exception ← ⍬
         :EndIf
 
         :If 0 ≠ ⎕NC 'CoverConf'
-                COVER_step ← { CoverConf COVER_step_function FromSpace Argument }
+                COVER_step ← { CoverConf COVER_step_function Argument }
         :EndIf                
 
         PRE_test ⍬
@@ -119,28 +119,24 @@ exception ← ⍬
         ⎕EX (⍕ FileNS)
 ∇
 
-∇ CoverConf single_function_cover Args;FromSpace;TestName
-        (FromSpace TestName) ← Args
+∇ CoverConf single_function_cover TestName
         CoverConf.Page_name ← TestName,'_coverage.html'
-        CoverConf generate_coverage_page FromSpace
+        generate_coverage_page CoverConf
 ∇
 
-∇ CoverConf list_of_functions_cover Args;FromSpace
-        FromSpace ← ⊃ Args
+∇ CoverConf list_of_functions_cover Args
         CoverConf.Page_name ← 'list_coverage.html'
-        CoverConf generate_coverage_page FromSpace
+        generate_coverage_page CoverConf
 ∇
 
-∇ CoverConf file_cover Args;FromSpace;FilePath
-        (FromSpace FilePath) ← Args
+∇ CoverConf file_cover FilePath
         CoverConf.Page_name ← (get_file_name FilePath),'_coverage.html'
-        CoverConf generate_coverage_page FromSpace
+        generate_coverage_page CoverConf
 ∇
 
-∇ CoverConf generate_coverage_page FromSpace;ProfileData;CheckForCoverage;CoverResults;HTML
+∇ generate_coverage_page CoverConf;ProfileData;CoverResults;HTML
         ProfileData ← ⎕PROFILE 'data'
-        CheckForCoverage ← { (⍕ FromSpace),'.',⍵ } ¨ CoverConf.Cover                        
-        CoverResults ← { ProfileData generate_cover_result ⍵ (⎕CR ⍵) } ¨ CheckForCoverage
+        CoverResults ← { ProfileData generate_cover_result ⍵ (⎕CR ⍵) } ¨ CoverConf.Cover
         HTML ← generate_html CoverResults
         CoverConf write_html_to_page HTML
         ⎕PROFILE 'clear'
