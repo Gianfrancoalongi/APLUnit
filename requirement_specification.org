@@ -183,10 +183,12 @@ Setting the cover page generation output directory property
 Conf.pages ← '/home/APL/coverage'
 #+END_EXAMPLE
 
-And setting the array of functions to cover property
+And setting the array of functions to cover property, the functions to cover
+are targeted through the corresponding namespace and function.
+In the example below, we are targeting the plus_function in the Example namespace.
 
 #+BEGIN_EXAMPLE
-Conf.cover ← ⊂ 'plus_function'
+Conf.cover ← ⊂ '#.Example.plus_function'
 #+END_EXAMPLE
 
 This instance is then given as left argument to the ordinary UT.run function.
@@ -194,7 +196,7 @@ This instance is then given as left argument to the ordinary UT.run function.
 #+BEGIN_EXAMPLE
 Conf ← ⎕NEW UTcover
 Conf.pages ← '/home/APL/coverage'
-Conf.cover ← ⊂ 'plus_function'
+Conf.cover ← ⊂ '#.Example.plus_function'
 Conf UT.run 'one_plus_one_TEST'
 #+END_EXAMPLE
 
@@ -214,7 +216,7 @@ Thus, the example
 #+BEGIN_EXAMPLE
 Conf ← ⎕NEW UTcover
 Conf.pages ← '/home/APL/coverage'
-Conf.cover ← ⊂ 'timetable_selector'
+Conf.cover ← ⊂ '#.Example.timetable_selector'
 Conf UT.run 'out_of_bound_TEST'
 
 Passed
