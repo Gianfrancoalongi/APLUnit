@@ -236,7 +236,7 @@ exception ← ⍬
 
 ∇ Z ← run_ut_obj testobject;UTRes
         UTRes ← execute_function testobject
-        determine_pass_fail UTRes
+        determine_pass_or_fail UTRes
         determine_message UTRes
         print_message_to_screen UTRes
         Z ← UTRes
@@ -278,7 +278,7 @@ exception ← ⍬
         ⎕ ← '    ⍒  Failed: ',+/ { ⍵.Failed } ¨ ArrayRes
 ∇
 
-∇ determine_pass_fail UTRes
+∇ determine_pass_or_fail UTRes
         :If 0 = UTRes.Crashed                                 
                 :If matches_expected UTRes
                         UTRes.Passed ← 1
