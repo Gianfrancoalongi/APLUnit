@@ -62,7 +62,7 @@
 expect ← ⍬
 exception ← ⍬
 
-∇ {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
+∇ Z ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
         FromSpace ← 1 ⊃ ⎕RSI
 
@@ -92,30 +92,32 @@ exception ← ⍬
         :EndIf                
 
         PRE_test ⍬
-        FromSpace TEST_step Argument
+        Z ← FromSpace TEST_step Argument
         POST_test ⍬
         COVER_step ⍬
 ∇
 
-∇ FromSpace single_function_test_function TestName;testobject
+∇ Z ← FromSpace single_function_test_function TestName;testobject
         testobject ← ⎕NEW UTobj FromSpace
         testobject.FunctionName ← TestName
-        run_ut_obj testobject
+        Z ← run_ut_obj testobject
 ∇
 
-∇ FromSpace list_of_functions_test_function ListOfNames;UTobjs
+∇ Z ← FromSpace list_of_functions_test_function ListOfNames;UTobjs
         UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
         { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
-        ('Text execution report') print_passed_crashed_failed run_ut_obj ¨ UTobjs
+        Z ← run_ut_obj ¨ UTobjs
+        ('Text execution report') print_passed_crashed_failed Z
 ∇
 
-∇ FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
+∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
         FileNS ← ⎕SE.SALT.Load FilePath
         Functions  ← ↓ FileNS.⎕NL 3
         TestFunctions ←  (is_test ¨ Functions) / Functions
         UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
         { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-        (FilePath,' tests') print_passed_crashed_failed run_ut_obj ¨ UTobjs
+        Z ← run_ut_obj ¨ UTobjs
+        (FilePath,' tests') print_passed_crashed_failed Z
         ⎕EX (⍕ FileNS)
 ∇
 
@@ -149,13 +151,17 @@ exception ← ⍬
 
 ∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Line;Res
         (FunctionName Representation) ← Args
-        Indices ← (FunctionName∘≡¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
+        Indices ← ({ FunctionName matches ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
         Lines ← ProfileData[Indices;2]
         Res ← ⎕NEW CoverResult
         Res.CoveredLines ← (⍬∘≢ ¨ Lines) / Lines
         Res.FunctionLines ← ¯1 + ⍴ ↓ Representation
         Res.Representation ← Representation
         Z ← Res
+∇
+
+∇ Z ← FunctionName matches Name 
+        Z ← FunctionName ≡ Name
 ∇
 
 ∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
