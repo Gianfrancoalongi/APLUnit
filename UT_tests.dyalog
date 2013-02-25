@@ -53,15 +53,19 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
         Conf ← ⎕NEW #.UT.UTcover
         Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
-        Conf #.UT.run 'passing_basic_TEST'
+        UTres ← Conf #.UT.run 'passing_basic_TEST'
+        Z ,← (1 0 0) ≡ UTres.(Passed Crashed Failed)
 
         Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.crashing_TEST' '#.UTT.failing_basic_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
-        Conf #.UT.run List
+        UTres ← Conf #.UT.run List
+        Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ { ⍵.(Passed Crashed Failed) } ¨ UTres
 
         Conf.Cover ← '#.UTFile.pick_elem_TEST' '#.UTFile.array_of_num_TEST' '#.UTFile.indexing_TEST'
         Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
-        Conf #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        UTres ←  Conf #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
+        Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ { ⍵.(Passed Crashed Failed) } ¨ UTres
+
 ∇
 
 :EndNameSpace
