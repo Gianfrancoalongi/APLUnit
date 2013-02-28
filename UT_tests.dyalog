@@ -28,7 +28,7 @@
 List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
 
 ∇ Z ← Tests;UTres
-        
+        Z ← ⍬
         UTres ← #.UT.run 'passing_basic_TEST'
         Z ← (1 0 0) ≡ UTres.(Passed Crashed Failed)
 

@@ -111,14 +111,13 @@ exception ← ⍬
 ∇
 
 ∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
-        FileNS ← ⎕SE.SALT.Load FilePath
+        FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
         Functions  ← ↓ FileNS.⎕NL 3
         TestFunctions ←  (is_test ¨ Functions) / Functions
         UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
         { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
         Z ← run_ut_obj ¨ UTobjs
         (FilePath,' tests') print_passed_crashed_failed Z
-        ⎕EX (⍕ FileNS)
 ∇
 
 ∇ CoverConf single_function_cover TestName
