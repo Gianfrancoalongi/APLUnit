@@ -328,9 +328,9 @@ exception ← ⍬
         (R2 C2) ← ⍴ gotterm
         W ← ⊃ ⊃ ⌈ / C1 C2 (⍴ hdr) (⍴ exp) (⍴ got) 
         Z ← (W ↑ hdr),[0.5] (W ↑ exp)
-        Z ← Z⍪(R2 W ↑ expterm)
+        Z ← Z⍪(R1 W ↑ expterm)
         Z ← Z⍪(W ↑ got)
-        Z ← Z⍪(R1 W ↑ gotterm)
+        Z ← Z⍪(R2 W ↑ gotterm)
 ∇
 
 :EndNameSpace
