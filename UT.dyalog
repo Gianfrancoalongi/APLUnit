@@ -64,6 +64,8 @@ exception ← ⍬
 
 ∇ Z ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
+        load_display_if_not_already_loaded
+
         FromSpace ← 1 ⊃ ⎕RSI
 
         PRE_test ← {}
@@ -95,6 +97,12 @@ exception ← ⍬
         Z ← FromSpace TEST_step Argument
         POST_test ⍬
         COVER_step ⍬
+∇
+
+∇ load_display_if_not_already_loaded
+        :If 0=⎕NC '#.DISPLAY'
+                'DISPLAY' #.⎕CY 'display'
+        :EndIf
 ∇
 
 ∇ Z ← FromSpace single_function_test_function TestName;testobject
