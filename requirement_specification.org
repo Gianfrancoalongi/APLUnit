@@ -263,3 +263,4 @@ all APLUnit test files and execute them in order.
   UT.run '/path/to/directory/'
 #+END_EXAMPLE
 
+APLUint test files are SALT scripts whone name ends in '_tests.dyalog'
