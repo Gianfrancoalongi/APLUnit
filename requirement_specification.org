@@ -253,3 +253,13 @@ bottom of the page.
 The reason to put this info at the bottom of the page, 
 is that the most interesting part is the coverage.
 
+* COULD
+** [t] Run all unit test files in the directory passed to run
+
+When executing #.UT.run ${PATH} if ${PATH} is a directory, then find
+all APLUnit test files and execute them in order.
+
+#+BEGIN_EXAMPLE
+  UT.run '/path/to/directory/'
+#+END_EXAMPLE
+
