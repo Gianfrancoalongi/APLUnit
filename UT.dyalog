@@ -87,6 +87,11 @@ exception ← ⍬
         :ElseIf is_file Argument
                 TEST_step ← file_test_function
                 COVER_step_function ← file_cover
+
+        :ElseIf is_dir Argument
+                test_files ← test_files_in_dir Argument
+                TEST_step ← { #.UT.run ¨ ⍵ }
+                Argument ← test_files
         :EndIf
 
         :If 0 ≠ ⎕NC 'CoverConf'
@@ -241,6 +246,14 @@ exception ← ⍬
 
 ∇ Z ← is_file Argument
         Z ← '.dyalog' ≡ ¯7 ↑ Argument
+∇
+
+∇ Z ← is_dir Argument
+        Z ← 'yes' ≡ ⊃ ⎕CMD 'test -d ',Argument,' && echo yes || echo no'
+∇
+
+∇ Z ← test_files_in_dir Argument
+        Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'
 ∇
 
 ∇ Z ← run_ut_obj testobject;UTRes
