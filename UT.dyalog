@@ -120,7 +120,7 @@ exception ← ⍬
         UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
         { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
         Z ← run_ut_obj ¨ UTobjs
-        ('Text execution report') print_passed_crashed_failed Z
+        ('Test execution report') print_passed_crashed_failed Z
 ∇
 
 ∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
