@@ -167,7 +167,7 @@ Such as 'this_TEST'.
 Arrays containing testcases will not be executed.
 
 ** [d] Generate HTML page with coverage result of Unit Tests
-
+   
 It shall be possible to generate a coverage report of selected
 functions as a result of unit test execution.
 
@@ -254,7 +254,7 @@ The reason to put this info at the bottom of the page,
 is that the most interesting part is the coverage.
 
 * COULD
-** [t] Run all unit test files in the directory passed to run
+** [d] Run all unit test files in the directory passed to run
 
 When executing #.UT.run ${PATH} if ${PATH} is a directory, then find
 all APLUnit test files and execute them in order.
@@ -266,3 +266,19 @@ all APLUnit test files and execute them in order.
 APLUnit test files are SALT scripts whone name ends in '_tests.dyalog'.
 
 Currently this only works for *nix as it used the OS level test -d
+
+** [t] Cover all functions in a namespace by only passing the namespace
+
+When setting the coverage configuration, it should be possible to only
+passing the namespace to the cover property of the Cover conf object.
+
+#+BEGIN_EXAMPLE
+Conf ← ⎕NEW UTcover
+Conf.pages ← '/home/APL/coverage'
+Conf.cover ← ⊂ '#.Example'
+#+END_EXAMPLE
+
+Running the Unit Tests from the Example_tests.dyalog file should now
+generate a full coverage report of all functions defined in #.Example
+
+
