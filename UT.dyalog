@@ -149,11 +149,29 @@ exception ← ⍬
 ∇
 
 ∇ generate_coverage_page CoverConf;ProfileData;CoverResults;HTML
-        ProfileData ← ⎕PROFILE 'data'
-        CoverResults ← { ProfileData generate_cover_result ⍵ (⎕CR ⍵) } ¨ CoverConf.Cover
+        ProfileData ← ⎕PROFILE 'data'       
+        ToCover ← retrieve_coverables ¨ CoverConf.Cover
+        :if (⍴ToCover) ≡ (⍴⊂1)
+                ToCover ← ⊃ ToCover
+        :endif
+        CoverResults ← { ProfileData generate_cover_result ⍵ } ¨ ToCover
         HTML ← generate_html CoverResults
         CoverConf write_html_to_page HTML
         ⎕PROFILE 'clear'
+∇
+
+∇ Z ← retrieve_coverables Something;nc;functions
+  nc ← ⎕NC Something
+  :if nc = 3
+          Z ← (Something (⎕CR Something))
+  :elseif nc = 9
+          functions ← strip ¨ ↓ ⍎ Something,'.⎕NL 3'
+          Z ← {(Something,'.',⍵) (⎕CR (Something,'.',⍵))} ¨ functions 
+  :endif
+∇
+
+∇ Z ← strip input
+  Z ← (input≠' ')/input
 ∇
 
 ∇ Z ← get_file_name Argument;separator

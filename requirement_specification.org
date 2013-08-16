@@ -267,7 +267,7 @@ APLUnit test files are SALT scripts whone name ends in '_tests.dyalog'.
 
 Currently this only works for *nix as it used the OS level test -d
 
-** [t] Cover all functions in a namespace by only passing the namespace
+** [o] Cover all functions in a namespace by only passing the namespace
 
 When setting the coverage configuration, it should be possible to only
 passing the namespace to the cover property of the Cover conf object.

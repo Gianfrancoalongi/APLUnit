@@ -65,6 +65,11 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
   Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
   UTres ←  Conf #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ { ⍵.(Passed Crashed Failed) } ¨ UTres
+
+  Conf.Cover ← ⊂'#.Demo'
+  Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+  UTres ← Conf #.UT.run './Demo_tests.dyalog'
+  Z,← (1 1 1 1 1 1) ≡ { ⍵.Passed } ¨ UTres
 ∇
 
 :EndNameSpace
