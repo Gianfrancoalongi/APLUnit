@@ -50,12 +50,14 @@
         :Field Public CoveredLines
         :Field Public FunctionLines
         :Field Public Representation
+        :Field Public NC
         ∇ coverresult
         :Access Public
         :Implements Constructor
         CoveredLines ← ⍬
         FunctionLines ← ⍬
         Representation ← ⍬
+        NC ← 0
         ∇
 :EndClass
 
@@ -148,13 +150,19 @@ exception ← ⍬
         generate_coverage_page CoverConf
 ∇
 
+∇ Z ← get_file_name Argument;separator
+        separator ← ⌈ / ('/' = Argument) / ⍳ ⍴ Argument
+        Z ← ¯7 ↓ separator ↓ Argument
+∇
+
 ∇ generate_coverage_page CoverConf;ProfileData;CoverResults;HTML
         ProfileData ← ⎕PROFILE 'data'       
         ToCover ← retrieve_coverables ¨ CoverConf.Cover
         :if (⍴ToCover) ≡ (⍴⊂1)
                 ToCover ← ⊃ ToCover
         :endif
-        CoverResults ← { ProfileData generate_cover_result ⍵ } ¨ ToCover
+        Representations ← get_representation ¨ ToCover
+        CoverResults ← ProfileData∘generate_cover_result ¨ ↓ ToCover,[1.5]Representations
         HTML ← generate_html CoverResults
         CoverConf write_html_to_page HTML
         ⎕PROFILE 'clear'
@@ -163,10 +171,10 @@ exception ← ⍬
 ∇ Z ← retrieve_coverables Something;nc;functions
   nc ← ⎕NC Something
   :if nc = 3
-          Z ← (Something (⎕CR Something))
+          Z ← Something
   :elseif nc = 9
           functions ← strip ¨ ↓ ⍎ Something,'.⎕NL 3'
-          Z ← {(Something,'.',⍵) (⎕CR (Something,'.',⍵))} ¨ functions 
+          Z ← { (Something,'.',⍵) } ¨ functions 
   :endif
 ∇
 
@@ -174,18 +182,31 @@ exception ← ⍬
   Z ← (input≠' ')/input
 ∇
 
-∇ Z ← get_file_name Argument;separator
-        separator ← ⌈ / ('/' = Argument) / ⍳ ⍴ Argument
-        Z ← ¯7 ↓ separator ↓ Argument
+∇ Z ← get_representation Function;nc;rep
+  nc ← ⎕NC ⊂Function
+  :if nc = 3.1
+          rep ← ↓ ⎕CR Function
+          rep[1] ← ⊂'∇',⊃rep[1]
+          rep,← ⊂'∇'          
+          rep ← ↑ rep 
+  :else
+          rep ← ⎕CR Function
+  :endif
+  Z ← rep
 ∇
 
-∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Line;Res
+∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Lines;Res
         (FunctionName Representation) ← Args
         Indices ← ({ FunctionName matches ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
         Lines ← ProfileData[Indices;2]
         Res ← ⎕NEW CoverResult
+        Res.NC ← ⎕NC ⊂FunctionName
+        :if 3.1 = Res.NC
+                Res.FunctionLines ← ¯2 + ⍴ ↓ Representation
+        :else
+                Res.FunctionLines ← ⊃ ⍴ ↓ Representation
+        :endif
         Res.CoveredLines ← (⍬∘≢ ¨ Lines) / Lines
-        Res.FunctionLines ← ¯1 + ⍴ ↓ Representation
         Res.Representation ← Representation
         Z ← Res
 ∇
@@ -220,17 +241,19 @@ exception ← ⍬
         end_of_line ← '</pre></font>'
 
         Code ← ↓ CoverResult.Representation
-        Code[1] ← ⊂'∇',⊃Code[1]
-        Code ,← ⊂'∇'
 
-        Colors ← (2 + CoverResult.FunctionLines) ⍴ ⊂ ⍬,red_font
-
-        Colors[1] ← ⊂ black_font
-        Colors[⍴Colors] ← ⊂ black_font
-
-        Colors[ 1 + CoverResult.CoveredLines ] ← ⊂ ⍬,green_font
+        :if 3.1=CoverResult.NC
+                Colors ← (2  + CoverResult.FunctionLines) ⍴ ⊂ ⍬,red_font
+                Colors[1] ← ⊂ black_font
+                Colors[⍴Colors] ← ⊂ black_font
+                Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
+        :else
+                Colors ← CoverResult.FunctionLines ⍴ ⊂ ⍬,red_font
+                Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
+        :endif
 
         Z ← Colors,[1.5]Code
+
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
 
