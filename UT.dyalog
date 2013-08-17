@@ -42,6 +42,7 @@
         :Implements Constructor
         Pages ← ⍬
         Cover ← ⍬
+        Page_name ← ⍬
         ∇
         
 :EndClass
@@ -78,17 +79,17 @@ exception ← ⍬
                 POST_test ← { ⎕PROFILE 'stop' }
         :EndIf
 
-        :If is_function Argument                
+        :If is_function Argument
                 TEST_step ← single_function_test_function
-                COVER_step_function ← single_function_cover
+                COVER_file ← Argument,'_coverage.html'
 
-        :ElseIf is_list_of_functions Argument                
+        :ElseIf is_list_of_functions Argument
                 TEST_step ← list_of_functions_test_function
-                COVER_step_function ← list_of_functions_cover
+                COVER_file ← 'list_coverage.html'
 
         :ElseIf is_file Argument
                 TEST_step ← file_test_function
-                COVER_step_function ← file_cover
+                COVER_file ← (get_file_name Argument),'_coverage.html'
 
         :ElseIf is_dir Argument
                 test_files ← test_files_in_dir Argument
@@ -97,7 +98,7 @@ exception ← ⍬
         :EndIf
 
         :If 0 ≠ ⎕NC 'CoverConf'
-                COVER_step ← { CoverConf COVER_step_function Argument }
+                COVER_step ← { CoverConf.Page_name ← COVER_file ⋄ generate_coverage_page CoverConf }
         :EndIf                
 
         PRE_test ⍬
@@ -133,21 +134,6 @@ exception ← ⍬
         { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
         Z ← run_ut_obj ¨ UTobjs
         (FilePath,' tests') print_passed_crashed_failed Z
-∇
-
-∇ CoverConf single_function_cover TestName
-        CoverConf.Page_name ← TestName,'_coverage.html'
-        generate_coverage_page CoverConf
-∇
-
-∇ CoverConf list_of_functions_cover Args
-        CoverConf.Page_name ← 'list_coverage.html'
-        generate_coverage_page CoverConf
-∇
-
-∇ CoverConf file_cover FilePath
-        CoverConf.Page_name ← (get_file_name FilePath),'_coverage.html'
-        generate_coverage_page CoverConf
 ∇
 
 ∇ Z ← get_file_name Argument;separator
