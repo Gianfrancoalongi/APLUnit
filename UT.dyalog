@@ -187,7 +187,7 @@ exception ← ⍬
   :if nc = 3.1
           rep ← ↓ ⎕CR Function
           rep[1] ← ⊂'∇',⊃rep[1]
-          rep,← ⊂'∇'          
+          rep,← ⊂'∇'
           rep ← ↑ rep 
   :else
           rep ← ⎕CR Function
@@ -197,7 +197,7 @@ exception ← ⍬
 
 ∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Lines;Res
         (FunctionName Representation) ← Args
-        Indices ← ({ FunctionName matches ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
+        Indices ← ({ FunctionName ≡ ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
         Lines ← ProfileData[Indices;2]
         Res ← ⎕NEW CoverResult
         Res.NC ← ⎕NC ⊂FunctionName
@@ -209,10 +209,6 @@ exception ← ⍬
         Res.CoveredLines ← (⍬∘≢ ¨ Lines) / Lines
         Res.Representation ← Representation
         Z ← Res
-∇
-
-∇ Z ← FunctionName matches Name 
-        Z ← FunctionName ≡ Name
 ∇
 
 ∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
@@ -240,20 +236,17 @@ exception ← ⍬
         black_font ← Color 'black'
         end_of_line ← '</pre></font>'
 
-        Code ← ↓ CoverResult.Representation
-
         :if 3.1=CoverResult.NC
                 Colors ← (2  + CoverResult.FunctionLines) ⍴ ⊂ ⍬,red_font
                 Colors[1] ← ⊂ black_font
                 Colors[⍴Colors] ← ⊂ black_font
-                Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
         :else
                 Colors ← CoverResult.FunctionLines ⍴ ⊂ ⍬,red_font
-                Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
         :endif
+        Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
 
+        Code ← ↓ CoverResult.Representation
         Z ← Colors,[1.5]Code
-
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
 
@@ -343,7 +336,7 @@ exception ← ⍬
 
 ∇ determine_pass_or_fail UTRes
         :If 0 = UTRes.Crashed                                 
-                :If matches_expected UTRes
+                :If #.UT.expect ≡ UTRes.Returned
                         UTRes.Passed ← 1
                 :Else
                         UTRes.Failed ← 1
@@ -363,10 +356,6 @@ exception ← ⍬
 
 ∇ print_message_to_screen UTRes
         ⎕ ← UTRes.Text
-∇
-
-∇ Z ← matches_expected UTRes
-        Z ← expect ≡ UTRes.Returned
 ∇
 
 ∇ Z ← term_to_text Term;Text;Rows
