@@ -281,8 +281,7 @@ Conf.cover ← ⊂ '#.Example'
 Running the Unit Tests from the Example_tests.dyalog file should now
 generate a full coverage report of all functions defined in #.Example
 
-
-** [o] It shall be possible to express non equality in expected result
+** [d] It shall be possible to express non equality in expected result
 
 When writing Unit Tests, it shall be possible to express a non-equality 
 for the result. This is done by exchanging the expect with nexpect.
