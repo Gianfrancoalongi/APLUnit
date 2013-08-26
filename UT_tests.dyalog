@@ -30,12 +30,17 @@
   #.UT.nexpect ← 1 2 3
 ∇
 
+∇ Z ← failing_non_equality_TEST
+  Z ← 1 2 3 ⍳ 1
+  #.UT.nexpect ← 1
+∇
+
 List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
 
 ∇ Z ← Tests;UTres
   Z ← ⍬
   UTres ← #.UT.run 'passing_basic_TEST'
-  Z ← (1 0 0) ≡ UTres.(Passed Crashed Failed)
+  Z ,← (1 0 0) ≡ UTres.(Passed Crashed Failed)
   
   UTres ←  #.UT.run 'failing_basic_TEST'
   Z ,← (0 0 1) ≡ UTres.(Passed Crashed Failed)
@@ -51,7 +56,10 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
 
   UTres ← #.UT.run 'non_equality_TEST'
   Z ,← (1 0 0) ≡ UTres.(Passed Crashed Failed)
-  
+
+  UTres ← #.UT.run 'failing_non_equality_TEST'
+  Z ,← (0 0 1) ≡ UTres.(Passed Crashed Failed)
+
   UTres ← #.UT.run List
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ { ⍵.(Passed Crashed Failed) } ¨ UTres
   
