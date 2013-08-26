@@ -324,13 +324,8 @@ nexpect ← ⍬
 
 ∇ determine_pass_or_fail UTRes
         :If 0 = UTRes.Crashed
-                ⍝ (⍬∘≡ ¨ #.UT.expect #.UT.nexpect) / ≢ ≡ 
-                :if #.UT.expect ≡ ⍬
-                        comparator ← ≢
-                :else
-                        comparator ← ≡
-                :endif
-                :if #.UT.expect comparator UTRes.Returned
+                comparator ← (⍬∘≡ ¨ #.UT.expect #.UT.nexpect) / '≢' '≡' 
+                :if #.UT.expect (⍎comparator) UTRes.Returned
                         UTRes.Passed ← 1
                 :else
                         UTRes.Failed ← 1
