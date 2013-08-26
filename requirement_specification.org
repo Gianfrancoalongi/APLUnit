@@ -282,3 +282,16 @@ Running the Unit Tests from the Example_tests.dyalog file should now
 generate a full coverage report of all functions defined in #.Example
 
 
+** [o] It shall be possible to express non equality in expected result
+
+When writing Unit Tests, it shall be possible to express a non-equality 
+for the result. This is done by exchanging the expect with nexpect.
+
+#+BEGIN_EXAMPLE
+∇ Z ← dyadic_iota_will_not_give_array_TEST
+   Z ← 1 2 ⍳ 1
+   #.UT.nexpect ← 1
+#+END_EXAMPLE
+
+The non equality shall behave the same as the equality, except that the condition
+for success is the actual argument NOT being equal to the result.

@@ -64,6 +64,7 @@
 
 expect ← ⍬
 exception ← ⍬
+nexpect ← ⍬
 
 ∇ Z ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
@@ -304,6 +305,7 @@ exception ← ⍬
 ∇ reset_UT_globals
         expect ← ⍬
         exception ← ⍬
+        nexpect ← ⍬  
 ∇
 
 ∇ Z ← is_test FunctionName;wsIndex
@@ -321,12 +323,18 @@ exception ← ⍬
 ∇
 
 ∇ determine_pass_or_fail UTRes
-        :If 0 = UTRes.Crashed                                 
-                :If #.UT.expect ≡ UTRes.Returned
+        :If 0 = UTRes.Crashed
+                ⍝ (⍬∘≡ ¨ #.UT.expect #.UT.nexpect) / ≢ ≡ 
+                :if #.UT.expect ≡ ⍬
+                        comparator ← ≢
+                :else
+                        comparator ← ≡
+                :endif
+                :if #.UT.expect comparator UTRes.Returned
                         UTRes.Passed ← 1
-                :Else
+                :else
                         UTRes.Failed ← 1
-                :EndIf
+                :endif
         :EndIf
 ∇
 
