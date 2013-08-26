@@ -294,3 +294,30 @@ for the result. This is done by exchanging the expect with nexpect.
 
 The non equality shall behave the same as the equality, except that the condition
 for success is the actual argument NOT being equal to the result.
+** [t] Result from #.UT.run should be shy
+
+When executing multiple tests with #.UT.run, the resulting output on the
+screen should be suppressed 
+
+#+BEGIN_EXAMPLE
+.....
+Passed
+Passed
+Passed
+-----------------------------------------
+../numbername_tests.dyalog tests
+    ⍋  Passed:  45
+    ⍟ Crashed:  0
+    ⍒  Failed:  0
+#+END_EXAMPLE
+
+Without the currently following
+
+#+BEGIN_EXAMPLE
+ #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[U
+      Tresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTr
+      esult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTres
+      ult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresul
+      ....
+#+END_EXAMPLE
+
