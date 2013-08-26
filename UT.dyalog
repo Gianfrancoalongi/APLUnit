@@ -66,7 +66,7 @@ expect ← ⍬
 exception ← ⍬
 nexpect ← ⍬
 
-∇ Z ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
+∇ {Z} ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
         load_display_if_not_already_loaded
 
