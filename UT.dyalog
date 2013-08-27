@@ -129,18 +129,17 @@ nexpect ← ⍬
   Z ← rep
 ∇
 
-∇ Z ← ProfileData generate_cover_result Args;FunctionName;Indices;lines;functionlines;covered_lines
-        (FunctionName representation) ← Args
-        Indices ← ({ FunctionName ≡ ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
-        lines ← ProfileData[Indices;2]        
-        nc ← ⎕NC ⊂FunctionName
-        :if 3.1 = nc
-                functionlines ← ¯2 + ⍴ ↓ representation
-        :else
-                functionlines ← ⊃ ⍴ ↓ representation
-        :endif
-        covered_lines ← (⍬∘≢ ¨ lines) / lines
-        Z ← (nc lines functionlines covered_lines representation)
+∇ Z ← ProfileData generate_cover_result (name representation);Indices;lines;functionlines;covered_lines
+  Indices ← ({ name ≡ ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
+  lines ← ProfileData[Indices;2]        
+  nc ← ⎕NC ⊂name
+  :if 3.1 = nc
+          functionlines ← ¯2 + ⍴ ↓ representation
+  :else
+          functionlines ← ⊃ ⍴ ↓ representation
+  :endif
+  covered_lines ← (⍬∘≢ ¨ lines) / lines
+  Z ← (nc lines functionlines covered_lines representation)
 ∇
 
 ∇ Z ← generate_html CoverResults;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
