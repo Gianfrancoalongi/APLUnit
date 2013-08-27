@@ -1,25 +1,5 @@
 :NameSpace UT
 
-:Class UTresult
-        :Field Public Crashed
-        :Field Public Passed
-        :Field Public Failed
-        :Field Public Text
-        :Field Public Returned
-        :Field Public Name
-
-        ∇ UTresult
-        :Access Public
-        :Implements Constructor
-        Crashed ← 0
-        Passed ← 0
-        Failed ← 0
-        Returned ← ⍬
-        Text ← ''
-        Name ← ''
-        ∇
-:EndClass 
-
 :Class UTcover
         :Field Public Page_name
         :Field Public Pages
@@ -259,29 +239,25 @@ nexpect ← ⍬
         Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'
 ∇
 
-∇ Z ← run_ut ut_data;UTRes
-        UTRes ← execute_function ut_data
-        determine_pass_or_fail UTRes
-        determine_message UTRes
-        print_message_to_screen UTRes
-        Z ← UTRes
+∇ Z ← run_ut ut_data;returned;crashed;pass;fail;message
+        (returned crashed) ← execute_function ut_data
+        (pass crash fail) ← determine_pass_crash_or_fail returned crashed
+        message ← determine_message pass fail crashed (2⊃ut_data) returned
+        print_message_to_screen message
+        Z ← (pass crash fail)
 ∇
 
-∇ Z ← execute_function ut_data;UTRes
-        UTRes ← ⎕NEW UTresult
-        UTRes.Name ← ⊃ut_data[2]
+∇ Z ← execute_function ut_data
         reset_UT_globals
         :Trap 0
-                UTRes.Returned ← ⍎ (⍕⊃ut_data[1]),'.',⊃ut_data[2]
+                Z ← (⍎ (⍕⊃ut_data[1]),'.',⊃ut_data[2]) 0
         :Else
-                UTRes.Returned ← 1 ⊃ ⎕DM
+                Z ← (1 ⊃ ⎕DM) 1
                 :If exception ≢ ⍬
                         expect ← exception
-                :Else
-                        UTRes.Crashed ← 1
+                        Z[2] ← 0
                 :EndIf
-        :EndTrap        
-        Z ← UTRes                
+        :EndTrap
 ∇
 
 ∇ reset_UT_globals
@@ -299,35 +275,37 @@ nexpect ← ⍬
 ∇ Heading print_passed_crashed_failed ArrayRes
         ⎕ ← '-----------------------------------------'
         ⎕ ← Heading
-        ⎕ ← '    ⍋  Passed: ',+/ { ⍵.Passed } ¨ ArrayRes
-        ⎕ ← '    ⍟ Crashed: ',+/ { ⍵.Crashed } ¨ ArrayRes
-        ⎕ ← '    ⍒  Failed: ',+/ { ⍵.Failed } ¨ ArrayRes
+        ⎕ ← '    ⍋  Passed: ',+/ { 1⊃⍵ } ¨ ArrayRes
+        ⎕ ← '    ⍟ Crashed: ',+/ { 2⊃⍵ } ¨ ArrayRes
+        ⎕ ← '    ⍒  Failed: ',+/ { 3⊃⍵ } ¨ ArrayRes
 ∇
 
-∇ determine_pass_or_fail UTRes
-        :If 0 = UTRes.Crashed
+∇ Z ← determine_pass_crash_or_fail (returned crashed)
+        :If 0 = crashed
                 argument ← ⊃ (⍬∘≢ ¨ #.UT.expect #.UT.nexpect) / #.UT.expect #.UT.nexpect
                 comparator ← (⍬∘≢ ¨ #.UT.expect #.UT.nexpect) / '≡' '≢'                 
-                :if argument (⍎comparator) UTRes.Returned
-                        UTRes.Passed ← 1
+                :if argument (⍎comparator) returned
+                        Z ← 1 0 0
                 :else
-                        UTRes.Failed ← 1
+                        Z ← 0 0 1
                 :endif
-        :EndIf
-∇
-
-∇ determine_message UTRes
-        :If UTRes.Crashed
-                UTRes.Text ← 'CRASHED: ' failure_message UTRes
-        :ElseIf UTRes.Passed
-                UTRes.Text ← 'Passed'
         :Else
-                UTRes.Text ← 'FAILED: ' failure_message UTRes
+                Z ← 0 1 0
         :EndIf
 ∇
 
-∇ print_message_to_screen UTRes
-        ⎕ ← UTRes.Text
+∇ Z ← determine_message (pass fail crashed name returned)
+        :If crashed
+                Z ← ' CRASHED: ' failure_message name returned
+        :ElseIf pass
+                Z ← 'Passed'
+        :Else
+                Z ← 'FAILED: ' failure_message name returned
+        :EndIf
+∇
+
+∇ print_message_to_screen message
+        ⎕ ← message
 ∇
 
 ∇ Z ← term_to_text Term;Text;Rows
@@ -336,12 +314,12 @@ nexpect ← ⍬
         Z ← (Rows 4 ⍴ ''),Text
 ∇
 
-∇ Z ← Cause failure_message UTRes;hdr;exp;expterm;got;gotterm
-        hdr ← Cause,UTRes.Name
+∇ Z ← Cause failure_message (name returned);hdr;exp;expterm;got;gotterm
+        hdr ← Cause,name
         exp ← 'Expected'
         expterm ← term_to_text #.UT.expect
         got ← 'Got'
-        gotterm ← term_to_text UTRes.Returned
+        gotterm ← term_to_text returned
         Z ← align_and_join_message_parts hdr exp expterm got gotterm
 ∇
 
