@@ -320,4 +320,20 @@ Without the currently following
       ult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresul
       ....
 #+END_EXAMPLE
+** [t] Generic configuration array passed to UT.run 
+
+Instead of using a specific Coverage configuration as the left argument to UT.run,
+it should accept an unordered keyed list  (proplist) carrying the configuration 
+parameters. This allows extension to be performed easier.
+
+This change will break backwards compatibility with the currently existing tests.
+It is important that the merge point labels this clearly.
+
+#+BEGIN_EXAMPLE
+ C ← ⍬
+ C,← ('cover_out' '/home/APL/coverage')
+ C,← ('cover_targets' ⊂ '#.Example.timetable_selector')
+ C,← ('skip' ⊂'#.Demo.count_zero_comments_from_no_input_TEST')
+ C UT.run 'out_of_bound_TEST'
+#+END_EXAMPLE
 
