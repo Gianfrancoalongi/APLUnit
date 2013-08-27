@@ -52,7 +52,8 @@ nexpect ← ⍬
         :EndIf
 
         :If 0 ≠ ⎕NC 'CoverConf'
-                COVER_step ← { CoverConf.Page_name ← COVER_file ⋄ generate_coverage_page CoverConf }
+                COVER_step ← { CoverConf.Page_name ← COVER_file ⋄ 
+                               generate_coverage_page CoverConf }
         :EndIf                
 
         PRE_test ⍬
