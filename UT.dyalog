@@ -15,21 +15,6 @@
         
 :EndClass
 
-:Class CoverResult
-        :Field Public CoveredLines
-        :Field Public FunctionLines
-        :Field Public Representation
-        :Field Public NC
-        ∇ coverresult
-        :Access Public
-        :Implements Constructor
-        CoveredLines ← ⍬
-        FunctionLines ← ⍬
-        Representation ← ⍬
-        NC ← 0
-        ∇
-:EndClass
-
 expect ← ⍬
 exception ← ⍬
 nexpect ← ⍬
@@ -144,26 +129,23 @@ nexpect ← ⍬
   Z ← rep
 ∇
 
-∇ Z ← ProfileData generate_cover_result Args;FunctionName;FunctionVR;Indices;Lines;Res
-        (FunctionName Representation) ← Args
+∇ Z ← ProfileData generate_cover_result Args;FunctionName;Indices;lines;functionlines;covered_lines
+        (FunctionName representation) ← Args
         Indices ← ({ FunctionName ≡ ⍵ } ¨ ProfileData[;1]) / ⍳ ⍴ ProfileData[;1]
-        Lines ← ProfileData[Indices;2]
-        Res ← ⎕NEW CoverResult
-        Res.NC ← ⎕NC ⊂FunctionName
-        :if 3.1 = Res.NC
-                Res.FunctionLines ← ¯2 + ⍴ ↓ Representation
+        lines ← ProfileData[Indices;2]        
+        nc ← ⎕NC ⊂FunctionName
+        :if 3.1 = nc
+                functionlines ← ¯2 + ⍴ ↓ representation
         :else
-                Res.FunctionLines ← ⊃ ⍴ ↓ Representation
+                functionlines ← ⊃ ⍴ ↓ representation
         :endif
-        Res.CoveredLines ← (⍬∘≢ ¨ Lines) / Lines
-        Res.Representation ← Representation
-        Z ← Res
+        covered_lines ← (⍬∘≢ ¨ lines) / lines
+        Z ← (nc lines functionlines covered_lines representation)
 ∇
 
-∇ Z ← generate_html CoverResults;TotalCov;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
-        TotalCov ← ⎕NEW CoverResult
-        Covered ← ⊃⊃+/ { ⍴ ⍵.CoveredLines } ¨ CoverResults
-        Total ← ⊃⊃+/ { ⍵.FunctionLines } ¨ CoverResults
+∇ Z ← generate_html CoverResults;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
+        Covered ← ⊃⊃+/ { ⍴ 4 ⊃ ⍵ } ¨ CoverResults
+        Total ← ⊃⊃+/ { 3⊃⍵ } ¨ CoverResults
         Percentage ← 100 × Covered ÷ Total
         CoverageText ← 'Coverage: ',Percentage,'% (',Covered,'/',Total,')'
         ColorizedCode ← ⊃ ,/ { colorize_code_by_coverage ⍵ } ¨ CoverResults
@@ -185,16 +167,16 @@ nexpect ← ⍬
         black_font ← Color 'black'
         end_of_line ← '</pre></font>'
 
-        :if 3.1=CoverResult.NC
-                Colors ← (2  + CoverResult.FunctionLines) ⍴ ⊂ ⍬,red_font
+        :if 3.1=⊃CoverResult
+                Colors ← (2  + 3⊃CoverResult) ⍴ ⊂ ⍬,red_font
                 Colors[1] ← ⊂ black_font
                 Colors[⍴Colors] ← ⊂ black_font
         :else
-                Colors ← CoverResult.FunctionLines ⍴ ⊂ ⍬,red_font
+                Colors ← (3⊃CoverResult) ⍴ ⊂ ⍬,red_font
         :endif
-        Colors[1+CoverResult.CoveredLines] ← ⊂ ⍬,green_font
+        Colors[1+4⊃CoverResult] ← ⊂ ⍬,green_font
 
-        Code ← ↓ CoverResult.Representation
+        Code ← ↓ 5⊃CoverResult
         Z ← Colors,[1.5]Code
         Z ← {⍺,(⎕UCS 13),⍵ }/ Z, (⍴ Code) ⍴ ⊂ ⍬,end_of_line
 ∇
