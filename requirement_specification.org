@@ -320,7 +320,7 @@ Without the currently following
       ult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresult]  #.UT.[UTresul
       ....
 #+END_EXAMPLE
-** [t] Generic configuration array passed to UT.run 
+** [d] Generic configuration array passed to UT.run 
 
 Instead of using a specific Coverage configuration as the left argument to UT.run,
 it should accept an unordered keyed list  (proplist) carrying the configuration 
