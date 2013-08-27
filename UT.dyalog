@@ -102,23 +102,20 @@ nexpect ← ⍬
         :EndIf
 ∇
 
-∇ Z ← FromSpace single_function_test_function TestName;test_data
-        ut_data ← FromSpace TestName
-        Z ← run_ut ut_data
+∇ Z ← FromSpace single_function_test_function TestName
+        Z ← run_ut FromSpace TestName
 ∇
 
 ∇ Z ← FromSpace list_of_functions_test_function ListOfNames
-        ut_datas ← { FromSpace ⍵ } ¨ ListOfNames
-        Z ← run_ut ¨ ut_datas
+        Z ← run_ut ¨ { FromSpace ⍵ } ¨ ListOfNames
         ('Test execution report') print_passed_crashed_failed Z
 ∇
 
-∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;ut_datas
+∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions
         FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
         Functions  ← ↓ FileNS.⎕NL 3
         TestFunctions ←  (is_test ¨ Functions) / Functions
-        ut_datas ← { FileNS ⍵ } ¨ TestFunctions
-        Z ← run_ut ¨ ut_datas
+        Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
         (FilePath,' tests') print_passed_crashed_failed Z
 ∇
 
