@@ -20,18 +20,6 @@
         ∇
 :EndClass 
 
-:Class UTobj
-        :Field Public NameSpace
-        :Field Public FunctionName
-        
-        ∇ testobj namespace
-        :Access Public
-        :Implements Constructor
-        NameSpace ← namespace
-        FunctionName ← ⍬
-        ∇
-:EndClass
-
 :Class UTcover
         :Field Public Page_name
         :Field Public Pages
@@ -114,26 +102,23 @@ nexpect ← ⍬
         :EndIf
 ∇
 
-∇ Z ← FromSpace single_function_test_function TestName;testobject
-        testobject ← ⎕NEW UTobj FromSpace
-        testobject.FunctionName ← TestName
-        Z ← run_ut_obj testobject
+∇ Z ← FromSpace single_function_test_function TestName;test_data
+        ut_data ← FromSpace TestName
+        Z ← run_ut ut_data
 ∇
 
-∇ Z ← FromSpace list_of_functions_test_function ListOfNames;UTobjs
-        UTobjs ← { ⎕NEW UTobj FromSpace } ¨ ListOfNames
-        { UTobjs[⍵].FunctionName ← ⊃ ListOfNames[⍵] } ¨ ⍳ ⍴ ListOfNames
-        Z ← run_ut_obj ¨ UTobjs
+∇ Z ← FromSpace list_of_functions_test_function ListOfNames
+        ut_datas ← { FromSpace ⍵ } ¨ ListOfNames
+        Z ← run_ut ¨ ut_datas
         ('Test execution report') print_passed_crashed_failed Z
 ∇
 
-∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;UTobjs
+∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;ut_datas
         FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
         Functions  ← ↓ FileNS.⎕NL 3
         TestFunctions ←  (is_test ¨ Functions) / Functions
-        UTobjs ← { ⎕NEW UTobj FileNS } ¨ TestFunctions
-        { UTobjs[⍵].FunctionName ← ⊃ TestFunctions[⍵] } ¨ ⍳ ⍴ TestFunctions
-        Z ← run_ut_obj ¨ UTobjs
+        ut_datas ← { FileNS ⍵ } ¨ TestFunctions
+        Z ← run_ut ¨ ut_datas
         (FilePath,' tests') print_passed_crashed_failed Z
 ∇
 
@@ -277,20 +262,20 @@ nexpect ← ⍬
         Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'
 ∇
 
-∇ Z ← run_ut_obj testobject;UTRes
-        UTRes ← execute_function testobject
+∇ Z ← run_ut ut_data;UTRes
+        UTRes ← execute_function ut_data
         determine_pass_or_fail UTRes
         determine_message UTRes
         print_message_to_screen UTRes
         Z ← UTRes
 ∇
 
-∇ Z ← execute_function testobject;UTRes
+∇ Z ← execute_function ut_data;UTRes
         UTRes ← ⎕NEW UTresult
-        UTRes.Name ← testobject.FunctionName  
+        UTRes.Name ← ⊃ut_data[2]
         reset_UT_globals
         :Trap 0
-                UTRes.Returned ← ⍎ (⍕testobject.NameSpace),'.',testobject.FunctionName
+                UTRes.Returned ← ⍎ (⍕⊃ut_data[1]),'.',⊃ut_data[2]
         :Else
                 UTRes.Returned ← 1 ⊃ ⎕DM
                 :If exception ≢ ⍬
