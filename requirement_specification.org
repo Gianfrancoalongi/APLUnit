@@ -331,9 +331,9 @@ It is important that the merge point labels this clearly.
 
 #+BEGIN_EXAMPLE
  C ← ⍬
- C,← ('cover_out' '/home/APL/coverage')
- C,← ('cover_targets' ⊂ '#.Example.timetable_selector')
- C,← ('skip' ⊂'#.Demo.count_zero_comments_from_no_input_TEST')
+ C,← ⊂('cover_out' '/home/APL/coverage')
+ C,← ⊂('cover_targets' ('#.Demo.this_TEST' '#.Demo.something_TEST'))
+ C,← ⊂('skip' ⊂'#.Demo.count_zero_comments_from_no_input_TEST')
  C UT.run 'out_of_bound_TEST'
 #+END_EXAMPLE
 

@@ -65,25 +65,43 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
   
   UTres ← #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ UTres
+
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' 'abba' 'cebba')
+  Conf,← ⊂('cover_out' 'debba')
+  Z,← ('abba' 'cebba') ≡ 'cover_target' #.UT.in Conf
+
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' 'abba' 'cebba')
+  Conf,← ⊂('cover_out' 'debba')
+  Z,← (⍬,⊂'debba') ≡ 'cover_out' #.UT.in Conf
+
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' 'abba' 'cebba')
+  Conf,← ⊂('cover_out' 'debba')
+  Z,← 1 ≡ Conf #.UT.has 'cover_out'
   
-  Conf ← ⎕NEW #.UT.UTcover
-  Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'
-  Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' ('#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'))
+  Conf,← ⊂('cover_out' '/home/gianfranco/APL/UnitTestFrameWork/Pages/')
   UTres ← Conf #.UT.run 'passing_basic_TEST'
   Z ,← (1 0 0) ≡ UTres
   
-  Conf.Cover ← '#.UTT.passing_basic_TEST' '#.UTT.crashing_TEST' '#.UTT.failing_basic_TEST'
-  Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' ('#.UTT.passing_basic_TEST' '#.UTT.crashing_TEST' '#.UTT.failing_basic_TEST'))
+  Conf,← ⊂('cover_out' '/home/gianfranco/APL/UnitTestFrameWork/Pages/')
   UTres ← Conf #.UT.run List
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ UTres
-  
-  Conf.Cover ← '#.UTFile.pick_elem_TEST' '#.UTFile.array_of_num_TEST' '#.UTFile.indexing_TEST'
-  Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' ('#.UTFile.pick_elem_TEST' '#.UTFile.array_of_num_TEST' '#.UTFile.indexing_TEST'))
+  Conf,← ⊂('cover_out' '/home/gianfranco/APL/UnitTestFrameWork/Pages/')
   UTres ←  Conf #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡  UTres
 
-  Conf.Cover ← ⊂'#.Demo'
-  Conf.Pages ← '/home/gianfranco/APL/UnitTestFrameWork/Pages/'
+  Conf ← ⍬
+  Conf,← ⊂('cover_target' (⊂'#.Demo'))
+  Conf,← ⊂('cover_out' '/home/gianfranco/APL/UnitTestFrameWork/Pages/')
   UTres ← Conf #.UT.run './Demo_tests.dyalog'
   Z,← ((1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0)) ≡ UTres
 ∇

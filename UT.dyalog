@@ -1,25 +1,10 @@
 :NameSpace UT
 
-:Class UTcover
-        :Field Public Page_name
-        :Field Public Pages
-        :Field Public Cover
-        
-        ∇ coverobj
-        :Access Public
-        :Implements Constructor
-        Pages ← ⍬
-        Cover ← ⍬
-        Page_name ← ⍬
-        ∇
-        
-:EndClass
-
 expect ← ⍬
 exception ← ⍬
 nexpect ← ⍬
 
-∇ {Z} ← {CoverConf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
+∇ {Z} ← {Conf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
         load_display_if_not_already_loaded
 
@@ -28,9 +13,11 @@ nexpect ← ⍬
         PRE_test ← {}
         POST_test ← {}
         COVER_step ← {} 
-        :If 0 ≠ ⎕NC 'CoverConf'
-                PRE_test ← { ⎕PROFILE 'start' }
-                POST_test ← { ⎕PROFILE 'stop' }
+        :If 0 ≠ ⎕NC 'Conf'
+                :if Conf has 'cover_target'
+                        PRE_test ← { ⎕PROFILE 'start' }                        
+                        POST_test ← { ⎕PROFILE 'stop' }
+                :endif
         :EndIf
 
         :If is_function Argument
@@ -51,10 +38,12 @@ nexpect ← ⍬
                 Argument ← test_files
         :EndIf
 
-        :If 0 ≠ ⎕NC 'CoverConf'
-                COVER_step ← { CoverConf.Page_name ← COVER_file ⋄ 
-                               generate_coverage_page CoverConf }
-        :EndIf                
+        :If 0 ≠ ⎕NC 'Conf'
+                :if  Conf has 'cover_target'
+                        COVER_step ← { Conf ,← ⊂('cover_file' COVER_file) ⋄ 
+                                       generate_coverage_page Conf }
+                :endif
+        :EndIf
 
         PRE_test ⍬
         Z ← FromSpace TEST_step Argument
@@ -90,16 +79,16 @@ nexpect ← ⍬
         Z ← ¯7 ↓ separator ↓ Argument
 ∇
 
-∇ generate_coverage_page CoverConf;ProfileData;CoverResults;HTML
+∇ generate_coverage_page Conf;ProfileData;CoverResults;HTML
         ProfileData ← ⎕PROFILE 'data'       
-        ToCover ← retrieve_coverables ¨ CoverConf.Cover
+        ToCover ← retrieve_coverables ¨ (⊃'cover_target' in Conf)
         :if (⍴ToCover) ≡ (⍴⊂1)
                 ToCover ← ⊃ ToCover
         :endif
         Representations ← get_representation ¨ ToCover
         CoverResults ← ProfileData∘generate_cover_result ¨ ↓ ToCover,[1.5]Representations
         HTML ← generate_html CoverResults
-        CoverConf write_html_to_page HTML
+        Conf write_html_to_page HTML
         ⎕PROFILE 'clear'
 ∇
 
@@ -188,8 +177,8 @@ nexpect ← ⍬
         Z ← 'Page generated: ',YYMMDD,'|',HHMMSS
 ∇
 
-∇ CoverConf write_html_to_page Page;tie;filename
-        filename ← CoverConf.Pages,CoverConf.Page_name
+∇ Conf write_html_to_page Page;tie;filename
+        filename ← (⊃'cover_out' in Conf),(⊃'cover_file' in Conf)
         :Trap 22
                 tie ← filename ⎕NTIE 0
                 filename ⎕NERASE tie
@@ -314,6 +303,14 @@ nexpect ← ⍬
         Z ← Z⍪(R1 W ↑ expterm)
         Z ← Z⍪(W ↑ got)
         Z ← Z⍪(R2 W ↑ gotterm)
+∇
+
+∇ Z ← confparam in config
+  Z ← 1↓⊃({confparam≡⊃⍵} ¨ config)/config
+∇
+
+∇ Z ← config has confparam
+  Z ← ∨/{confparam≡⊃⍵} ¨config
 ∇
 
 :EndNameSpace
