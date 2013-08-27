@@ -239,7 +239,7 @@ nexpect ← ⍬
         Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'
 ∇
 
-∇ Z ← run_ut ut_data;returned;crashed;pass;fail;message
+∇ Z ← run_ut ut_data;returned;crashed;pass;crash;fail;message
         (returned crashed) ← execute_function ut_data
         (pass crash fail) ← determine_pass_crash_or_fail returned crashed
         message ← determine_message pass fail crashed (2⊃ut_data) returned
