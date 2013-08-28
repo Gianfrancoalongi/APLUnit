@@ -61,8 +61,8 @@ nexpect ← ⍬
 ∇ load_salt_scripts_into_current_namespace_if_configured
   :if 0≠⎕NC '#.UT.appdir'
           :if ⍬≢#.UT.appdir
-                  ⎕SE.SALT.Load #.UT.appdir,'/src/*.dyalog -target=#'
-                  ⎕SE.SALT.Load #.UT.appdir,'/test/*.dyalog -target=#'
+                  ⎕SE.SALT.Load #.UT.appdir,'src/*.dyalog -target=#'
+                  ⎕SE.SALT.Load #.UT.appdir,'test/*.dyalog -target=#'
           :endif
   :endif
 ∇
@@ -208,7 +208,7 @@ nexpect ← ⍬
         Z ← 2 =≡ Argument
 ∇
 
-∇ Z ← is_file Argument
+∇ Z ← is_file Argument`
         Z ← '.dyalog' ≡ ¯7 ↑ Argument
 ∇
 
