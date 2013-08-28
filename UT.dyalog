@@ -208,7 +208,7 @@ nexpect ← ⍬
         Z ← 2 =≡ Argument
 ∇
 
-∇ Z ← is_file Argument`
+∇ Z ← is_file Argument
         Z ← '.dyalog' ≡ ¯7 ↑ Argument
 ∇
 
