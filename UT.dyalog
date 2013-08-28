@@ -7,6 +7,7 @@ nexpect ← ⍬
 ∇ {Z} ← {Conf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
 
         load_display_if_not_already_loaded
+        load_salt_scripts_into_current_namespace_if_configured
 
         FromSpace ← 1 ⊃ ⎕RSI
 
@@ -55,6 +56,15 @@ nexpect ← ⍬
         :If 0=⎕NC '#.DISPLAY'
                 'DISPLAY' #.⎕CY 'display'
         :EndIf
+∇
+
+∇ load_salt_scripts_into_current_namespace_if_configured
+  :if 0≠⎕NC '#.UT.appdir'
+          :if ⍬≢#.UT.appdir
+                  ⎕SE.SALT.Load #.UT.appdir,'/src/*.dyalog'
+                  ⎕SE.SALT.Load #.UT.appdir,'/test/*.dyalog'
+          :endif
+  :endif
 ∇
 
 ∇ Z ← FromSpace single_function_test_function TestName

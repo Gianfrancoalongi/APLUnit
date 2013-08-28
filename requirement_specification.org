@@ -337,7 +337,7 @@ It is important that the merge point labels this clearly.
  C UT.run 'out_of_bound_TEST'
 #+END_EXAMPLE
 
-** [t] Fast reload of dyalog SALT scripts from within APL Environment
+** [d] Fast reload of dyalog SALT scripts from within APL Environment
 
 It shall be possible to quickly reload all dyalog SALT scripts from within 
 the Dyalog environment without too much ceremony. For this to work, a global 
@@ -366,3 +366,8 @@ commands will always start by first loading all the Dyalog salt scripts
 into the current namespace first, and then proceeding as usual.
 
 The path can be relative and absolute, just as passed to SALT.
+To disable this behavior, ⍬ can be assigned.
+
+#+BEGIN_EXAMPLE
+  #.UT.appdir ← ⍬
+#+END_EXAMPLE
