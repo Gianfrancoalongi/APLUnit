@@ -233,7 +233,7 @@ nexpect ← ⍬
         :Trap 0
                 Z ← (⍎ (⍕⊃ut_data[1]),'.',⊃ut_data[2]) 0
         :Else
-                Z ← (1 ⊃ ⎕DM) 1
+                Z ← (↑ ⎕DM) 1
                 :If exception ≢ ⍬
                         expect ← exception
                         Z[2] ← 0

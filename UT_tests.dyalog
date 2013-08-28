@@ -16,8 +16,11 @@
 ∇
 
 ∇ rank_error_TEST
-        #.UT.exception ← 'RANK ERROR'
-        1 ⊃ 1
+  #.UT.exception,← ⊂'RANK ERROR'
+  #.UT.exception,← ⊂'rank_error_TEST[5] 1⊃1'
+  #.UT.exception,← ⊂'                  ∧   '
+  #.UT.exception ← ↑ #.UT.exception
+  1 ⊃ 1
 ∇
 
 ∇ failing_error_TEST
