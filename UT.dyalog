@@ -4,52 +4,52 @@ expect ← ⍬
 exception ← ⍬
 nexpect ← ⍬
 
-∇ {Z} ← {Conf} run Argument;PRE_test;POST_test;TEST_step;COVER_step_function;COVER_step;FromSpace
+∇ {Z} ← {Conf} run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
 
-        load_display_if_not_already_loaded
-        load_salt_scripts_into_current_namespace_if_configured
+  load_display_if_not_already_loaded
+  load_salt_scripts_into_current_namespace_if_configured
 
-        FromSpace ← 1 ⊃ ⎕RSI
+  FromSpace ← 1 ⊃ ⎕RSI
 
-        PRE_test ← {}
-        POST_test ← {}
-        COVER_step ← {} 
-        :If 0 ≠ ⎕NC 'Conf'
-                :if Conf has 'cover_target'
-                        PRE_test ← { ⎕PROFILE 'start' }                        
-                        POST_test ← { ⎕PROFILE 'stop' }
-                :endif
-        :EndIf
+  PRE_test ← {}
+  POST_test ← {}
+  COVER_step ← {} 
+  :If 0 ≠ ⎕NC 'Conf'
+          :if Conf has 'cover_target'
+                  PRE_test ← { ⎕PROFILE 'start' }                        
+                  POST_test ← { ⎕PROFILE 'stop' }
+          :endif
+  :EndIf
 
-        :If is_function Argument
-                TEST_step ← single_function_test_function
-                COVER_file ← Argument,'_coverage.html'
+  :If is_function Argument
+          TEST_step ← single_function_test_function
+          COVER_file ← Argument,'_coverage.html'
+          
+  :ElseIf is_list_of_functions Argument
+          TEST_step ← list_of_functions_test_function
+          COVER_file ← 'list_coverage.html'
+          
+  :ElseIf is_file Argument
+          TEST_step ← file_test_function
+          COVER_file ← (get_file_name Argument),'_coverage.html'
+          
+  :ElseIf is_dir Argument
+          test_files ← test_files_in_dir Argument
+          TEST_step ← { #.UT.run ¨ ⍵ }
+          Argument ← test_files
+  :EndIf
 
-        :ElseIf is_list_of_functions Argument
-                TEST_step ← list_of_functions_test_function
-                COVER_file ← 'list_coverage.html'
+  :If 0 ≠ ⎕NC 'Conf'
+          :if  Conf has 'cover_target'
+                  COVER_step ← { Conf ,← ⊂('cover_file' COVER_file) ⋄ 
+                                 generate_coverage_page Conf }
+          :endif
+  :EndIf
 
-        :ElseIf is_file Argument
-                TEST_step ← file_test_function
-                COVER_file ← (get_file_name Argument),'_coverage.html'
-
-        :ElseIf is_dir Argument
-                test_files ← test_files_in_dir Argument
-                TEST_step ← { #.UT.run ¨ ⍵ }
-                Argument ← test_files
-        :EndIf
-
-        :If 0 ≠ ⎕NC 'Conf'
-                :if  Conf has 'cover_target'
-                        COVER_step ← { Conf ,← ⊂('cover_file' COVER_file) ⋄ 
-                                       generate_coverage_page Conf }
-                :endif
-        :EndIf
-
-        PRE_test ⍬
-        Z ← FromSpace TEST_step Argument
-        POST_test ⍬
-        COVER_step ⍬
+  PRE_test ⍬
+  Z ← FromSpace TEST_step Argument
+  POST_test ⍬
+  COVER_step ⍬
 ∇
 
 ∇ load_display_if_not_already_loaded
