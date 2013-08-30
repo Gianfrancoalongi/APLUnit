@@ -228,10 +228,15 @@ nexpect ← ⍬
         Z ← (pass crash fail)
 ∇
 
-∇ Z ← execute_function ut_data
+∇ Z ← execute_function ut_data;function
         reset_UT_globals
+        function ← (⍕(⊃ut_data[1])),'.',⊃ut_data[2]
         :Trap 0
-                Z ← (⍎ (⍕⊃ut_data[1]),'.',⊃ut_data[2]) 0
+                :if 3.2 ≡ ⎕NC ⊂function
+                        Z ← (⍎ function,' ⍬') 0
+                :else
+                        Z ← (⍎ function)  0
+                :endif
         :Else
                 Z ← (↑ ⎕DM) 1
                 :If exception ≢ ⍬

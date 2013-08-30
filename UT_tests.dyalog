@@ -38,6 +38,11 @@
   #.UT.nexpect ← 1
 ∇
 
+dfun_TEST ← {
+        #.UT.expect ← 1 2 3
+        1 2 3
+}
+
 List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
 
 ∇ Z ← Tests;UTres
@@ -65,6 +70,9 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
 
   UTres ← #.UT.run List
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ UTres
+
+  UTres ← #.UT.run 'dfun_TEST'
+  Z,← (1 0 0) ≡ UTres
   
   UTres ← #.UT.run '/home/gianfranco/APL/UnitTestFrameWork/UTFile.dyalog'
   Z,← ((1 0 0) (0 1 0) (0 0 1)) ≡ UTres
