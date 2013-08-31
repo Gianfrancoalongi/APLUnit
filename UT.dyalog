@@ -1,5 +1,6 @@
 :NameSpace UT
 
+sac ← 0
 expect ← ⍬
 exception ← ⍬
 nexpect ← ⍬
@@ -41,7 +42,7 @@ nexpect ← ⍬
 
   :If 0 ≠ ⎕NC 'Conf'
           :if  Conf has 'cover_target'
-                  COVER_step ← { Conf ,← ⊂('cover_file' COVER_file) ⋄ 
+                  COVER_step ← { Conf ,← ⊂('cover_file' COVER_file)  
                                  generate_coverage_page Conf }
           :endif
   :EndIf
@@ -213,11 +214,15 @@ nexpect ← ⍬
 ∇
 
 ∇ Z ← is_dir Argument
-        Z ← 'yes' ≡ ⊃ ⎕CMD 'test -d ',Argument,' && echo yes || echo no'
+  :if 'Linux'≡⊃'.'⎕WG'APLVersion'
+          Z ← 'yes' ≡ ⊃ ⎕CMD 'test -d ',Argument,' && echo yes || echo no'
+  :endif
 ∇
 
-∇ Z ← test_files_in_dir Argument
-        Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'
+∇ Z ← test_files_in_dir Argument 
+  :if 'Linux'≡⊃'.'⎕WG'APLVersion'          
+          Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'  
+  :endif
 ∇
 
 ∇ Z ← run_ut ut_data;returned;crashed;pass;crash;fail;message
@@ -231,7 +236,7 @@ nexpect ← ⍬
 ∇ Z ← execute_function ut_data;function
         reset_UT_globals
         function ← (⍕(⊃ut_data[1])),'.',⊃ut_data[2]
-        :Trap 0
+        :Trap sac
                 :if 3.2 ≡ ⎕NC ⊂function
                         Z ← (⍎ function,' ⍬') 0
                 :else
