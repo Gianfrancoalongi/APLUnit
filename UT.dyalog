@@ -17,8 +17,8 @@ nexpect ← ⍬
   COVER_step ← {} 
   :If 0 ≠ ⎕NC 'Conf'
           :if Conf has 'cover_target'
-                  PRE_test ← { ⎕PROFILE 'start' }                        
-                  POST_test ← { ⎕PROFILE 'stop' }
+                  PRE_test ← { {} ⎕PROFILE 'start' }                        
+                  POST_test ← { {} ⎕PROFILE 'stop' }
           :endif
   :EndIf
 
@@ -72,17 +72,21 @@ nexpect ← ⍬
         Z ← run_ut FromSpace TestName
 ∇
 
-∇ Z ← FromSpace list_of_functions_test_function ListOfNames
-        Z ← run_ut ¨ { FromSpace ⍵ } ¨ ListOfNames
-        ('Test execution report') print_passed_crashed_failed Z
+∇ Z ← FromSpace list_of_functions_test_function ListOfNames;t
+  t←⎕TS
+  Z ← run_ut ¨ { FromSpace ⍵ } ¨ ListOfNames
+  t←⎕TS-t
+  ('Test execution report') print_passed_crashed_failed Z t
 ∇
 
-∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions
-        FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
-        Functions  ← ↓ FileNS.⎕NL 3
-        TestFunctions ←  (is_test ¨ Functions) / Functions
-        Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
-        (FilePath,' tests') print_passed_crashed_failed Z
+∇ Z ← FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;t
+  FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
+  Functions  ← ↓ FileNS.⎕NL 3
+  TestFunctions ←  (is_test ¨ Functions) / Functions
+  t ← ⎕TS
+  Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
+  t ← ⎕TS-t
+  (FilePath,' tests') print_passed_crashed_failed Z t
 ∇
 
 ∇ Z ← get_file_name Argument;separator
@@ -226,29 +230,36 @@ nexpect ← ⍬
 ∇
 
 ∇ Z ← run_ut ut_data;returned;crashed;pass;crash;fail;message
-        (returned crashed) ← execute_function ut_data
+        (returned crashed time) ← execute_function ut_data
         (pass crash fail) ← determine_pass_crash_or_fail returned crashed
-        message ← determine_message pass fail crashed (2⊃ut_data) returned
+        message ← determine_message pass fail crashed (2⊃ut_data) returned time
         print_message_to_screen message
         Z ← (pass crash fail)
 ∇
 
-∇ Z ← execute_function ut_data;function
+∇ Z ← execute_function ut_data;function;t
         reset_UT_globals
         function ← (⍕(⊃ut_data[1])),'.',⊃ut_data[2]
         :Trap sac
                 :if 3.2 ≡ ⎕NC ⊂function
+                        t ← ⎕TS
                         Z ← (⍎ function,' ⍬') 0
+                        t ← ⎕TS-t
                 :else
+                        t ← ⎕TS
                         Z ← (⍎ function)  0
+                        t ← ⎕TS-t
                 :endif
+                
         :Else
                 Z ← (↑ ⎕DM) 1
                 :If exception ≢ ⍬
                         expect ← exception
                         Z[2] ← 0
+                        t ← ⎕TS-t
                 :EndIf
         :EndTrap
+        Z,← ⊂t
 ∇
 
 ∇ reset_UT_globals
@@ -263,12 +274,13 @@ nexpect ← ⍬
         Z ← '_TEST' ≡ ¯5 ↑ FunctionName
 ∇
 
-∇ Heading print_passed_crashed_failed ArrayRes
-        ⎕ ← '-----------------------------------------'
-        ⎕ ← Heading
-        ⎕ ← '    ⍋  Passed: ',+/ { 1⊃⍵ } ¨ ArrayRes
-        ⎕ ← '    ⍟ Crashed: ',+/ { 2⊃⍵ } ¨ ArrayRes
-        ⎕ ← '    ⍒  Failed: ',+/ { 3⊃⍵ } ¨ ArrayRes
+∇ Heading print_passed_crashed_failed (ArrayRes time)
+  ⎕ ← '-----------------------------------------'
+  ⎕ ← Heading
+  ⎕ ← '    ⍋  Passed: ',+/ { 1⊃⍵ } ¨ ArrayRes
+  ⎕ ← '    ⍟ Crashed: ',+/ { 2⊃⍵ } ¨ ArrayRes
+  ⎕ ← '    ⍒  Failed: ',+/ { 3⊃⍵ } ¨ ArrayRes
+  ⎕ ← '    ○ Runtime: ',time[5],'m',time[6],'s',time[7],'ms'
 ∇
 
 ∇ Z ← determine_pass_crash_or_fail (returned crashed)
@@ -285,11 +297,11 @@ nexpect ← ⍬
         :EndIf
 ∇
 
-∇ Z ← determine_message (pass fail crashed name returned)
+∇ Z ← determine_message (pass fail crashed name returned time)
         :If crashed
-                Z ← ' CRASHED: ' failure_message name returned
+                Z ← 'CRASHED: ' failure_message name returned
         :ElseIf pass
-                Z ← 'Passed'
+                Z ← 'Passed ',time[5],'m',time[6],'s',time[7],'ms'
         :Else
                 Z ← 'FAILED: ' failure_message name returned
         :EndIf
