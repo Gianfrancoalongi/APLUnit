@@ -116,8 +116,11 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
   UTres ← Conf #.UT.run './Demo_tests.dyalog'
   Z,← ((1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0)) ≡ UTres
 
-  UTres ← Conf #.UT.run './Empty_tests.dyalog'
-  ⍬≡UTres
+  UTres ← #.UT.run './Empty_tests.dyalog'
+  Z,←⍬≡UTres
+
+  UTres ← #.UT.run './Pages/'
+  Z,←⍬≡UTres
 ∇
 
 :EndNameSpace

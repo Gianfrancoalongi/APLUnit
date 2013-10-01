@@ -36,7 +36,7 @@ nexpect ← ⍬
           
   :ElseIf is_dir Argument
           test_files ← test_files_in_dir Argument
-          TEST_step ← { #.UT.run ¨ ⍵ }
+          TEST_step ← test_dir_function
           Argument ← test_files
   :EndIf
 
@@ -84,13 +84,22 @@ nexpect ← ⍬
   Functions  ← ↓ FileNS.⎕NL 3
   TestFunctions ←  (is_test ¨ Functions) / Functions
   :if (0/⍬,⊂0/'') ≡ TestFunctions
-          ⎕←'No tests to run'
+          ⎕←'No test functions found'
           Z ← ⍬
   :else
           t ← ⎕TS
           Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
           t ← ⎕TS-t
           (FilePath,' tests') print_passed_crashed_failed Z t
+  :endif
+∇
+
+∇ Z ← FromSpace test_dir_function Test_files
+  :if Test_files≡⍬,⊂'no_test_files'
+          ⎕←'No test files found'
+          Z←⍬
+  :else
+          Z←#.UT.run ¨ Test_files
   :endif
 ∇
 
@@ -230,7 +239,7 @@ nexpect ← ⍬
 
 ∇ Z ← test_files_in_dir Argument 
   :if 'Linux'≡⊃'.'⎕WG'APLVersion'          
-          Z ← ⎕CMD 'ls ',Argument,'*_tests.dyalog'  
+          Z ← ⎕CMD 'ls ',Argument,' | grep _tests.dyalog || echo no_test_files'
   :endif
 ∇
 
