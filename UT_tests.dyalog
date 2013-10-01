@@ -115,6 +115,9 @@ List ← 'passing_basic_TEST' 'crashing_TEST' 'failing_basic_TEST'
   Conf,← ⊂('cover_out' '/home/gianfranco/APL/UnitTestFrameWork/Pages/')
   UTres ← Conf #.UT.run './Demo_tests.dyalog'
   Z,← ((1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0) (1 0 0)) ≡ UTres
+
+  UTres ← Conf #.UT.run './Empty_tests.dyalog'
+  ⍬≡UTres
 ∇
 
 :EndNameSpace

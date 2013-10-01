@@ -83,10 +83,15 @@ nexpect ← ⍬
   FileNS ← ⎕SE.SALT.Load FilePath,' -target=#'
   Functions  ← ↓ FileNS.⎕NL 3
   TestFunctions ←  (is_test ¨ Functions) / Functions
-  t ← ⎕TS
-  Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
-  t ← ⎕TS-t
-  (FilePath,' tests') print_passed_crashed_failed Z t
+  :if (0/⍬,⊂0/'') ≡ TestFunctions
+          ⎕←'No tests to run'
+          Z ← ⍬
+  :else
+          t ← ⎕TS
+          Z ← run_ut ¨ { FileNS ⍵ } ¨ TestFunctions
+          t ← ⎕TS-t
+          (FilePath,' tests') print_passed_crashed_failed Z t
+  :endif
 ∇
 
 ∇ Z ← get_file_name Argument;separator
