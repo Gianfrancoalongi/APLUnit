@@ -95,7 +95,7 @@ nexpect ← ⍬
 ∇
 
 ∇ Z ← FromSpace test_dir_function Test_files
-  :if Test_files≡⍬,⊂'no_test_files'
+  :if Test_files≡⍬/⍬,⊂''
           ⎕←'No test files found'
           Z←⍬
   :else
@@ -239,7 +239,7 @@ nexpect ← ⍬
 
 ∇ Z ← test_files_in_dir Argument 
   :if 'Linux'≡⊃'.'⎕WG'APLVersion'          
-          Z ← ⎕CMD 'ls ',Argument,' | grep _tests.dyalog || echo no_test_files'
+          Z ← ⎕SH 'find ',Argument,' -name \*_tests.dyalog'
   :endif
 ∇
 
