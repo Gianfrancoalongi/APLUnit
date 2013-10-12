@@ -231,15 +231,17 @@ nexpect ← ⍬
         Z ← '.dyalog' ≡ ¯7 ↑ Argument
 ∇
 
-∇ Z ← is_dir Argument
-  :if 'Linux'≡⊃'.'⎕WG'APLVersion'
-          Z ← 'yes' ≡ ⊃ ⎕CMD 'test -d ',Argument,' && echo yes || echo no'
-  :else
-          'gfa'⎕NA  'I kernel32|GetFileAttributes* <0t'
-          attr←gfa⊂Argument
-          Z←1=4⊃2 2 2 2 2 2 2 2⊤attr
-  :endif
+∇ Z←is_dir Argument;attr
+   :If 'Linux'≡⊃'.'⎕WG'APLVersion'
+       Z←'yes'≡⊃⎕CMD'test -d ',Argument,' && echo yes || echo no'
+   :Else
+       'gfa'⎕NA'I kernel32|GetFileAttributes* <0t'
+       :If Z←¯1≠attr←gfa⊂Argument ⍝ If file exists
+           Z←⊃2 16⊤attr           ⍝ Return bit 4
+       :EndIf
+   :EndIf
 ∇
+
 
 ∇ Z ← test_files_in_dir Argument 
   :if 'Linux'≡⊃'.'⎕WG'APLVersion'          
