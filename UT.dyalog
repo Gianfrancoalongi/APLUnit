@@ -248,7 +248,8 @@ nexpect ← ⍬
           Z ← ⎕SH 'find ',Argument,' -name \*_tests.dyalog'
   :else
           #.⎕CY 'files'
-          Z ← Files.Dir Argument,'\*_tests.dyalog'
+          Z ← #.Files.Dir Argument,'\*_tests.dyalog'
+          Z←(Argument,'\')∘,¨Z
   :endif
 ∇
 
