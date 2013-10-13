@@ -103,9 +103,9 @@ nexpect ← ⍬
   :endif
 ∇
 
-∇ Z ← get_file_name Argument;separator
-        separator ← ⌈ / ('/' = Argument) / ⍳ ⍴ Argument
-        Z ← ¯7 ↓ separator ↓ Argument
+∇ Z←get_file_name Argument;separator
+  separator←⌈/(Argument∊'/\')/⍳⍴Argument
+  Z←¯7↓separator↓Argument
 ∇
 
 ∇ generate_coverage_page Conf;ProfileData;CoverResults;HTML
