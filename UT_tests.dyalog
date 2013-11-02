@@ -48,7 +48,7 @@
     ∇ Z←quad_IO_modified_TEST
       #.UT.expect←0 1 2
       ⎕IO←0
-      ⍳3
+      Z←⍳3
     ∇
 
     ∇ Z←Tests;UTres
