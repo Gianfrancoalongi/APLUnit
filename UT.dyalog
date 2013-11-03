@@ -51,7 +51,7 @@
       :EndIf
     ∇
 
-    execute_all←{ run_ut ¨ tests}
+    execute_all←{ run_ut ¨ ⍵}
 
     ∇ Argument display_execution_report test_result;rh
       rh←determine_report_heading Argument
