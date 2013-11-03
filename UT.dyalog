@@ -5,52 +5,25 @@
     exception ← ⍬
     nexpect ← ⍬
 
-    ∇ {Z}←{Conf}run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
+    ∇ {Z}←{Conf}run Argument;from_space;tests;results;t_s;t_e
      
       load_display_if_not_already_loaded
+     
       load_salt_scripts_into_current_namespace_if_configured
      
-      FromSpace←1⊃⎕RSI
+      from_space←1⊃⎕RSI
      
-      PRE_test←{}
-      POST_test←{}
-      COVER_step←{}
-      :If 0≠⎕NC'Conf'
-          :If Conf has'cover_target'
-              PRE_test←{{}⎕PROFILE'start'}
-              POST_test←{{}⎕PROFILE'stop'}
-          :EndIf
+      tests←from_space determine_list_of_tests Argument
+      :If 0=≢tests
+          ⎕←'No tests to run'
+          Z←⍬
+      :Else
+          t_s←⎕TS
+          results←execute_all tests
+          t_e←⎕TS-t_s
+          Argument display_execution_report results t_e
+          Z←results
       :EndIf
-     
-      :If is_function Argument
-          TEST_step←single_function_test_function
-          COVER_file←Argument,'_coverage.html'
-     
-      :ElseIf is_list_of_functions Argument
-          TEST_step←list_of_functions_test_function
-          COVER_file←'list_coverage.html'
-     
-      :ElseIf is_file Argument
-          TEST_step←file_test_function
-          COVER_file←(get_file_name Argument),'_coverage.html'
-     
-      :ElseIf is_dir Argument
-          test_files←test_files_in_dir Argument
-          TEST_step←test_dir_function
-          Argument←test_files
-      :EndIf
-     
-      :If 0≠⎕NC'Conf'
-          :If Conf has'cover_target'
-              COVER_step←{Conf,←⊂('cover_file'COVER_file)
-                  generate_coverage_page Conf}
-          :EndIf
-      :EndIf
-     
-      PRE_test ⍬
-      Z←FromSpace TEST_step Argument
-      POST_test ⍬
-      COVER_step ⍬
     ∇
 
     ∇ load_display_if_not_already_loaded
@@ -68,159 +41,63 @@
       :EndIf
     ∇
 
-    ∇ Z←FromSpace single_function_test_function TestName
-      Z←run_ut FromSpace TestName
+    ∇ Z←FromSpace determine_list_of_tests Argument;test_files;test_functions
+      :If is_function Argument
+          Z←⊂,(FromSpace Argument)
+     
+      :ElseIf is_list_of_functions Argument
+          Z←{FromSpace ⍵}¨Argument
+     
+      :ElseIf is_file Argument
+          Z←FromSpace file_test_functions Argument
+     
+      :ElseIf is_dir Argument
+          test_files←test_files_in_dir Argument
+          :If 0≢test_files
+              Z←⍬
+          :Else
+              test_functions←FromSpace∘determine_list_of_tests¨test_files
+              Z←⊃,/test_functions
+          :EndIf
+      :EndIf
     ∇
 
-    ∇ Z←FromSpace list_of_functions_test_function ListOfNames;t
-      t←⎕TS
-      Z←run_ut¨{FromSpace ⍵}¨ListOfNames
-      t←⎕TS-t
-      ('Test execution report')print_passed_crashed_failed Z t
+    ∇ Z←execute_all tests
+      Z←run_ut¨tests
     ∇
 
-    ∇ Z←FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;t
+    ∇ Argument display_execution_report test_result;rh
+      rh←determine_report_heading Argument
+      rh print_passed_crashed_failed test_result
+    ∇
+    
+    ∇ Z←determine_report_heading Argument;heading
+      heading←'Test execution report'
+      :If is_function Argument
+          Z←heading
+      :ElseIf is_list_of_functions Argument
+          Z←heading,' for ',(⍕⍴Argument),' tests'
+      :ElseIf is_file Argument
+          Z←heading,' for ',Argument
+      :ElseIf is_dir Argument
+          Z←heading,' for ',Argument
+      :EndIf
+    ∇
+
+    ∇ Z←FromSpace file_test_functions FilePath;FileNS;Functions;TestFunctions;t
       FileNS←⎕SE.SALT.Load FilePath,' -target=#'
       Functions←↓FileNS.⎕NL 3
       TestFunctions←(is_test¨Functions)/Functions
       :If (0/⍬,⊂0/'')≡TestFunctions
-          ⎕←'No test functions found'
           Z←⍬
       :Else
-          t←⎕TS
-          Z←run_ut¨{FileNS ⍵}¨TestFunctions
-          t←⎕TS-t
-          (FilePath,' tests')print_passed_crashed_failed Z t
-      :EndIf
-    ∇
-
-    ∇ Z←FromSpace test_dir_function Test_files
-      :If Test_files≡⍬/⍬,⊂''
-          ⎕←'No test files found'
-          Z←⍬
-      :Else
-          Z←#.UT.run¨Test_files
+          Z←{FileNS ⍵}¨TestFunctions
       :EndIf
     ∇
 
     ∇ Z←get_file_name Argument;separator
       separator←⌈/(Argument∊'/\')/⍳⍴Argument
       Z←¯7↓separator↓Argument
-    ∇
-
-    ∇ generate_coverage_page Conf;ProfileData;CoverResults;HTML
-      ProfileData←⎕PROFILE'data'
-      ToCover←retrieve_coverables¨(⊃'cover_target'in Conf)
-      :If (⍴ToCover)≡(⍴⊂1)
-          ToCover←⊃ToCover
-      :EndIf
-      Representations←get_representation¨ToCover
-      CoverResults←ProfileData∘generate_cover_result¨↓ToCover,[1.5]Representations
-      HTML←generate_html CoverResults
-      Conf write_html_to_page HTML
-      ⎕PROFILE'clear'
-    ∇
-
-    ∇ Z←retrieve_coverables Something;nc;functions
-      nc←⎕NC Something
-      :If nc=3
-          Z←Something
-      :ElseIf nc=9
-          functions←strip¨↓⍎Something,'.⎕NL 3'
-          Z←{(Something,'.',⍵)}¨functions
-      :EndIf
-    ∇
-
-    ∇ Z←strip input
-      Z←(input≠' ')/input
-    ∇
-
-    ∇ Z←get_representation Function;nc;rep
-      nc←⎕NC⊂Function
-      :If nc=3.1
-          rep←↓⎕CR Function
-          rep[1]←⊂'∇',⊃rep[1]
-          rep,←⊂'∇'
-          rep←↑rep
-      :Else
-          rep←⎕CR Function
-      :EndIf
-      Z←rep
-    ∇
-
-    ∇ Z←ProfileData generate_cover_result(name representation);Indices;lines;functionlines;covered_lines
-      Indices←({name≡⍵}¨ProfileData[;1])/⍳⍴ProfileData[;1]
-      lines←ProfileData[Indices;2]
-      nc←⎕NC⊂name
-      :If 3.1=nc
-          functionlines←¯2+⍴↓representation
-      :Else
-          functionlines←⊃⍴↓representation
-      :EndIf
-      covered_lines←(⍬∘≢¨lines)/lines
-      Z←(nc lines functionlines covered_lines representation)
-    ∇
-
-    ∇ Z←generate_html CoverResults;Covered;Total;Percentage;CoverageText;ColorizedCode;Timestamp;Page
-      Covered←⊃⊃+/{⍴4⊃⍵}¨CoverResults
-      Total←⊃⊃+/{3⊃⍵}¨CoverResults
-      Percentage←100×Covered÷Total
-      CoverageText←'Coverage: ',Percentage,'% (',Covered,'/',Total,')'
-      ColorizedCode←⊃,/{colorize_code_by_coverage ⍵}¨CoverResults
-      Timestamp←generate_timestamp_text
-      Page←⍬
-      Page,←⊂⍬,'<html>'
-      Page,←⊂⍬,'<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>'
-      Page,←⊂⍬,'<style>pre cov {line-height:80%;}'
-      Page,←⊂⍬,'pre cov {color: green;}'
-      Page,←⊂⍬,'pre uncov {line-height:80%;}'
-      Page,←⊂⍬,'pre uncov {color:red;}</style>'
-      Page,←⊂⍬,CoverageText
-      Page,←⊂⍬,'<pre>'
-      Page,←ColorizedCode
-      Page,←⊂⍬,'</pre>'
-      Page,←Timestamp
-      Page,←⊂⍬,'</html>'
-      Z←Page
-    ∇
-
-    ∇ Z←colorize_code_by_coverage CoverResult;Colors;Ends;Code
-      :If 3.1=⊃CoverResult
-          Colors←(2+3⊃CoverResult)⍴⊂'<uncov>'
-          Colors[1]←⊂''
-          Colors[⍴Colors]←⊂''
-          Ends←(2+3⊃CoverResult)⍴⊂'</uncov>'
-          Ends[1]←⊂''
-          Ends[⍴Ends]←⊂''
-      :Else
-          Colors←(3⊃CoverResult)⍴⊂'<uncov>'
-          Ends←(3⊃CoverResult)⍴⊂'</uncov>'
-      :EndIf
-      Colors[1+4⊃CoverResult]←⊂'<cov>'
-      Ends[1+4⊃CoverResult]←⊂'</cov>'
-      Code←↓5⊃CoverResult
-      Z←Colors,[1.5]Code
-      Z←{⍺,(⎕UCS 13),⍵}/Z,Ends
-    ∇
-
-    ∇ Z←generate_timestamp_text;TS;YYMMDD;HHMMSS
-      TS←⎕TS
-      YYMMDD←⊃{⍺,'-',⍵}/3↑TS
-      HHMMSS←⊃{⍺,':',⍵}/3↑3↓TS
-      Z←'Page generated: ',YYMMDD,'|',HHMMSS
-    ∇
-
-    ∇ Conf write_html_to_page Page;tie;filename
-      filename←(⊃'cover_out'in Conf),(⊃'cover_file'in Conf)
-      :Trap 22
-          tie←filename ⎕NTIE 0
-          filename ⎕NERASE tie
-          filename ⎕NCREATE tie
-      :Else
-          tie←filename ⎕NCREATE 0
-      :EndTrap
-      Simple_array←⍕⊃,/Page
-      (⎕UCS'UTF-8'⎕UCS Simple_array)⎕NAPPEND tie
     ∇
 
     ∇ Z←is_function Argument
@@ -246,7 +123,6 @@
       :EndIf
     ∇
 
-
     ∇ Z←test_files_in_dir Argument
       :If 'Linux'≡5↑⊃'.'⎕WG'APLVersion'
           Z←⎕SH'find ',Argument,' -name \*_tests.dyalog'
@@ -257,11 +133,10 @@
       :EndIf
     ∇
 
-    ∇ Z←run_ut ut_data;returned;crashed;pass;crash;fail;message
+    ∇ Z←run_ut ut_data;returned;crashed;pass;crash;fail
       (returned crashed time)←execute_function ut_data
       (pass crash fail)←determine_pass_crash_or_fail returned crashed
-      message←determine_message pass fail crashed(2⊃ut_data)returned time
-      print_message_to_screen message
+      ⎕←determine_message pass fail crashed(2⊃ut_data)returned time
       Z←(pass crash fail)
     ∇
 
@@ -335,10 +210,6 @@
       :EndIf
     ∇
 
-    ∇ print_message_to_screen message
-      ⎕←message
-    ∇
-
     ∇ Z←term_to_text Term;Text;Rows
       Text←#.DISPLAY Term
       Rows←1⊃⍴Text
@@ -363,14 +234,6 @@
       Z←Z⍪(R1 W↑expterm)
       Z←Z⍪(W↑got)
       Z←Z⍪(R2 W↑gotterm)
-    ∇
-
-    ∇ Z←confparam in config
-      Z←1↓⊃({confparam≡⊃⍵}¨config)/config
-    ∇
-
-    ∇ Z←config has confparam
-      Z←∨/{confparam≡⊃⍵}¨config
     ∇
 
 :EndNameSpace
