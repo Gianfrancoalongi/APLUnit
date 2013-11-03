@@ -9,8 +9,6 @@
      
       load_display_if_not_already_loaded
      
-      load_salt_scripts_into_current_namespace_if_configured
-     
       from_space←1⊃⎕RSI
      
       tests←from_space determine_list_of_tests Argument
@@ -29,15 +27,6 @@
     ∇ load_display_if_not_already_loaded
       :If 0=⎕NC'#.DISPLAY'
           'DISPLAY'#.⎕CY'display'
-      :EndIf
-    ∇
-
-    ∇ load_salt_scripts_into_current_namespace_if_configured
-      :If 0≠⎕NC'#.UT.appdir'
-          :If ⍬≢#.UT.appdir
-              ⎕SE.SALT.Load #.UT.appdir,'src/*.dyalog -target=#'
-              ⎕SE.SALT.Load #.UT.appdir,'test/*.dyalog -target=#'
-          :EndIf
       :EndIf
     ∇
 
@@ -62,9 +51,7 @@
       :EndIf
     ∇
 
-    ∇ Z←execute_all tests
-      Z←run_ut¨tests
-    ∇
+    execute_all←{ run_ut ¨ tests}
 
     ∇ Argument display_execution_report test_result;rh
       rh←determine_report_heading Argument
