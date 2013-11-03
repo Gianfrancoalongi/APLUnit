@@ -53,7 +53,7 @@
      
       :ElseIf is_dir Argument
           test_files←test_files_in_dir Argument
-          :If 0≢test_files
+          :If 0=≢test_files
               Z←⍬
           :Else
               test_functions←FromSpace∘determine_list_of_tests¨test_files

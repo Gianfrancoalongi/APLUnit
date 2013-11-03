@@ -99,6 +99,9 @@
       Z,←'Test execution report for ./UTFile.dyalog'≡#.UT.determine_report_heading'./UTFile.dyalog'
      
       Z,←'Test execution report for ./Pages/'≡#.UT.determine_report_heading'./Pages/'
+     
+      UTres←#.UT.run'./'
+      Z,←(16 1 3)≡⊃+/UTres
     ∇
 
 :EndNameSpace
