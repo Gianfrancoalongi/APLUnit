@@ -291,9 +291,9 @@
     ∇
 
     ∇ reset_UT_globals
-      expect←⍬
+      expect_orig ← expect← ⎕NS⍬
       exception←⍬
-      nexpect←⍬
+      nexpect_orig ← nexpect← ⎕NS⍬
     ∇
 
     ∇ Z←is_test FunctionName;wsIndex
