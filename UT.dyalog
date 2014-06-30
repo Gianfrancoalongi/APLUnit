@@ -1,9 +1,9 @@
 ﻿:NameSpace UT
 
     sac ← 0
-    expect ← ⍬
+    expect_orig ← expect ← ⎕NS⍬
     exception ← ⍬
-    nexpect ← ⍬
+    nexpect_orig ← nexpect ← ⎕NS⍬
 
     ∇ {Z}←{Conf}run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
      
@@ -310,20 +310,11 @@
       ⎕←'    ⍒  Failed: ',+/{3⊃⍵}¨ArrayRes
       ⎕←'    ○ Runtime: ',time[5],'m',time[6],'s',time[7],'ms'
     ∇
-
-    ∇ Z←determine_pass_crash_or_fail(returned crashed)
-      :If 0=crashed
-          argument←⊃(⍬∘≢¨#.UT.expect #.UT.nexpect)/#.UT.expect #.UT.nexpect
-          comparator←(⍬∘≢¨#.UT.expect #.UT.nexpect)/'≡' '≢'
-          :If argument(⍎comparator)returned
-              Z←1 0 0
-          :Else
-              Z←0 0 1
-          :EndIf
-      :Else
-          Z←0 1 0
-      :EndIf
-    ∇
+    
+    determine_pass_crash_or_fail←{
+      r c←⍵ ⋄ 0≠c:0 1 0 ⋄ z←(0 0 1)(1 0 0)
+      expect_orig≢expect:(⎕IO+expect≡r)⊃z ⋄ (⎕IO+nexpect≢r)⊃z
+    }
 
     ∇ Z←determine_message(pass fail crashed name returned time)
       :If crashed
