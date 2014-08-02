@@ -80,7 +80,7 @@
       UTres←#.UT.run'dfun_TEST'
       Z,←(1 0 0)≡UTres
      
-      UTres←#.UT.run'/home/gianfranco/APLUnit/UTFile.dyalog'
+      UTres←#.UT.run'./UTFile.dyalog'
       Z,←((1 0 0)(0 1 0)(0 0 1))≡UTres
      
       Conf←⍬
@@ -100,25 +100,25 @@
      
       Conf←⍬
       Conf,←⊂('cover_target'('#.UTT.passing_basic_TEST' '#.UTT.rank_error_TEST'))
-      Conf,←⊂('cover_out' '/home/gianfranco/APLUnit/Pages/')
+      Conf,←⊂('cover_out' './Pages/')
       UTres←Conf #.UT.run'passing_basic_TEST'
       Z,←(1 0 0)≡UTres
      
       Conf←⍬
       Conf,←⊂('cover_target'('#.UTT.passing_basic_TEST' '#.UTT.crashing_TEST' '#.UTT.failing_basic_TEST'))
-      Conf,←⊂('cover_out' '/home/gianfranco/APLUnit/Pages/')
+      Conf,←⊂('cover_out' './Pages/')
       UTres←Conf #.UT.run List
       Z,←((1 0 0)(0 1 0)(0 0 1))≡UTres
      
       Conf←⍬
       Conf,←⊂('cover_target'('#.UTFile.pick_elem_TEST' '#.UTFile.array_of_num_TEST' '#.UTFile.indexing_TEST'))
-      Conf,←⊂('cover_out' '/home/gianfranco/APLUnit/Pages/')
-      UTres←Conf #.UT.run'/home/gianfranco/APLUnit/UTFile.dyalog'
+      Conf,←⊂('cover_out' './Pages/')
+      UTres←Conf #.UT.run'./UTFile.dyalog'
       Z,←((1 0 0)(0 1 0)(0 0 1))≡UTres
      
       Conf←⍬
       Conf,←⊂('cover_target'(⊂'#.Demo'))
-      Conf,←⊂('cover_out' '/home/gianfranco/APLUnit/Pages/')
+      Conf,←⊂('cover_out' './Pages/')
       UTres←Conf #.UT.run'./Demo_tests.dyalog'
       Z,←((1 0 0)(1 0 0)(1 0 0)(1 0 0)(1 0 0)(1 0 0))≡UTres
      

@@ -104,7 +104,7 @@
     ∇
 
     ∇ Z←get_file_name Argument;separator
-      separator←⌈/(Argument∊'/\')/⍳⍴Argument
+      separator←⊃⌽(Argument∊'/\')/⍳⍴Argument
       Z←¯7↓separator↓Argument
     ∇
 
