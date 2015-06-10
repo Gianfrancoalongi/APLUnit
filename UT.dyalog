@@ -1,5 +1,6 @@
 ﻿:NameSpace UT
 
+    ⎕IO ← 1
     sac ← 0
     expect_orig ← expect ← ⎕NS⍬
     exception ← ⍬
