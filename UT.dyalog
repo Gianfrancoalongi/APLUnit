@@ -6,6 +6,8 @@
     exception ← ⍬
     nexpect_orig ← nexpect ← ⎕NS⍬
     print_passed ← 1
+    print_summary ← 1
+    print_header ← 0
 
     ∇ {Z}←{Conf}run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
      
@@ -78,7 +80,9 @@
       t←⎕TS
       Z←run_ut¨{FromSpace ⍵}¨ListOfNames
       t←⎕TS-t
-      ('Test execution report')print_passed_crashed_failed Z t
+      :If print_summary
+          ('Test execution report')print_passed_crashed_failed Z t
+      :EndIf
     ∇
 
     ∇ Z←FromSpace file_test_function FilePath;FileNS;Functions;TestFunctions;t
@@ -89,19 +93,35 @@
           ⎕←'No test functions found'
           Z←⍬
       :Else
+          :If print_header
+              ⎕←'Testing from ',FilePath
+          :EndIf
           t←⎕TS
           Z←run_ut¨{FileNS ⍵}¨TestFunctions
           t←⎕TS-t
-          (FilePath,' tests')print_passed_crashed_failed Z t
+          :If print_summary
+              (FilePath,' tests')print_passed_crashed_failed Z t
+          :EndIf
       :EndIf
     ∇
 
-    ∇ Z←FromSpace test_dir_function Test_files
+    ∇ Z←FromSpace test_dir_function Test_files;old_sum;old_head
       :If Test_files≡⍬/⍬,⊂''
           ⎕←'No test files found'
           Z←⍬
       :Else
+          old_sum←print_summary
+          old_head←print_header
+          print_summary←0
+          print_header←1
+          t←⎕TS
           Z←#.UT.run¨Test_files
+          t←⎕TS-t
+          print_summary←old_sum
+          print_header←old_head
+          :If print_summary
+              'All tests'print_passed_crashed_failed (⊃,/Z)t
+          :EndIf
       :EndIf
     ∇
 
