@@ -5,6 +5,7 @@
     expect_orig ← expect ← ⎕NS⍬
     exception ← ⍬
     nexpect_orig ← nexpect ← ⎕NS⍬
+    print_passed ← 1
 
     ∇ {Z}←{Conf}run Argument;PRE_test;POST_test;TEST_step;COVER_step;FromSpace
      
@@ -262,7 +263,7 @@
       (returned crashed time)←execute_function ut_data
       (pass crash fail)←determine_pass_crash_or_fail returned crashed
       message←determine_message pass fail crashed(2⊃ut_data)returned time
-      print_message_to_screen message
+      (pass∧~crashed)print_message_to_screen message
       Z←(pass crash fail)
     ∇
 
@@ -327,8 +328,10 @@
       :EndIf
     ∇
 
-    ∇ print_message_to_screen message
-      ⎕←message
+    ∇ passed print_message_to_screen message
+      :If (~passed)∨passed∧print_passed
+          ⎕←message
+      :EndIf
     ∇
 
     ∇ Z←term_to_text Term;Text;Rows
