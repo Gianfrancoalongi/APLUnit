@@ -291,7 +291,7 @@
       reset_UT_globals
       function←(⍕(⊃ut_data[1])),'.',⊃ut_data[2]
       :Trap sac
-          :If 3.2≡⎕NC⊂function
+          :If 3.2 3.3∨.=⎕NC⊂function
               t←⎕TS
               Z←(⍎function,' ⍬')0
               t←⎕TS-t
