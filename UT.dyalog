@@ -342,7 +342,7 @@
       :If crashed
           Z←'CRASHED: 'failure_message name returned
       :ElseIf pass
-          Z←'Passed ',time[5],'m',time[6],'s',time[7],'ms'
+          Z←name,' Passed ',time[5],'m',time[6],'s',time[7],'ms'
       :Else
           Z←'FAILED: 'failure_message name returned
       :EndIf
